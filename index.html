@@ -250,6 +250,7 @@
     <div class="subtitle">The game that plays itself so you don't have to.</div>
 
     <div class="game-container">
+        <!-- CHARACTER PANEL -->
         <div class="panel">
             <div class="panel-title">Hero Sheet</div>
             <div class="stat-line"><span>Name:</span> <span id="char-name" style="font-weight:600; color:#fff;">---</span></div>
@@ -277,13 +278,16 @@
             <div class="stat-line"><span>Shield:</span> <span id="eq-shield" style="color:#a78bfa; font-weight:500;">None</span></div>
             <div class="stat-line"><span>Armor:</span> <span id="eq-armor" style="color:#a78bfa; font-weight:500;">Cloth Rags</span></div>
 
+            <!-- PvP ARENA PANEL -->
             <div style="margin-top:24px; font-weight:700; font-size:0.8rem; text-transform:uppercase; color:var(--pvp-color); border-top: 1px dashed var(--border-color); padding-top:16px; letter-spacing:0.05em;">PvP Arena Statistics</div>
             <div class="stat-line" style="margin-top:12px;"><span>Ranked Wins:</span> <span id="pvp-wins" style="color:var(--success-color); font-weight:700;">0</span></div>
             <div class="stat-line"><span>Ranked Losses:</span> <span id="pvp-losses">0</span></div>
             <div class="stat-line" style="font-size:0.85em;"><span>Next Match In:</span> <span id="pvp-countdown" style="color:var(--text-muted);">--:--</span></div>
         </div>
 
+        <!-- MAIN ACTION PANEL -->
         <div class="panel">
+            <!-- CHAPTER PROGRESSION PANEL -->
             <div class="panel-title" style="color: var(--chapter-color);">Story Campaign</div>
             <div style="font-weight:600; font-size: 1.05rem; margin-bottom: 8px;">Current Chapter: <span id="chapter-number" style="color:var(--chapter-color)">1</span></div>
             <div class="progress-container" style="margin-top:5px; margin-bottom:32px;">
@@ -307,6 +311,7 @@
             <div id="log"></div>
         </div>
 
+        <!-- INVENTORY PANEL -->
         <div class="panel">
             <div class="panel-title">Inventory</div>
             <div class="stat-line" style="font-size:1.3rem; margin-bottom:16px; align-items: center;">
@@ -322,10 +327,12 @@
             </div>
 
             <div class="inventory-list" id="inventory-items">
-                </div>
+                <!-- Items list -->
+            </div>
         </div>
     </div>
 
+    <!-- UTILITIES -->
     <div class="io-section panel">
         <div class="panel-title">Data Transmission (Save / Load)</div>
         <label for="saveCodeBox" style="font-size:0.85rem; color:var(--text-muted);">To back up your progress or move to a different computer, copy the code below. Paste a code and click Import to restore data.</label>
@@ -337,9 +344,14 @@
         </div>
     </div>
 
+    <!-- CHANGELOG PANEL -->
     <div class="changelog-panel panel">
         <div class="panel-title">System Change Log</div>
         <div class="changelog-list">
+            <div class="changelog-item">
+                <span class="changelog-date">Jun 08, 2026</span>
+                <span class="changelog-text">Restructured merchant economy loops. Characters will now only evaluate or buy equipment upgrades at the end of their liquidation phase when returning to town with a full inventory, preventing them from buying items instantly mid-quest.</span>
+            </div>
             <div class="changelog-item">
                 <span class="changelog-date">Jun 08, 2026</span>
                 <span class="changelog-text">Expanded global content matrices significantly. Added 100 new thematic, satirical monster sub-types to combat generator loops, and implemented 50 additional immersive, flavor-text-driven idle quests to the campaign data array pools.</span>
@@ -351,14 +363,6 @@
             <div class="changelog-item">
                 <span class="changelog-date">Jun 08, 2026</span>
                 <span class="changelog-text">Redesigned user interface with premium high-contrast theme layout, modernized typography stack, integrated localized interactive naming prompts on character generation, and implemented runtime changelog modules.</span>
-            </div>
-            <div class="changelog-item">
-                <span class="changelog-date">May 24, 2026</span>
-                <span class="changelog-text">Fixed structural logic scoping collision causing equipment upgrades to drop or bypass the designated Hero Sheet Armor slot boundaries. Array data pools isolated from system state keys.</span>
-            </div>
-            <div class="changelog-item">
-                <span class="changelog-date">Mar 11, 2026</span>
-                <span class="changelog-text">Deployed automated background PvP Arena simulator including cross-instance calculations, automated match countdown handlers, and global tracking parameters.</span>
             </div>
         </div>
     </div>
@@ -648,7 +652,6 @@
                 checkLevelUp();
             }
 
-            buyEquipmentUpgrade();
             saveGame();
             rollNewTask();
         }
@@ -677,6 +680,8 @@
                 logMessage(`Sold [${item}] to a gullible merchant for ${profit} Gold.`, "log-loot");
                 state.taskProgress = 0;
             } else {
+                // Character is in town and inventory is clear: Window shop right now!
+                buyEquipmentUpgrade();
                 logMessage("Inventory cleared. Moving back to the dangerous wilds.", "log-level");
                 rollNewTask();
             }

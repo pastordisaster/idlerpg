@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Regress Quest</title>
+    <title>Progress Quest: Zero Player Edition</title>
     <style>
         :root {
             --bg-color: #0f172a;
@@ -17,6 +17,7 @@
             --warning-color: #f59e0b;
             --pvp-color: #f43f5e;
             --chapter-color: #06b6d4;
+            --house-color: #ec4899;
         }
 
         * {
@@ -130,6 +131,7 @@
         .progress-bar-fill.xp { background: linear-gradient(90deg, #059669, #10b981); }
         .progress-bar-fill.inventory { background: linear-gradient(90deg, #d97706, #f59e0b); }
         .progress-bar-fill.chapter { background: linear-gradient(90deg, #0891b2, #06b6d4); }
+        .progress-bar-fill.house { background: linear-gradient(90deg, #db2777, #ec4899); }
 
         .progress-text {
             position: absolute;
@@ -329,6 +331,17 @@
             <div class="inventory-list" id="inventory-items">
                 <!-- Items list -->
             </div>
+
+            <!-- PLAYER HOUSING SUB-PANEL -->
+            <div style="margin-top:24px; font-weight:700; font-size:0.8rem; text-transform:uppercase; color:var(--house-color); border-top: 1px dashed var(--border-color); padding-top:16px; letter-spacing:0.05em;">Player Housing</div>
+            <div class="stat-line" style="margin-top:12px;"><span>Estate Status:</span> <b id="house-name" style="color:#fff;">Level 1 Lean-To</b></div>
+            <div class="progress-container" style="margin-top:8px; margin-bottom:0;">
+                <label>Renovation Progress</label>
+                <div class="progress-bar-bg">
+                    <div id="house-bar" class="progress-bar-fill house"></div>
+                    <div id="house-text" class="progress-text">0%</div>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -350,15 +363,11 @@
         <div class="changelog-list">
             <div class="changelog-item">
                 <span class="changelog-date">Jun 08, 2026</span>
+                <span class="changelog-text">Implemented Player Housing systems into the primary Inventory frame. Allowed real-estate material scaling utilizing leftover end-of-trip town gold if no combat upgrades are found. Intercepted mid-wilderness equipment asset liquidation loops to enforce strict, immersive town inventory trade regulations.</span>
+            </div>
+            <div class="changelog-item">
+                <span class="changelog-date">Jun 08, 2026</span>
                 <span class="changelog-text">Expanded loot engine drop architecture. Implemented 50 new algorithmic loot modifiers (25 custom item prefixes + 25 randomized trash-tier nouns) into the core generation tables to dramatically increase inventory text variety.</span>
-            </div>
-            <div class="changelog-item">
-                <span class="changelog-date">Jun 08, 2026</span>
-                <span class="changelog-text">Restructured merchant economy loops. Characters will now only evaluate or buy equipment upgrades at the end of their liquidation phase when returning to town with a full inventory, preventing them from buying items instantly mid-quest.</span>
-            </div>
-            <div class="changelog-item">
-                <span class="changelog-date">Jun 08, 2026</span>
-                <span class="changelog-text">Expanded global content matrices significantly. Added 100 new thematic, satirical monster sub-types to combat generator loops, and implemented 50 additional immersive, flavor-text-driven idle quests to the campaign data array pools.</span>
             </div>
         </div>
     </div>
@@ -432,7 +441,6 @@
             "Counting down the minutes until lunch break", "Looking for the start of a roll of packing tape while wearing gloves"
         ];
 
-        // Core item drop pools - dynamically expanded with 50 unique items/modifiers
         const itemPrefixes = [
             "Dull", "Rusty", "Slightly Sticky", "Overpriced", "Plastic", "Vaguely Magic", "Standard-Issue", "Exquisite",
             "Aggressively Moist", "Mildly Radioactive", "Finely Aged", "Counterfeit", "Slightly Charred", "Haunted",
@@ -451,12 +459,18 @@
         
         const weaponPool = ["Butter Knife", "Rusty Fork", "Slightly Shiter Fork", "Pointy Stick", "Iron Ladle", "Excalibur's Replica", "Hyper-Dense Loaf of Bread"];
         const shieldPool = ["Garbage Can Lid", "Thick Newspaper", "Wooden Platter", "Rusty Hubcap", "Buckler of Extreme Doubt"];
-        const armorPool = ["Bubble Wrap Plate", "Cardboard Box Mail", "Threadbare Poncho", "Leather Tunic", "Iron Boilerplate", "Hazardous Bio-Suit"];
+        const armorPool = ["Bubble Wrap Plate", "Cardboard Box mail", "Threadbare Poncho", "Leather Tunic", "Iron Boilerplate", "Hazardous Bio-Suit"];
 
         const fakePlayers = [
             "xX_Sephiroth_Xx", "GamerDad69", "NoobSlayer2000", "IdleKing", "Leeroy_Jenkins", 
             "SirClipsALot", "SlayerOfCode", "GandalfTheGains", "u_mad_bro", "ClickerPro", 
             "AlphaWolf", "TaxEvasionWizard", "Bongos4Life", "LootGoblin"
+        ];
+
+        const houseTiers = [
+            "Cardboard Lean-To", "Mud Hut", "Thatch Cottage", "Slightly Sturdy Cabin", 
+            "Gated Suburban Home", "Double-Wide Brick Bastion", "Feudal Manor", 
+            "Gothic Citadel", "Neon Corporate Penthouse", "Unregulated Megastructure"
         ];
 
         // State Container
@@ -466,7 +480,8 @@
             equipment: { weapon: "Bare Fists", shield: "None", armor: "Cloth Rags" },
             inventory: [], maxInventory: 15, currentTask: "", taskProgress: 0,
             taskType: "quest", taskDuration: 3000,
-            chapter: 1, chapterProgress: 0, pvpWins: 0, pvpLosses: 0, nextPvpTime: 0
+            chapter: 1, chapterProgress: 0, pvpWins: 0, pvpLosses: 0, nextPvpTime: 0,
+            houseLevel: 1, houseProgress: 0
         };
 
         // Helper to extract an item's +level modifier safely
@@ -474,6 +489,12 @@
             if (!itemStr || itemStr === "Bare Fists" || itemStr === "None" || itemStr === "Cloth Rags") return 0;
             const match = itemStr.match(/\+(\d+)$/);
             return match ? parseInt(match[1], 10) : 0;
+        }
+
+        function getHouseTierName(lvl) {
+            if (lvl <= 0) return houseTiers[0];
+            if (lvl > houseTiers.length) return houseTiers[houseTiers.length - 1];
+            return houseTiers[lvl - 1];
         }
 
         // Initialize Engine
@@ -499,6 +520,8 @@
                         if (state.maxInventory === undefined) {
                             state.maxInventory = 15 + (state.level - 1);
                         }
+                        if (state.houseLevel === undefined) state.houseLevel = 1;
+                        if (state.houseProgress === undefined) state.houseProgress = 0;
                         if (!state.nextPvpTime || isNaN(state.nextPvpTime)) resetPvpTimer();
                         
                         validLoad = true;
@@ -550,6 +573,8 @@
             state.chapterProgress = 0;
             state.pvpWins = 0;
             state.pvpLosses = 0;
+            state.houseLevel = 1;
+            state.houseProgress = 0;
             resetPvpTimer();
             
             logMessage(`Character [${state.name}] created! Adventure awaits.`, "log-level");
@@ -622,7 +647,12 @@
                 const gainedXp = Math.floor(Math.random() * 15) + 10;
                 const gainedGold = Math.floor(Math.random() * 8) + 2;
                 
-                logMessage(`Defeated opponent! Gained ${gainedXp} XP and ${gainedGold} Gold.`, "log-combat");
+                // Passively gather structural leftovers for housing from every kill
+                const passiveHouseProg = Math.floor(Math.random() * 3) + 1;
+                state.houseProgress += passiveHouseProg;
+                checkHouseLevelUp();
+
+                logMessage(`Defeated opponent! Gained ${gainedXp} XP, ${gainedGold} Gold, and +${passiveHouseProg}% House Renovation progress.`, "log-combat");
                 
                 state.xp += gainedXp;
                 state.gold += gainedGold;
@@ -644,9 +674,9 @@
                         state.equipment[dropSlot] = droppedItem;
                         logMessage(`💥 RARE UPGRADE: Found and equipped ${droppedItem} (Old: +${currentEquippedLvl})!`, "log-loot");
                     } else {
-                        const itemWorth = itemLvl * 12;
-                        state.gold += itemWorth;
-                        logMessage(`Dropped ${droppedItem}, but it's worse than your current gear. Automatically liquidated for ${itemWorth} Gold.`, "log-loot");
+                        // Drop goes strictly to the inventory loop, never sold mid-quest out in the wild
+                        state.inventory.push(droppedItem);
+                        logMessage(`Found gear drop: [${droppedItem}], but it's worse than your current gear. Stashed it in inventory bags.`, "log-loot");
                     }
                 } else if (Math.random() > 0.3) {
                     const item = itemPrefixes[Math.floor(Math.random() * itemPrefixes.length)] + " " + itemNouns[Math.floor(Math.random() * itemNouns.length)];
@@ -685,12 +715,31 @@
         function sellOneItem() {
             if (state.inventory.length > 0) {
                 const item = state.inventory.pop();
-                const profit = Math.floor(Math.random() * 15) + 5;
+                const itemLvl = getItemLevel(item);
+                
+                // Better items (with dynamic + levels) command much higher market values
+                const profit = itemLvl > 0 ? (itemLvl * 12) : (Math.floor(Math.random() * 15) + 5);
                 state.gold += profit;
-                logMessage(`Sold [${item}] to a gullible merchant for ${profit} Gold.`, "log-loot");
+                logMessage(`Sold [${item}] to a merchant for ${profit} Gold.`, "log-loot");
                 state.taskProgress = 0;
             } else {
-                buyEquipmentUpgrade();
+                // Liquidation complete. Look for combat gear enhancements first.
+                const upgradePurchased = buyEquipmentUpgrade();
+                
+                // If no character upgrades are available, allocate excess capital toward real-estate materials
+                if (!upgradePurchased) {
+                    const materialCost = Math.floor(state.houseLevel * 32);
+                    if (state.gold >= materialCost) {
+                        state.gold -= materialCost;
+                        const progressGained = Math.floor(Math.random() * 16) + 15;
+                        state.houseProgress += progressGained;
+                        logMessage(`🏡 Property Investment: No gear upgrades found. Expended ${materialCost} Gold on construction timber (+${progressGained}% Renovation).`, "log-loot");
+                        checkHouseLevelUp();
+                    } else {
+                        logMessage("Property Investment: Lacked sufficient gold pools to purchase expansion blocks.", "");
+                    }
+                }
+                
                 logMessage("Inventory cleared. Moving back to the dangerous wilds.", "log-level");
                 rollNewTask();
             }
@@ -714,6 +763,14 @@
             }
         }
 
+        function checkHouseLevelUp() {
+            if (state.houseProgress >= 100) {
+                state.houseLevel++;
+                state.houseProgress -= 100;
+                logMessage(`🏰 HOME IMPROVEMENT: Your player house has evolved to Level ${state.houseLevel} [${getHouseTierName(state.houseLevel)}]!`, "log-level");
+            }
+        }
+
         function buyEquipmentUpgrade() {
             const slots = ["weapon", "shield", "armor"];
             const merchantSlot = slots[Math.floor(Math.random() * slots.length)];
@@ -733,10 +790,13 @@
                     state.gold -= cost;
                     state.equipment[merchantSlot] = vendorItem;
                     logMessage(`🛍️ Merchant: Purchased upgrade! Equipped ${vendorItem} for ${cost} Gold (Old: +${currentEquippedLvl}).`, "log-level");
+                    return true;
                 } else {
                     logMessage(`🛍️ Merchant: Viewed ${vendorItem} (${cost} Gold). Rejected as worse than current gear.`, "");
+                    return false;
                 }
             }
+            return false;
         }
 
         // UI Painting Engine
@@ -786,6 +846,12 @@
             const invPct = (state.inventory.length / state.maxInventory) * 100;
             document.getElementById("inv-bar").style.width = invPct + "%";
             document.getElementById("inv-text").innerText = `${state.inventory.length} / ${state.maxInventory} Items`;
+
+            // Player Housing UI updates
+            document.getElementById("house-name").innerText = `Lvl ${state.houseLevel} ${getHouseTierName(state.houseLevel)}`;
+            const housePct = Math.min(state.houseProgress, 100);
+            document.getElementById("house-bar").style.width = housePct + "%";
+            document.getElementById("house-text").innerText = Math.floor(housePct) + "%";
 
             const invContainer = document.getElementById("inventory-items");
             if (invContainer) {
@@ -843,6 +909,8 @@
                     if (state.pvpWins === undefined) state.pvpWins = 0;
                     if (state.pvpLosses === undefined) state.pvpLosses = 0;
                     if (state.maxInventory === undefined) state.maxInventory = 15 + (state.level - 1);
+                    if (state.houseLevel === undefined) state.houseLevel = 1;
+                    if (state.houseProgress === undefined) state.houseProgress = 0;
                     if (!state.nextPvpTime) resetPvpTimer();
 
                     saveGame();

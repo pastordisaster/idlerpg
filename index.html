@@ -363,7 +363,7 @@
         <div class="changelog-list">
             <div class="changelog-item">
                 <span class="changelog-date">Jun 08, 2026</span>
-                <span class="changelog-text">Deprecating flat array listings for properties. Integrated a grand procedural real estate matrix capable of handling metrics up to level 500,000+. Infrastructure models scale structurally from primitive holes in the dirt toward inter-galactic stellar civilizations based on investment thresholds.</span>
+                <span class="changelog-text">Restructured real estate matrices. Calibrated regional asset tiers to spawn a House at Lvl 1,000, Mansions at Lvl 5,000, Compounds at Lvl 7,500, and Entire City Blocks at Lvl 10,000. Metropolitan Cities have been re-mapped to trigger systematically at Lvl 100,000, maintaining original parameters for space and colonization mechanics.</span>
             </div>
             <div class="changelog-item">
                 <span class="changelog-date">Jun 08, 2026</span>
@@ -488,26 +488,31 @@
 
         // Procedural Real Estate Engine
         function getHouseTierName(lvl) {
-            if (lvl < 500) {
+            if (lvl < 1000) {
                 if (lvl === 1) return "Hole in the Ground";
-                if (lvl < 100) return "Slightly Deeper Ditch";
-                if (lvl < 250) return "Reinforced Earth Pit";
+                if (lvl < 250) return "Slightly Deeper Ditch";
+                if (lvl < 500) return "Reinforced Earth Pit";
                 return "Mud-Lined Trench Complex";
-            } else if (lvl < 10000) {
+            } else if (lvl < 5000) {
                 if (lvl < 2500) return "Modest Thatch House";
-                if (lvl < 5000) return "Suburban Residential House";
-                if (lvl < 7500) return "Fortified Stone Manor House";
+                if (lvl < 4000) return "Suburban Residential House";
                 return "Sprawling Gated Estate House";
+            } else if (lvl < 7500) {
+                if (lvl < 6200) return "Luxury Multi-Wing Mansion";
+                return "Mega-Mansion with Helipad";
+            } else if (lvl < 10000) {
+                if (lvl < 8700) return "Fortified Secure Compound";
+                return "Automated Tech-Compound Enclave";
             } else if (lvl < 100000) {
-                if (lvl < 25000) return "Emerging Frontier City";
-                if (lvl < 50000) return "Bustling Industrial City";
-                if (lvl < 75000) return "High-Tech Metacognitive City";
-                return "Global Capital Megacity";
+                if (lvl < 25000) return "Sovereign Entire City Block";
+                if (lvl < 50000) return "Interconnected Commercial District";
+                if (lvl < 75000) return "Sprawling Megastructure Sector";
+                return "Metropolitan Cyber-Quarter";
             } else if (lvl < 200000) {
-                if (lvl < 125000) return "Sovereign Principality Country";
-                if (lvl < 150000) return "Federated Allied Country";
-                if (lvl < 175000) return "Continental Superpower Country";
-                return "Global Hegemony Cyber-Country";
+                if (lvl < 125000) return "Unified Metro City";
+                if (lvl < 150000) return "Global Capital Megacity";
+                if (lvl < 175000) return "Continental Super-City Network";
+                return "Planetary Ecumenopolis City-World";
             } else if (lvl < 500000) {
                 if (lvl < 250000) return "Space Travel Hub (Orbital Lift)";
                 if (lvl < 350000) return "Space Travel Fleet (Low-Orbit Station)";

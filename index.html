@@ -371,11 +371,11 @@
         <div class="changelog-list">
             <div class="changelog-item">
                 <span class="changelog-date">Jun 08, 2026</span>
-                <span class="changelog-text">Implemented an interactive currency routing interface within the inventory hub. Players may now manually liquidize excess asset holdings, converting 100 Gold blocks into a flat pool of 50 Experience Points to self-accelerate progression curves.</span>
+                <span class="changelog-text">Adjusted PvP arena simulation parameters. Baseline encounter success configuration shifted from an optimized 60% system to an enhanced 70% player advantage weight. Matchmaker fail-safe subroutines remain active, enforcing 5 automated pity wins upon reaching a 3-loss streak.</span>
             </div>
             <div class="changelog-item">
                 <span class="changelog-date">Jun 08, 2026</span>
-                <span class="changelog-text">Adjusted PvP arena simulation parameters. Baseline encounter success configuration shifted from a balanced 50/50 model to an optimized 60% player advantage weight. Matchmaker fail-safe subroutines remain active, enforcing 5 automated pity wins upon reaching a 3-loss streak.</span>
+                <span class="changelog-text">Implemented an interactive currency routing interface within the inventory hub. Players may now manually liquidize excess asset holdings, converting 100 Gold blocks into a flat pool of 50 Experience Points to self-accelerate progression curves.</span>
             </div>
             <div class="changelog-item">
                 <span class="changelog-date">Jun 08, 2026</span>
@@ -746,7 +746,7 @@
                 playerWins = true;
                 state.pvpForcedWinsLeft--;
             } else {
-                playerWins = Math.random() < 0.6; // Baseline 60% chance to win
+                playerWins = Math.random() < 0.7; // Baseline 70% chance to win
             }
 
             if (playerWins) {

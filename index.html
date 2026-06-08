@@ -377,6 +377,10 @@
         <div class="changelog-list">
             <div class="changelog-item">
                 <span class="changelog-date">Jun 08, 2026</span>
+                <span class="changelog-text">Refactored background active text execution arrays. Extracted and purged the obsolete '0 damage' string calculation completely across combat tracking updates. Scaled the level-gated skill tree matrices significantly, expanding the active joke combat skillset pools to a highly diversified matrix of 57 progressive corporate jargon entries.</span>
+            </div>
+            <div class="changelog-item">
+                <span class="changelog-date">Jun 08, 2026</span>
                 <span class="changelog-text">Deployed comprehensive background calibration modules. Integrated item color tiering metrics based on item modifiers (Uncommon Green, Rare Blue, Epic Purple), initiated a localized analytics node (Hall of Records) to compute lifetime metrics across browser sessions, and patched level-gated satirical active optimization subroutines into combat loops.</span>
             </div>
             <div class="changelog-item">
@@ -390,10 +394,6 @@
             <div class="changelog-item">
                 <span class="changelog-date">Jun 08, 2026</span>
                 <span class="changelog-text">Restructured real estate matrices. Calibrated regional asset tiers to spawn a House at Lvl 1,000, Mansions at Lvl 5,000, Compounds at Lvl 7,500, and Entire City Blocks at Lvl 10,000. Metropolitan Cities have been re-mapped to trigger systematically at Lvl 100,000, maintaining original parameters for space and colonization mechanics.</span>
-            </div>
-            <div class="changelog-item">
-                <span class="changelog-date">Jun 08, 2026</span>
-                <span class="changelog-text">Deconstructed the deterministic PvP arena match countdown timer. Ported player encounter loops over to a localized ambient probability system. Ambushed encounters now occur dynamically at unexpected times during general world travel or town logistics sequences.</span>
             </div>
         </div>
     </div>
@@ -493,14 +493,65 @@
             "AlphaWolf", "TaxEvasionWizard", "Bongos4Life", "LootGoblin"
         ];
 
+        // Level-gated skill matrix pool containing 57 modular updates
         const jokeSkills = [
             { lvl: 1, name: "Passive-Aggressive Sigh" },
+            { lvl: 1, name: "Low-Priority Slack Ping" },
+            { lvl: 2, name: "Reply All Catastrophe" },
+            { lvl: 3, name: "Disappointing Update Presentation" },
+            { lvl: 4, name: "Unscheduled Calendar Ambush" },
             { lvl: 5, name: "Synergy Blast" },
+            { lvl: 6, name: "Per My Last Email Rebuttal" },
+            { lvl: 7, name: "Bi-Weekly Status Sync" },
+            { lvl: 8, name: "Low-Hanging Fruit Harvest" },
+            { lvl: 9, name: "As Per Our Thread Notation" },
             { lvl: 10, name: "Circle Back Loop" },
+            { lvl: 12, name: "Bandwidth Inspection" },
+            { lvl: 14, name: "Deep Dive Extrapolation" },
             { lvl: 15, name: "Paradigm Shift" },
+            { lvl: 16, name: "Table This Discussion Mandate" },
+            { lvl: 18, name: "Move the Needle Initiative" },
+            { lvl: 20, name: "Offline Sync Request" },
+            { lvl: 22, name: "Change Management Protocol" },
+            { lvl: 24, name: "Core Competency Evaluation" },
             { lvl: 25, name: "Actionable Deliverable" },
+            { lvl: 26, name: "Wheelhouse Realignment" },
+            { lvl: 28, name: "Out of Office Auto-Reply" },
+            { lvl: 30, name: "Thought Leadership Lecture" },
+            { lvl: 32, name: "Executive Buy-In Request" },
+            { lvl: 34, name: "Strategic Pivoting Exercise" },
+            { lvl: 36, name: "Ecosystem Optimization Strike" },
+            { lvl: 38, name: "Scalable Infrastructure Fallacy" },
             { lvl: 40, name: "Leverage Core Competency" },
-            { lvl: 60, name: "Double-Click Optimization" }
+            { lvl: 42, name: "Value-Add Proposition" },
+            { lvl: 44, name: "Scope Creep Aggression" },
+            { lvl: 46, name: "Deliverable Velocity Multiplier" },
+            { lvl: 48, name: "Agile Standup Interruption" },
+            { lvl: 50, name: "Cross-Functional Misalignment" },
+            { lvl: 52, name: "Retrospective Blamestorming" },
+            { lvl: 54, name: "Stakeholder Management Nightmare" },
+            { lvl: 56, name: "Burning Platform Crisis" },
+            { lvl: 58, name: "Product Sunset Notification" },
+            { lvl: 60, name: "Double-Click Optimization" },
+            { lvl: 62, name: "Bleeding Edge Disruption" },
+            { lvl: 64, name: "Hyper-Personalized Content Funnel" },
+            { lvl: 66, name: "Disruptive Market Innovation" },
+            { lvl: 68, name: "Data-Driven Narrative Synthesis" },
+            { lvl: 70, name: "Quantum Synergistics Matrix" },
+            { lvl: 72, name: "Holistic Health Metric Adjustment" },
+            { lvl: 74, name: "Frictionless User Onboarding" },
+            { lvl: 76, name: "Next-Gen Enterprise Architecture" },
+            { lvl: 78, name: "Omnichannel Engagement Wave" },
+            { lvl: 80, name: "Sea-Change Ideation Blast" },
+            { lvl: 85, name: "Cloud-Native Microservices Cascade" },
+            { lvl: 90, name: "AI-Powered Hallucination Vortex" },
+            { lvl: 95, name: "Total System Overhead Collapse" },
+            { lvl: 100, name: "Endless Infinite Meeting Loop" },
+            { lvl: 110, name: "Venture Capital Ghosting Wave" },
+            { lvl: 120, name: "Golden Parachute Emergency Ejection" },
+            { lvl: 130, name: "Unpaid Internship Exploit" },
+            { lvl: 140, name: "Quiet Quitting Optimization Node" },
+            { lvl: 150, name: "Macro-Management Interlock Disconnect" }
         ];
 
         // State Container
@@ -721,12 +772,12 @@
                 state.gold += gainedGold;
                 state.lifetime.goldEarned += gainedGold;
 
-                // Active skill layout text processing
+                // Process active skill layout text with 0-damage segments removed
                 let combatLogMsg = "";
                 const availableSkills = jokeSkills.filter(s => state.level >= s.lvl);
                 if (availableSkills.length > 0 && Math.random() < 0.4) {
                     const chosenSkill = availableSkills[Math.floor(Math.random() * availableSkills.length)].name;
-                    combatLogMsg = `Cast [${chosenSkill}] for 0 damage! Defeated opponent! Gained ${gainedXp} XP, ${gainedGold} Gold, and +${passiveHouseProg}% Real Estate progress.`;
+                    combatLogMsg = `Cast [${chosenSkill}]! Defeated opponent! Gained ${gainedXp} XP, ${gainedGold} Gold, and +${passiveHouseProg}% Real Estate progress.`;
                 } else {
                     combatLogMsg = `Defeated opponent! Gained ${gainedXp} XP, ${gainedGold} Gold, and +${passiveHouseProg}% Real Estate development progress.`;
                 }

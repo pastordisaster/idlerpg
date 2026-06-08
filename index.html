@@ -284,7 +284,7 @@
             <div style="margin-top:24px; font-weight:700; font-size:0.8rem; text-transform:uppercase; color:var(--pvp-color); border-top: 1px dashed var(--border-color); padding-top:16px; letter-spacing:0.05em;">PvP Arena Statistics</div>
             <div class="stat-line" style="margin-top:12px;"><span>Ranked Wins:</span> <span id="pvp-wins" style="color:var(--success-color); font-weight:700;">0</span></div>
             <div class="stat-line"><span>Ranked Losses:</span> <span id="pvp-losses" style="color:var(--pvp-color); font-weight:700;">0</span></div>
-            <div class="stat-line" style="font-size:0.85em;"><span>Next Match In:</span> <span id="pvp-countdown" style="color:var(--text-muted);">--:--</span></div>
+            <div class="stat-line" style="font-size:0.85em;"><span>Arena Status:</span> <span id="pvp-status" style="color:var(--text-muted); font-weight:600;">Searching...</span></div>
         </div>
 
         <!-- MAIN ACTION PANEL -->
@@ -363,11 +363,11 @@
         <div class="changelog-list">
             <div class="changelog-item">
                 <span class="changelog-date">Jun 08, 2026</span>
-                <span class="changelog-text">Overhauled Arena matchmaking system. Resolved deterministic win loops to enforce 50/50 localized random combat outcome simulations. Programmed a back-end tracking sub-routine that detects 3 consecutive ranked defeats and forces a 5-match guaranteed win streak to preserve algorithmic metrics retention.</span>
+                <span class="changelog-text">Deconstructed the deterministic PvP arena match countdown timer. Ported player encounter loops over to a localized ambient probability system. Ambushed encounters now occur dynamically at unexpected times during general world travel or town logistics sequences.</span>
             </div>
             <div class="changelog-item">
                 <span class="changelog-date">Jun 08, 2026</span>
-                <span class="changelog-text">Implemented Player Housing systems into the primary Inventory frame. Allowed real-estate material scaling utilizing leftover end-of-trip town gold if no combat upgrades are found. Intercepted mid-wilderness equipment asset liquidation loops to enforce strict, immersive town inventory trade regulations.</span>
+                <span class="changelog-text">Overhauled Arena matchmaking system. Resolved deterministic win loops to enforce 50/50 localized random combat outcome simulations. Programmed a back-end tracking sub-routine that detects 3 consecutive ranked defeats and forces a 5-match guaranteed win streak to preserve algorithmic metrics retention.</span>
             </div>
         </div>
     </div>
@@ -481,7 +481,7 @@
             inventory: [], maxInventory: 15, currentTask: "", taskProgress: 0,
             taskType: "quest", taskDuration: 3000,
             chapter: 1, chapterProgress: 0, pvpWins: 0, pvpLosses: 0, 
-            pvpLossStreak: 0, pvpForcedWinsLeft: 0, nextPvpTime: 0,
+            pvpLossStreak: 0, pvpForcedWinsLeft: 0,
             houseLevel: 1, houseProgress: 0
         };
 
@@ -525,7 +525,6 @@
                         }
                         if (state.houseLevel === undefined) state.houseLevel = 1;
                         if (state.houseProgress === undefined) state.houseProgress = 0;
-                        if (!state.nextPvpTime || isNaN(state.nextPvpTime)) resetPvpTimer();
                         
                         validLoad = true;
                     }
@@ -563,7 +562,7 @@
             state.gold = 20;
             state.stats = {
                 str: Math.floor(Math.random() * 8) + 8,
-                dex: Math.floor(Math.random() * 8) + 8,
+                num_dex: Math.floor(Math.random() * 8) + 8,
                 con: Math.floor(Math.random() * 8) + 8,
                 int: Math.floor(Math.random() * 8) + 8,
                 wis: Math.floor(Math.random() * 8) + 8,
@@ -580,18 +579,10 @@
             state.pvpForcedWinsLeft = 0;
             state.houseLevel = 1;
             state.houseProgress = 0;
-            resetPvpTimer();
             
             logMessage(`Character [${state.name}] created! Adventure awaits.`, "log-level");
             rollNewTask();
             saveGame();
-        }
-
-        function resetPvpTimer() {
-            const minMs = 5 * 60 * 1000;
-            const maxMs = 60 * 60 * 1000;
-            const randomTimeSpan = Math.floor(Math.random() * (maxMs - minMs + 1)) + minMs;
-            state.nextPvpTime = Date.now() + randomTimeSpan;
         }
 
         function saveGame() {
@@ -600,7 +591,9 @@
 
         const tickRate = 200; 
         function tick() {
-            if (Date.now() >= state.nextPvpTime) {
+            // Ambient probability sweep: ~0.03% chance per tick to pull player into an arena skirmish
+            // On a 200ms tick engine, this yields completely random encounters throughout extended runtime blocks.
+            if (Math.random() < 0.0003) {
                 executePvPEvent();
             }
 
@@ -743,7 +736,6 @@
                 }
             }
             
-            resetPvpTimer();
             saveGame();
         }
 
@@ -855,13 +847,16 @@
             document.getElementById("pvp-wins").innerText = state.pvpWins;
             document.getElementById("pvp-losses").innerText = state.pvpLosses;
             
-            const timeRemaining = state.nextPvpTime - Date.now();
-            if (timeRemaining > 0) {
-                const displayMins = Math.floor(timeRemaining / 60000);
-                const displaySecs = Math.floor((timeRemaining % 60000) / 1000);
-                document.getElementById("pvp-countdown").innerText = `${displayMins}m ${displaySecs}s`;
+            // Render non-deterministic, immersive state indicators rather than fixed time clocks
+            if (state.pvpForcedWinsLeft > 0) {
+                document.getElementById("pvp-status").innerText = "Rigged Matrix Active";
+                document.getElementById("pvp-status").style.color = "var(--success-color)";
+            } else if (state.taskType === "selling") {
+                document.getElementById("pvp-status").innerText = "Safe in Outpost Town";
+                document.getElementById("pvp-status").style.color = "var(--text-muted)";
             } else {
-                document.getElementById("pvp-countdown").innerText = "Match Pending...";
+                document.getElementById("pvp-status").innerText = "Hunting Targets...";
+                document.getElementById("pvp-status").style.color = "var(--pvp-color)";
             }
 
             document.getElementById("chapter-number").innerText = state.chapter;
@@ -944,7 +939,6 @@
                     if (state.maxInventory === undefined) state.maxInventory = 15 + (state.level - 1);
                     if (state.houseLevel === undefined) state.houseLevel = 1;
                     if (state.houseProgress === undefined) state.houseProgress = 0;
-                    if (!state.nextPvpTime) resetPvpTimer();
 
                     saveGame();
                     updateUI();

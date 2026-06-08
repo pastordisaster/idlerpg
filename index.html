@@ -6,48 +6,62 @@
     <title>Progress Quest: Zero Player Edition</title>
     <style>
         :root {
-            --bg-color: #121214;
-            --panel-bg: #1a1a1e;
-            --border-color: #2d2d34;
-            --text-color: #e2e2e9;
-            --accent-color: #4f46e5;
+            --bg-color: #0f172a;
+            --panel-bg: #1e293b;
+            --border-color: #334155;
+            --text-color: #f8fafc;
+            --text-muted: #94a3b8;
+            --accent-color: #6366f1;
+            --accent-hover: #4f46e5;
             --success-color: #10b981;
             --warning-color: #f59e0b;
-            --pvp-color: #ef4444;
+            --pvp-color: #f43f5e;
             --chapter-color: #06b6d4;
         }
 
+        * {
+            box-sizing: border-box;
+        }
+
         body {
-            font-family: 'Courier New', Courier, monospace;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
             background-color: var(--bg-color);
             color: var(--text-color);
             margin: 0;
-            padding: 20px;
+            padding: 40px 20px;
             display: flex;
             flex-direction: column;
             align-items: center;
+            -webkit-font-smoothing: antialiased;
         }
 
         h1 {
-            color: var(--accent-color);
+            color: #fff;
             margin-bottom: 5px;
+            font-weight: 800;
+            letter-spacing: -0.025em;
+            font-size: 2.5rem;
+            background: linear-gradient(to right, #a5b4fc, #6366f1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
         }
 
         .subtitle {
-            font-style: italic;
-            color: #888;
-            margin-bottom: 20px;
+            color: var(--text-muted);
+            margin-bottom: 40px;
+            font-size: 1rem;
+            font-weight: 500;
         }
 
         .game-container {
             display: grid;
-            grid-template-columns: 300px 2fr 300px;
-            gap: 20px;
+            grid-template-columns: 320px 1fr 320px;
+            gap: 24px;
             width: 100%;
             max-width: 1200px;
         }
 
-        @media (max-width: 900px) {
+        @media (max-width: 1024px) {
             .game-container {
                 grid-template-columns: 1fr;
             }
@@ -55,122 +69,179 @@
 
         .panel {
             background-color: var(--panel-bg);
-            border: 2px solid var(--border-color);
-            border-radius: 6px;
-            padding: 15px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 24px;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.3), 0 4px 6px -4px rgba(0, 0, 0, 0.3);
         }
 
         .panel-title {
-            font-weight: bold;
-            border-bottom: 2px solid var(--border-color);
-            padding-bottom: 5px;
-            margin-bottom: 15px;
-            color: var(--accent-color);
+            font-weight: 700;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 12px;
+            margin-bottom: 20px;
+            color: #fff;
             text-transform: uppercase;
-            font-size: 1.1em;
+            font-size: 0.85rem;
+            letter-spacing: 0.05em;
         }
 
         .stat-line {
             display: flex;
             justify-content: space-between;
-            margin-bottom: 8px;
+            margin-bottom: 12px;
+            font-size: 0.95rem;
+        }
+        
+        .stat-line span:first-child {
+            color: var(--text-muted);
         }
 
         .progress-container {
-            margin: 15px 0;
+            margin: 20px 0;
+        }
+
+        .progress-container label {
+            display: block;
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: var(--text-muted);
+            margin-bottom: 6px;
         }
 
         .progress-bar-bg {
-            background-color: #2d2d34;
-            border-radius: 4px;
+            background-color: #0f172a;
+            border-radius: 9999px;
             height: 20px;
             width: 100%;
             overflow: hidden;
             position: relative;
+            border: 1px solid var(--border-color);
         }
 
         .progress-bar-fill {
             background-color: var(--accent-color);
             height: 100%;
             width: 0%;
-            transition: width 0.1s linear;
+            transition: width 0.2s ease-out;
+            border-radius: 9999px;
         }
 
-        .progress-bar-fill.xp { background-color: var(--success-color); }
-        .progress-bar-fill.inventory { background-color: var(--warning-color); }
-        .progress-bar-fill.chapter { background-color: var(--chapter-color); }
+        .progress-bar-fill.xp { background: linear-gradient(90deg, #059669, #10b981); }
+        .progress-bar-fill.inventory { background: linear-gradient(90deg, #d97706, #f59e0b); }
+        .progress-bar-fill.chapter { background: linear-gradient(90deg, #0891b2, #06b6d4); }
 
         .progress-text {
             position: absolute;
             width: 100%;
             text-align: center;
-            top: 1px;
-            font-size: 0.85em;
-            font-weight: bold;
+            top: 2px;
+            font-size: 0.75rem;
+            font-weight: 700;
             color: #fff;
-            text-shadow: 1px 1px 2px #000;
+            text-shadow: 0 1px 2px rgba(0,0,0,0.6);
         }
 
         #log {
-            height: 300px;
+            height: 320px;
             overflow-y: auto;
             border: 1px solid var(--border-color);
-            background-color: #0c0c0e;
-            padding: 10px;
-            font-size: 0.9em;
-            line-height: 1.4;
+            background-color: #0f172a;
+            padding: 16px;
+            font-size: 0.9rem;
+            line-height: 1.5;
+            border-radius: 8px;
         }
 
-        .log-entry { margin-bottom: 5px; }
+        .log-entry { 
+            margin-bottom: 8px; 
+            border-bottom: 1px solid rgba(255,255,255,0.02);
+            padding-bottom: 4px;
+        }
         .log-combat { color: #f87171; }
         .log-loot { color: #fbbf24; }
-        .log-level { color: #34d399; font-weight: bold; }
-        .log-pvp { color: #f43f5e; font-weight: bold; background-color: rgba(244, 63, 94, 0.1); padding: 2px 4px; border-radius: 3px; }
+        .log-level { color: #34d399; font-weight: 600; }
+        .log-pvp { color: #f43f5e; font-weight: 600; background-color: rgba(244, 63, 94, 0.1); padding: 4px 6px; border-radius: 4px; display: inline-block; width: 100%; box-sizing: border-box; }
 
         .inventory-list {
-            height: 230px;
+            height: 250px;
             overflow-y: auto;
-            font-size: 0.9em;
+            font-size: 0.9rem;
             border: 1px solid var(--border-color);
-            background-color: #0c0c0e;
-            padding: 10px;
+            background-color: #0f172a;
+            padding: 16px;
+            border-radius: 8px;
         }
 
-        .io-section {
-            margin-top: 20px;
+        .io-section, .changelog-panel {
+            margin-top: 24px;
             width: 100%;
             max-width: 1200px;
             display: flex;
             flex-direction: column;
-            gap: 10px;
+            gap: 12px;
         }
 
         textarea {
-            background-color: #0c0c0e;
+            background-color: #0f172a;
             color: var(--text-color);
             border: 1px solid var(--border-color);
-            padding: 10px;
+            padding: 12px;
             font-family: monospace;
             resize: vertical;
-            height: 60px;
+            height: 70px;
+            border-radius: 8px;
+            outline: none;
+        }
+        
+        textarea:focus {
+            border-color: var(--accent-color);
         }
 
         button {
             background-color: var(--accent-color);
             color: white;
             border: none;
-            padding: 10px 15px;
-            border-radius: 4px;
+            padding: 12px 20px;
+            border-radius: 8px;
             cursor: pointer;
-            font-family: monospace;
-            font-weight: bold;
+            font-weight: 600;
+            font-size: 0.9rem;
+            transition: background-color 0.2s, transform 0.1s;
         }
 
-        button:hover { background-color: #4338ca; }
+        button:hover { background-color: var(--accent-hover); }
+        button:active { transform: scale(0.98); }
         .btn-danger { background-color: #dc2626; }
         .btn-danger:hover { background-color: #b91c1c; }
-        .button-group { display: flex; gap: 10px; }
+        .button-group { display: flex; gap: 12px; }
+
+        .changelog-list {
+            max-height: 200px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            font-size: 0.9rem;
+            line-height: 1.6;
+        }
+
+        .changelog-item {
+            padding-bottom: 10px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .changelog-date {
+            font-weight: 700;
+            color: var(--accent-color);
+            margin-right: 8px;
+            display: inline-block;
+            min-width: 110px;
+        }
+        
+        .changelog-text {
+            color: #cbd5e1;
+        }
     </style>
 </head>
 <body>
@@ -181,41 +252,41 @@
     <div class="game-container">
         <div class="panel">
             <div class="panel-title">Hero Sheet</div>
-            <div class="stat-line"><span>Name:</span> <span id="char-name">---</span></div>
+            <div class="stat-line"><span>Name:</span> <span id="char-name" style="font-weight:600; color:#fff;">---</span></div>
             <div class="stat-line"><span>Class:</span> <span id="char-class">---</span></div>
             <div class="stat-line"><span>Level:</span> <b id="char-level" style="color:var(--success-color)">1</b></div>
             
             <div class="progress-container">
-                <label>Experience:</label>
+                <label>Experience</label>
                 <div class="progress-bar-bg">
                     <div id="xp-bar" class="progress-bar-fill xp"></div>
                     <div id="xp-text" class="progress-text">0 / 0</div>
                 </div>
             </div>
 
-            <div style="margin-top:15px; font-weight:bold; color:#888;">Attributes</div>
-            <div class="stat-line"><span>Strength:</span> <span id="stat-str">0</span></div>
-            <div class="stat-line"><span>Dexterity:</span> <span id="stat-dex">0</span></div>
-            <div class="stat-line"><span>Constitution:</span> <span id="stat-con">0</span></div>
-            <div class="stat-line"><span>Intelligence:</span> <span id="stat-int">0</span></div>
-            <div class="stat-line"><span>Wisdom:</span> <span id="stat-wis">0</span></div>
-            <div class="stat-line"><span>Charisma:</span> <span id="stat-cha">0</span></div>
+            <div style="margin-top:24px; margin-bottom: 12px; font-weight:700; font-size:0.8rem; text-transform:uppercase; color:var(--text-muted); letter-spacing:0.05em;">Attributes</div>
+            <div class="stat-line"><span>Strength:</span> <span id="stat-str" style="font-weight:600;">0</span></div>
+            <div class="stat-line"><span>Dexterity:</span> <span id="stat-dex" style="font-weight:600;">0</span></div>
+            <div class="stat-line"><span>Constitution:</span> <span id="stat-con" style="font-weight:600;">0</span></div>
+            <div class="stat-line"><span>Intelligence:</span> <span id="stat-int" style="font-weight:600;">0</span></div>
+            <div class="stat-line"><span>Wisdom:</span> <span id="stat-wis" style="font-weight:600;">0</span></div>
+            <div class="stat-line"><span>Charisma:</span> <span id="stat-cha" style="font-weight:600;">0</span></div>
 
-            <div style="margin-top:15px; font-weight:bold; color:#888;">Equipment</div>
-            <div class="stat-line"><span>Weapon:</span> <span id="eq-weapon" style="color:#a78bfa">Bare Fists</span></div>
-            <div class="stat-line"><span>Shield:</span> <span id="eq-shield" style="color:#a78bfa">None</span></div>
-            <div class="stat-line"><span>Armor:</span> <span id="eq-armor" style="color:#a78bfa">Cloth Rags</span></div>
+            <div style="margin-top:24px; margin-bottom: 12px; font-weight:700; font-size:0.8rem; text-transform:uppercase; color:var(--text-muted); letter-spacing:0.05em;">Equipment</div>
+            <div class="stat-line"><span>Weapon:</span> <span id="eq-weapon" style="color:#a78bfa; font-weight:500;">Bare Fists</span></div>
+            <div class="stat-line"><span>Shield:</span> <span id="eq-shield" style="color:#a78bfa; font-weight:500;">None</span></div>
+            <div class="stat-line"><span>Armor:</span> <span id="eq-armor" style="color:#a78bfa; font-weight:500;">Cloth Rags</span></div>
 
-            <div style="margin-top:20px; font-weight:bold; color:var(--pvp-color); border-top: 1px dashed var(--border-color); padding-top:10px;">PvP Arena Statistics</div>
-            <div class="stat-line"><span>Ranked Wins:</span> <span id="pvp-wins" style="color:var(--success-color); font-weight:bold;">0</span></div>
+            <div style="margin-top:24px; font-weight:700; font-size:0.8rem; text-transform:uppercase; color:var(--pvp-color); border-top: 1px dashed var(--border-color); padding-top:16px; letter-spacing:0.05em;">PvP Arena Statistics</div>
+            <div class="stat-line" style="margin-top:12px;"><span>Ranked Wins:</span> <span id="pvp-wins" style="color:var(--success-color); font-weight:700;">0</span></div>
             <div class="stat-line"><span>Ranked Losses:</span> <span id="pvp-losses">0</span></div>
-            <div class="stat-line" style="font-size:0.85em; color:#aaa;"><span>Next Match In:</span> <span id="pvp-countdown">--:--</span></div>
+            <div class="stat-line" style="font-size:0.85em;"><span>Next Match In:</span> <span id="pvp-countdown" style="color:var(--text-muted);">--:--</span></div>
         </div>
 
         <div class="panel">
             <div class="panel-title" style="color: var(--chapter-color);">Story Campaign</div>
-            <div style="font-weight:bold; margin-bottom: 5px;">Current Chapter: <span id="chapter-number" style="color:var(--chapter-color)">1</span></div>
-            <div class="progress-container" style="margin-top:5px; margin-bottom:25px;">
+            <div style="font-weight:600; font-size: 1.05rem; margin-bottom: 8px;">Current Chapter: <span id="chapter-number" style="color:var(--chapter-color)">1</span></div>
+            <div class="progress-container" style="margin-top:5px; margin-bottom:32px;">
                 <div class="progress-bar-bg">
                     <div id="chapter-bar" class="progress-bar-fill chapter"></div>
                     <div id="chapter-text-pct" class="progress-text">0%</div>
@@ -223,7 +294,7 @@
             </div>
 
             <div class="panel-title">Current Quest</div>
-            <div id="action-text" style="font-weight:bold; font-size:1.1em; margin-bottom:10px;">Rolling a character...</div>
+            <div id="action-text" style="font-weight:700; font-size:1.2rem; margin-bottom:12px; color:#fff;">Rolling a character...</div>
             
             <div class="progress-container">
                 <div class="progress-bar-bg">
@@ -232,18 +303,18 @@
                 </div>
             </div>
 
-            <div class="panel-title" style="margin-top:20px;">Quest Log</div>
+            <div class="panel-title" style="margin-top:32px;">Quest Log</div>
             <div id="log"></div>
         </div>
 
         <div class="panel">
             <div class="panel-title">Inventory</div>
-            <div class="stat-line" style="font-size:1.2em; margin-bottom:10px;">
-                <span>Gold:</span> <span id="inv-gold" style="color:#fbbf24; font-weight:bold;">0💰</span>
+            <div class="stat-line" style="font-size:1.3rem; margin-bottom:16px; align-items: center;">
+                <span style="color:#fff;">Gold:</span> <span id="inv-gold" style="color:#fbbf24; font-weight:800;">0💰</span>
             </div>
             
             <div class="progress-container">
-                <label>Inventory Capacity:</label>
+                <label>Inventory Capacity</label>
                 <div class="progress-bar-bg">
                     <div id="inv-bar" class="progress-bar-fill inventory"></div>
                     <div id="inv-text" class="progress-text">0 / 15 Items</div>
@@ -257,7 +328,7 @@
 
     <div class="io-section panel">
         <div class="panel-title">Data Transmission (Save / Load)</div>
-        <label for="saveCodeBox" style="font-size:0.85em; color:#aaa;">To back up your progress or move to a different computer, copy the code below. Paste a code and click Import to restore data.</label>
+        <label for="saveCodeBox" style="font-size:0.85rem; color:var(--text-muted);">To back up your progress or move to a different computer, copy the code below. Paste a code and click Import to restore data.</label>
         <textarea id="saveCodeBox" placeholder="Your save code will appear here... paste a save code here to import."></textarea>
         <div class="button-group">
             <button onclick="exportSave()">Generate Export Code</button>
@@ -266,8 +337,30 @@
         </div>
     </div>
 
+    <div class="changelog-panel panel">
+        <div class="panel-title">System Change Log</div>
+        <div class="changelog-list">
+            <div class="changelog-item">
+                <span class="changelog-date">Jun 08, 2026</span>
+                <span class="changelog-text">Redesigned user interface with premium high-contrast theme layout, modernized typography stack, integrated localized interactive naming prompts on character generation, and implemented runtime changelog modules.</span>
+            </div>
+            <div class="changelog-item">
+                <span class="changelog-date">May 24, 2026</span>
+                <span class="changelog-text">Fixed structural logic scoping collision causing equipment upgrades to drop or bypass the designated Hero Sheet Armor slot boundaries. Array data pools isolated from system state keys.</span>
+            </div>
+            <div class="changelog-item">
+                <span class="changelog-date">Mar 11, 2026</span>
+                <span class="changelog-text">Deployed automated background PvP Arena simulator including cross-instance calculations, automated match countdown handlers, and global tracking parameters.</span>
+            </div>
+            <div class="changelog-item">
+                <span class="changelog-date">Jan 15, 2026</span>
+                <span class="changelog-text">Optimized rendering cycles and micro-tick rate synchronization engine to prevent layout shifts during intense quest processing loops.</span>
+            </div>
+        </div>
+    </div>
+
     <script>
-        // Unique Data Item Pools (Renamed to guarantee isolation from object property keys)
+        // Data Item Pools
         const firstNames = ["Borog", "Drizzt", "Elminster", "Grog", "Morgoth", "Xanthor", "Thorg", "Glitch", "Sprocket", "Bravestarr"];
         const titles = ["the Unwashed", "the Mildly Adequate", "the Spine-Thief", "the Voodoo Cook", "the Geometric", "the Chronicler", "of the Low-Lands"];
         const classes = ["Hedge Wizard", "Slightly Magic Boy", "Voodoo Accountant", "Spine Thief", "Potato Paladin", "Bargain Barbarian", "Lunch Rogue"];
@@ -279,7 +372,7 @@
         ];
         
         const tasks = [
-            "Placating the local local authorities", "Executing a flawless parallel park", 
+            "Placating the local authorities", "Executing a flawless parallel park", 
             "Polishing a glass marble", "Waiting in an imaginary line", "Debating a brick wall",
             "Slightly adjusting the coordinates of a bush", "Contemplating structural integrity"
         ];
@@ -297,7 +390,7 @@
             "AlphaWolf", "TaxEvasionWizard", "Bongos4Life", "LootGoblin"
         ];
 
-        // Default State Configuration Object
+        // State Container
         let state = {
             name: "", class: "", level: 1, xp: 0, xpNeeded: 100, gold: 0,
             stats: { str: 0, dex: 0, con: 0, int: 0, wis: 0, cha: 0 },
@@ -307,7 +400,7 @@
             chapter: 1, chapterProgress: 0, pvpWins: 0, pvpLosses: 0, nextPvpTime: 0
         };
 
-        // Initialize Engine Safely
+        // Initialize Engine
         function init() {
             const saved = localStorage.getItem("regress_quest_save");
             let validLoad = false;
@@ -318,7 +411,6 @@
                     if (parsed && typeof parsed === 'object' && parsed.name) {
                         state = parsed;
                         
-                        // Enforce robust explicit legacy property normalization updates
                         if (!state.equipment) state.equipment = {};
                         if (!state.equipment.weapon) state.equipment.weapon = "Bare Fists";
                         if (!state.equipment.shield) state.equipment.shield = "None";
@@ -352,7 +444,16 @@
         }
 
         function generateCharacter() {
-            state.name = firstNames[Math.floor(Math.random() * firstNames.length)] + " " + titles[Math.floor(Math.random() * titles.length)];
+            const suggestedName = firstNames[Math.floor(Math.random() * firstNames.length)] + " " + titles[Math.floor(Math.random() * titles.length)];
+            let chosenName = prompt("Enter your hero's name (leave blank for a random name):", suggestedName);
+            
+            if (chosenName === null || chosenName.trim() === "") {
+                chosenName = suggestedName;
+            } else {
+                chosenName = chosenName.trim();
+            }
+
+            state.name = chosenName;
             state.class = classes[Math.floor(Math.random() * classes.length)];
             state.level = 1;
             state.xp = 0;
@@ -375,7 +476,7 @@
             state.pvpLosses = 0;
             resetPvpTimer();
             
-            logMessage("Character created! Adventure awaits.", "log-level");
+            logMessage(`Character [${state.name}] created! Adventure awaits.`, "log-level");
             rollNewTask();
             saveGame();
         }
@@ -391,7 +492,6 @@
             localStorage.setItem("regress_quest_save", JSON.stringify(state));
         }
 
-        // Clock Cycles Loop
         const tickRate = 200; 
         function tick() {
             if (Date.now() >= state.nextPvpTime) {
@@ -588,7 +688,7 @@
 
             const invContainer = document.getElementById("inventory-items");
             if (invContainer) {
-                invContainer.innerHTML = state.inventory.map(item => `<div style="margin-bottom:3px;">📦 ${item}</div>`).join('');
+                invContainer.innerHTML = state.inventory.map(item => `<div style="margin-bottom:6px; color:#e2e8f0;">📦 ${item}</div>`).join('');
             }
         }
 
@@ -664,7 +764,6 @@
             }
         }
 
-        // Execute Immediately on Parse
         init();
     </script>
 </body>

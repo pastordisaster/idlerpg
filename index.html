@@ -217,7 +217,7 @@
         .button-group { display: flex; gap: 12px; }
 
         .changelog-list {
-            max-height: 200px;
+            max-height: 250px;
             overflow-y: auto;
             display: flex;
             flex-direction: column;
@@ -250,6 +250,7 @@
     <div class="subtitle">The game that plays itself so you don't have to.</div>
 
     <div class="game-container">
+        <!-- CHARACTER PANEL -->
         <div class="panel">
             <div class="panel-title">Hero Sheet</div>
             <div class="stat-line"><span>Name:</span> <span id="char-name" style="font-weight:600; color:#fff;">---</span></div>
@@ -277,13 +278,16 @@
             <div class="stat-line"><span>Shield:</span> <span id="eq-shield" style="color:#a78bfa; font-weight:500;">None</span></div>
             <div class="stat-line"><span>Armor:</span> <span id="eq-armor" style="color:#a78bfa; font-weight:500;">Cloth Rags</span></div>
 
+            <!-- PvP ARENA PANEL -->
             <div style="margin-top:24px; font-weight:700; font-size:0.8rem; text-transform:uppercase; color:var(--pvp-color); border-top: 1px dashed var(--border-color); padding-top:16px; letter-spacing:0.05em;">PvP Arena Statistics</div>
             <div class="stat-line" style="margin-top:12px;"><span>Ranked Wins:</span> <span id="pvp-wins" style="color:var(--success-color); font-weight:700;">0</span></div>
             <div class="stat-line"><span>Ranked Losses:</span> <span id="pvp-losses">0</span></div>
             <div class="stat-line" style="font-size:0.85em;"><span>Next Match In:</span> <span id="pvp-countdown" style="color:var(--text-muted);">--:--</span></div>
         </div>
 
+        <!-- MAIN ACTION PANEL -->
         <div class="panel">
+            <!-- CHAPTER PROGRESSION PANEL -->
             <div class="panel-title" style="color: var(--chapter-color);">Story Campaign</div>
             <div style="font-weight:600; font-size: 1.05rem; margin-bottom: 8px;">Current Chapter: <span id="chapter-number" style="color:var(--chapter-color)">1</span></div>
             <div class="progress-container" style="margin-top:5px; margin-bottom:32px;">
@@ -307,6 +311,7 @@
             <div id="log"></div>
         </div>
 
+        <!-- INVENTORY PANEL -->
         <div class="panel">
             <div class="panel-title">Inventory</div>
             <div class="stat-line" style="font-size:1.3rem; margin-bottom:16px; align-items: center;">
@@ -322,10 +327,12 @@
             </div>
 
             <div class="inventory-list" id="inventory-items">
-                </div>
+                <!-- Items list -->
+            </div>
         </div>
     </div>
 
+    <!-- UTILITIES -->
     <div class="io-section panel">
         <div class="panel-title">Data Transmission (Save / Load)</div>
         <label for="saveCodeBox" style="font-size:0.85rem; color:var(--text-muted);">To back up your progress or move to a different computer, copy the code below. Paste a code and click Import to restore data.</label>
@@ -337,9 +344,14 @@
         </div>
     </div>
 
+    <!-- CHANGELOG PANEL -->
     <div class="changelog-panel panel">
         <div class="panel-title">System Change Log</div>
         <div class="changelog-list">
+            <div class="changelog-item">
+                <span class="changelog-date">Jun 08, 2026</span>
+                <span class="changelog-text">Decoupled gear level modifiers from strict character level caps, allowing high-level item drops and merchant wares to span far past current status levels. Added a dynamic gear comparison matrix that automatically sells interior gear items for gold while instantly equipping real upgrades. Shifted local merchants to cycle stock pools completely at random.</span>
+            </div>
             <div class="changelog-item">
                 <span class="changelog-date">Jun 08, 2026</span>
                 <span class="changelog-text">Redesigned user interface with premium high-contrast theme layout, modernized typography stack, integrated localized interactive naming prompts on character generation, and implemented runtime changelog modules.</span>
@@ -380,9 +392,9 @@
         const itemPrefixes = ["Dull", "Rusty", "Slightly Sticky", "Overpriced", "Plastic", "Vaguely Magic", "Standard-Issue", "Exquisite"];
         const itemNouns = ["Spoon", "Thimble", "Cardboard Box", "Left Sock", "Lint Ball", "Broken Pencil", "Shiny Pebble", "Expired Coupon", "Fake Mustache"];
         
-        const weaponPool = ["Butter Knife", "Rusty Fork", "Slightly Shiter Fork +1", "Pointy Stick", "Iron Ladle", "Excalibur's Replica", "Hyper-Dense Loaf of Bread"];
+        const weaponPool = ["Butter Knife", "Rusty Fork", "Slightly Shiter Fork", "Pointy Stick", "Iron Ladle", "Excalibur's Replica", "Hyper-Dense Loaf of Bread"];
         const shieldPool = ["Garbage Can Lid", "Thick Newspaper", "Wooden Platter", "Rusty Hubcap", "Buckler of Extreme Doubt"];
-        const armorPool = ["Bubble Wrap Plate", "Cardboard Box mail", "Threadbare Poncho", "Leather Tunic (Smells like wet dog)", "Iron Boilerplate", "Hazardous Bio-Suit"];
+        const armorPool = ["Bubble Wrap Plate", "Cardboard Box mail", "Threadbare Poncho", "Leather Tunic", "Iron Boilerplate", "Hazardous Bio-Suit"];
 
         const fakePlayers = [
             "xX_Sephiroth_Xx", "GamerDad69", "NoobSlayer2000", "IdleKing", "Leeroy_Jenkins", 
@@ -399,6 +411,13 @@
             taskType: "quest", taskDuration: 3000,
             chapter: 1, chapterProgress: 0, pvpWins: 0, pvpLosses: 0, nextPvpTime: 0
         };
+
+        // Helper to extract an item's +level modifier safely
+        function getItemLevel(itemStr) {
+            if (!itemStr || itemStr === "Bare Fists" || itemStr === "None" || itemStr === "Cloth Rags") return 0;
+            const match = itemStr.match(/\+(\d+)$/);
+            return match ? parseInt(match[1], 10) : 0;
+        }
 
         // Initialize Engine
         function init() {
@@ -551,7 +570,31 @@
                 state.xp += gainedXp;
                 state.gold += gainedGold;
 
-                if (Math.random() > 0.3) {
+                // 15% chance to roll an equipment drop instead of typical junk items
+                if (Math.random() < 0.15) {
+                    const slots = ["weapon", "shield", "armor"];
+                    const dropSlot = slots[Math.floor(Math.random() * slots.length)];
+                    
+                    // Equipment level rolls independently of character levels (can swing low or highly past character limits)
+                    const itemLvl = Math.floor(Math.random() * (state.level * 1.6)) + Math.floor(Math.random() * 12) + 1;
+                    let droppedItem = "";
+                    
+                    if (dropSlot === "weapon") droppedItem = weaponPool[Math.floor(Math.random() * weaponPool.length)] + ` +${itemLvl}`;
+                    else if (dropSlot === "shield") droppedItem = shieldPool[Math.floor(Math.random() * shieldPool.length)] + ` +${itemLvl}`;
+                    else if (dropSlot === "armor") droppedItem = armorPool[Math.floor(Math.random() * armorPool.length)] + ` +${itemLvl}`;
+
+                    const currentEquippedLvl = getItemLevel(state.equipment[dropSlot]);
+                    
+                    if (itemLvl > currentEquippedLvl) {
+                        state.equipment[dropSlot] = droppedItem;
+                        logMessage(`💥 RARE UPGRADE: Found and equipped ${droppedItem} (Old: +${currentEquippedLvl})!`, "log-loot");
+                    } else {
+                        // Automatically sold if worse
+                        const itemWorth = itemLvl * 12;
+                        state.gold += itemWorth;
+                        logMessage(`Dropped ${droppedItem}, but it's worse than your current gear. Automatically liquidated for ${itemWorth} Gold.`, "log-loot");
+                    }
+                } else if (Math.random() > 0.3) {
                     const item = itemPrefixes[Math.floor(Math.random() * itemPrefixes.length)] + " " + itemNouns[Math.floor(Math.random() * itemNouns.length)];
                     state.inventory.push(item);
                     logMessage(`Found item: [${item}]`, "log-loot");
@@ -617,24 +660,34 @@
             }
         }
 
+        // Refactored Merchant Logic: Vendor cycles random gear selections past character level limits
         function buyEquipmentUpgrade() {
-            const cost = state.level * 40;
-            if (state.gold >= cost) {
-                state.gold -= cost;
-                const slots = ["weapon", "shield", "armor"];
-                const chosenSlot = slots[Math.floor(Math.random() * slots.length)];
-                
-                let newItem = "";
-                if (chosenSlot === "weapon") {
-                    newItem = weaponPool[Math.floor(Math.random() * weaponPool.length)] + ` +${state.level}`;
-                } else if (chosenSlot === "shield") {
-                    newItem = shieldPool[Math.floor(Math.random() * shieldPool.length)] + ` +${state.level}`;
-                } else if (chosenSlot === "armor") {
-                    newItem = armorPool[Math.floor(Math.random() * armorPool.length)] + ` +${state.level}`;
-                }
+            const slots = ["weapon", "shield", "armor"];
+            const merchantSlot = slots[Math.floor(Math.random() * slots.length)];
+            
+            // Item levels generated past character level boundaries
+            const itemLvl = Math.floor(Math.random() * (state.level * 1.8)) + Math.floor(Math.random() * 6) + 1;
+            const cost = itemLvl * 28;
 
-                state.equipment[chosenSlot] = newItem;
-                logMessage(`🛍️ Auto-Merchant: Purchased ${newItem} for ${cost} Gold.`, "log-level");
+            let vendorItem = "";
+            if (merchantSlot === "weapon") vendorItem = weaponPool[Math.floor(Math.random() * weaponPool.length)] + ` +${itemLvl}`;
+            else if (merchantSlot === "shield") vendorItem = shieldPool[Math.floor(Math.random() * shieldPool.length)] + ` +${itemLvl}`;
+            else if (merchantSlot === "armor") vendorItem = armorPool[Math.floor(Math.random() * armorPool.length)] + ` +${itemLvl}`;
+
+            // Check if hero has enough money to buy the item
+            if (state.gold >= cost) {
+                const currentEquippedLvl = getItemLevel(state.equipment[merchantSlot]);
+                
+                if (itemLvl > currentEquippedLvl) {
+                    // Purchase and swap equipment
+                    state.gold -= cost;
+                    state.equipment[merchantSlot] = vendorItem;
+                    logMessage(`🛍️ Merchant: Purchased upgrade! Equipped ${vendorItem} for ${cost} Gold (Old: +${currentEquippedLvl}).`, "log-level");
+                } else {
+                    // Item is worse than current gear; character ignores it or "sells back" interest
+                    // We simply cycle past it without expending gold as requested by decision rules
+                    logMessage(`🛍️ Merchant: Viewed ${vendorItem} (${cost} Gold). Rejected as worse than current gear.`, "");
+                }
             }
         }
 

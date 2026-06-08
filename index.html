@@ -13,6 +13,8 @@
             --accent-color: #4f46e5;
             --success-color: #10b981;
             --warning-color: #f59e0b;
+            --pvp-color: #ef4444;
+            --chapter-color: #06b6d4;
         }
 
         body {
@@ -97,6 +99,7 @@
 
         .progress-bar-fill.xp { background-color: var(--success-color); }
         .progress-bar-fill.inventory { background-color: var(--warning-color); }
+        .progress-bar-fill.chapter { background-color: var(--chapter-color); }
 
         .progress-text {
             position: absolute;
@@ -123,9 +126,10 @@
         .log-combat { color: #f87171; }
         .log-loot { color: #fbbf24; }
         .log-level { color: #34d399; font-weight: bold; }
+        .log-pvp { color: #f43f5e; font-weight: bold; background-color: rgba(244, 63, 94, 0.1); padding: 2px 4px; border-radius: 3px; }
 
         .inventory-list {
-            height: 200px;
+            height: 230px;
             overflow-y: auto;
             font-size: 0.9em;
             border: 1px solid var(--border-color);
@@ -175,7 +179,6 @@
     <div class="subtitle">The game that plays itself so you don't have to.</div>
 
     <div class="game-container">
-        <!-- CHARACTER PANEL -->
         <div class="panel">
             <div class="panel-title">Hero Sheet</div>
             <div class="stat-line"><span>Name:</span> <span id="char-name">---</span></div>
@@ -202,10 +205,23 @@
             <div class="stat-line"><span>Weapon:</span> <span id="eq-weapon" style="color:#a78bfa">Bare Fists</span></div>
             <div class="stat-line"><span>Shield:</span> <span id="eq-shield" style="color:#a78bfa">None</span></div>
             <div class="stat-line"><span>Armor:</span> <span id="eq-armor" style="color:#a78bfa">Cloth Rags</span></div>
+
+            <div style="margin-top:20px; font-weight:bold; color:var(--pvp-color); border-top: 1px dashed var(--border-color); padding-top:10px;">PvP Arena Statistics</div>
+            <div class="stat-line"><span>Ranked Wins:</span> <span id="pvp-wins" style="color:var(--success-color); font-weight:bold;">0</span></div>
+            <div class="stat-line"><span>Ranked Losses:</span> <span id="pvp-losses">0</span></div>
+            <div class="stat-line" style="font-size:0.85em; color:#aaa;"><span>Next Match In:</span> <span id="pvp-countdown">--:--</span></div>
         </div>
 
-        <!-- MAIN ACTION PANEL -->
         <div class="panel">
+            <div class="panel-title" style="color: var(--chapter-color);">Story Campaign</div>
+            <div style="font-weight:bold; margin-bottom: 5px;">Current Chapter: <span id="chapter-number" style="color:var(--chapter-color)">1</span></div>
+            <div class="progress-container" style="margin-top:5px; margin-bottom:25px;">
+                <div class="progress-bar-bg">
+                    <div id="chapter-bar" class="progress-bar-fill chapter"></div>
+                    <div id="chapter-text-pct" class="progress-text">0%</div>
+                </div>
+            </div>
+
             <div class="panel-title">Current Quest</div>
             <div id="action-text" style="font-weight:bold; font-size:1.1em; margin-bottom:10px;">Rolling a character...</div>
             
@@ -220,7 +236,6 @@
             <div id="log"></div>
         </div>
 
-        <!-- INVENTORY PANEL -->
         <div class="panel">
             <div class="panel-title">Inventory</div>
             <div class="stat-line" style="font-size:1.2em; margin-bottom:10px;">
@@ -228,7 +243,7 @@
             </div>
             
             <div class="progress-container">
-                <label>Encumbrance:</label>
+                <label>Inventory Capacity:</label>
                 <div class="progress-bar-bg">
                     <div id="inv-bar" class="progress-bar-fill inventory"></div>
                     <div id="inv-text" class="progress-text">0 / 15 Items</div>
@@ -236,332 +251,10 @@
             </div>
 
             <div class="inventory-list" id="inventory-items">
-                <!-- Items appear here -->
-            </div>
+                </div>
         </div>
     </div>
 
-    <!-- IMPORT / EXPORT DATA UTILITY -->
     <div class="io-section panel">
         <div class="panel-title">Data Transmission (Save / Load)</div>
-        <label for="saveCodeBox" style="font-size:0.85em; color:#aaa;">To back up your progress or move to a different computer, copy the code below. Paste a code and click Import to restore data.</label>
-        <textarea id="saveCodeBox" placeholder="Your save code will appear here... paste a save code here to import."></textarea>
-        <div class="button-group">
-            <button onclick="exportSave()">Generate Export Code</button>
-            <button onclick="importSave()">Import Code</button>
-            <button class="btn-danger" onclick="confirmReset()" style="margin-left:auto;">Reroll Character (Reset)</button>
-        </div>
-    </div>
-
-    <script>
-        // Game Data Pools
-        const firstNames = ["Borog", "Drizzt", "Elminster", "Grog", "Morgoth", "Xanthor", "Thorg", "Glitch", "Sprocket", "Bravestarr"];
-        const titles = ["the Unwashed", "the Mildly Adequate", "the Spine-Thief", "the Voodoo Cook", "the Geometric", "the Chronicler", "of the Low-Lands"];
-        const classes = ["Hedge Wizard", "Slightly Magic Boy", "Voodoo Accountant", "Spine Thief", "Potato Paladin", "Bargain Barbarian", "Lunch Rogue"];
-        
-        const monsters = [
-            "an angry pocket-watch", "a rogue geometry teacher", "a sentient head of lettuce", 
-            "a minor inconvenience", "a budget goblin", "an aggressive dust bunny", 
-            "a corporate synergy executioner", "a slightly damp skeleton", "a deterministic algorithms textbook"
-        ];
-        
-        const tasks = [
-            "Placating the local local authorities", "Executing a flawless parallel park", 
-            "Polishing a glass marble", "Waiting in an imaginary line", "Debating a brick wall",
-            "Slightly adjusting the coordinates of a bush", "Contemplating structural integrity"
-        ];
-
-        const itemPrefixes = ["Dull", "Rusty", "Slightly Sticky", "Overpriced", "Plastic", "Vaguely Magic", "Standard-Issue", "Exquisite"];
-        const itemNouns = ["Spoon", "Thimble", "Cardboard Box", "Left Sock", "Lint Ball", "Broken Pencil", "Shiny Pebble", "Expired Coupon", "Fake Mustache"];
-        
-        const weapons = ["Butter Knife", "Rusty Fork", "Slightly Shiter Fork +1", "Pointy Stick", "Iron Ladle", "Excalibur's Replica", "Hyper-Dense Loaf of Bread"];
-        const shields = ["Garbage Can Lid", "Thick Newspaper", "Wooden Platter", "Rusty Hubcap", "Buckler of Extreme Doubt"];
-        const armor = ["Bubble Wrap", "Cardboard Box mail", "Threadbare Poncho", "Leather Tunic (Smells like wet dog)", "Iron Boilerplate"];
-
-        // State Core Object
-        let state = {
-            name: "",
-            class: "",
-            level: 1,
-            xp: 0,
-            xpNeeded: 100,
-            gold: 0,
-            stats: { str: 0, dex: 0, con: 0, int: 0, wis: 0, cha: 0 },
-            equipment: { weapon: "Bare Fists", shield: "None", armor: "Cloth Rags" },
-            inventory: [],
-            maxInventory: 15,
-            currentTask: "",
-            taskProgress: 0,
-            taskType: "quest", // "quest" or "selling"
-            taskDuration: 3000 // ms
-        };
-
-        // Initialize/Load Game
-        function init() {
-            const saved = localStorage.getItem("regress_quest_save");
-            if (saved) {
-                try {
-                    state = JSON.parse(saved);
-                } catch(e) {
-                    generateCharacter();
-                }
-            } else {
-                generateCharacter();
-            }
-            updateUI();
-            tick();
-        }
-
-        function generateCharacter() {
-            state.name = firstNames[Math.floor(Math.random() * firstNames.length)] + " " + titles[Math.floor(Math.random() * titles.length)];
-            state.class = classes[Math.floor(Math.random() * classes.length)];
-            state.level = 1;
-            state.xp = 0;
-            state.xpNeeded = 100;
-            state.gold = 20;
-            state.stats = {
-                str: Math.floor(Math.random() * 8) + 8,
-                dex: Math.floor(Math.random() * 8) + 8,
-                con: Math.floor(Math.random() * 8) + 8,
-                int: Math.floor(Math.random() * 8) + 8,
-                wis: Math.floor(Math.random() * 8) + 8,
-                cha: Math.floor(Math.random() * 8) + 8
-            };
-            state.equipment = { weapon: "Bare Fists", shield: "None", armor: "Cloth Rags" };
-            state.inventory = [];
-            state.maxInventory = 15;
-            
-            logMessage("Character created! Adventure awaits.", "log-level");
-            rollNewTask();
-            saveGame();
-        }
-
-        function saveGame() {
-            localStorage.setItem("regress_quest_save", JSON.stringify(state));
-        }
-
-        // Loop Dynamics
-        const tickRate = 200; // running the loop every 200ms
-        function tick() {
-            if (state.taskType === "quest") {
-                state.taskProgress += (tickRate / state.taskDuration) * 100;
-                if (state.taskProgress >= 100) {
-                    completeTask();
-                }
-            } else if (state.taskType === "selling") {
-                state.taskProgress += (tickRate / 800) * 100; // sells fast!
-                if (state.taskProgress >= 100) {
-                    sellOneItem();
-                }
-            }
-            updateUI();
-            setTimeout(tick, tickRate);
-        }
-
-        function rollNewTask() {
-            state.taskProgress = 0;
-            
-            // Check if inventory full
-            if (state.inventory.length >= state.maxInventory) {
-                state.taskType = "selling";
-                state.currentTask = "Heading back to town to liquidate assets...";
-                state.taskDuration = 1000;
-                return;
-            }
-
-            state.taskType = "quest";
-            state.taskDuration = Math.floor(Math.random() * 2000) + 2000; // 2-4 seconds
-
-            if (Math.random() > 0.4) {
-                const monster = monsters[Math.floor(Math.random() * monsters.length)];
-                state.currentTask = `Slaying ${monster}`;
-            } else {
-                state.currentTask = tasks[Math.floor(Math.random() * tasks.length)];
-            }
-        }
-
-        function completeTask() {
-            if (state.currentTask.startsWith("Slaying")) {
-                const gainedXp = Math.floor(Math.random() * 15) + 10;
-                const gainedGold = Math.floor(Math.random() * 8) + 2;
-                
-                logMessage(`Defeated opponent! Gained ${gainedXp} XP and ${gainedGold} Gold.`, "log-combat");
-                
-                state.xp += gainedXp;
-                state.gold += gainedGold;
-
-                // Roll loot drop chance
-                if (Math.random() > 0.3) {
-                    const item = itemPrefixes[Math.floor(Math.random() * itemPrefixes.length)] + " " + itemNouns[Math.floor(Math.random() * itemNouns.length)];
-                    state.inventory.push(item);
-                    logMessage(`Found item: [${item}]`, "log-loot");
-                }
-
-                checkLevelUp();
-            } else {
-                const gainedXp = Math.floor(Math.random() * 20) + 15;
-                logMessage(`Task completed successfully! Gained ${gainedXp} XP.`, "");
-                state.xp += gainedXp;
-                checkLevelUp();
-            }
-
-            // Passive check to see if hero upgrades gear using gold automatically
-            buyEquipmentUpgrade();
-            
-            saveGame();
-            rollNewTask();
-        }
-
-        function sellOneItem() {
-            if (state.inventory.length > 0) {
-                const item = state.inventory.pop();
-                const profit = Math.floor(Math.random() * 15) + 5;
-                state.gold += profit;
-                logMessage(`Sold [${item}] to a gullible merchant for ${profit} Gold.`, "log-loot");
-                state.taskProgress = 0;
-            } else {
-                logMessage("Inventory cleared. Moving back to the dangerous wilds.", "log-level");
-                rollNewTask();
-            }
-            saveGame();
-        }
-
-        function checkLevelUp() {
-            if (state.xp >= state.xpNeeded) {
-                state.level++;
-                state.xp -= state.xpNeeded;
-                state.xpNeeded = Math.floor(state.xpNeeded * 1.5);
-                
-                // Increase random attribute
-                const attrs = ['str', 'dex', 'con', 'int', 'wis', 'cha'];
-                const chosen = attrs[Math.floor(Math.random() * attrs.length)];
-                state.stats[chosen] += Math.floor(Math.random() * 3) + 1;
-
-                logMessage(`⚡ LEVEL UP! You are now Level ${state.level}! Your ${chosen.toUpperCase()} increased.`, "log-level");
-            }
-        }
-
-        function buyEquipmentUpgrade() {
-            const cost = state.level * 40;
-            if (state.gold >= cost) {
-                state.gold -= cost;
-                const slots = ["weapon", "shield", "armor"];
-                const chosenSlot = slots[Math.floor(Math.random() * slots.length)];
-                
-                let newItem = "";
-                if (chosenSlot === "weapon") newItem = weapons[Math.floor(Math.random() * weapons.length)] + ` +${state.level}`;
-                if (chosenSlot === "shield") newItem = shields[Math.floor(Math.random() * shields.length)] + ` +${state.level}`;
-                if (chosenSlot === "armor") newItem = armor[Math.floor(Math.random() * armor.length)] + ` +${state.level}`;
-
-                state.equipment[chosenSlot] = newItem;
-                logMessage(`🛍️ Auto-Merchant: Purchased ${newItem} for ${cost} Gold.`, "log-level");
-            }
-        }
-
-        // Interface Management
-        function updateUI() {
-            document.getElementById("char-name").innerText = state.name;
-            document.getElementById("char-class").innerText = state.class;
-            document.getElementById("char-level").innerText = state.level;
-            
-            // Xp Bar
-            const xpPct = Math.min((state.xp / state.xpNeeded) * 100, 100);
-            document.getElementById("xp-bar").style.width = xpPct + "%";
-            document.getElementById("xp-text").innerText = `${state.xp} / ${state.xpNeeded} XP`;
-
-            // Stats
-            document.getElementById("stat-str").innerText = state.stats.str;
-            document.getElementById("stat-dex").innerText = state.stats.dex;
-            document.getElementById("stat-con").innerText = state.stats.con;
-            document.getElementById("stat-int").innerText = state.stats.int;
-            document.getElementById("stat-wis").innerText = state.stats.wis;
-            document.getElementById("stat-cha").innerText = state.stats.cha;
-
-            // Gear
-            document.getElementById("eq-weapon").innerText = state.equipment.weapon;
-            document.getElementById("eq-shield").innerText = state.equipment.shield;
-            document.getElementById("eq-armor").innerText = state.equipment.armor;
-
-            // Current Action Panel
-            document.getElementById("action-text").innerText = state.currentTask;
-            const actPct = Math.min(state.taskProgress, 100);
-            document.getElementById("action-bar").style.width = actPct + "%";
-            document.getElementById("action-text-pct").innerText = Math.floor(actPct) + "%";
-
-            // Inventory
-            document.getElementById("inv-gold").innerText = state.gold + " 💰";
-            const invPct = (state.inventory.length / state.maxInventory) * 100;
-            document.getElementById("inv-bar").style.width = invPct + "%";
-            document.getElementById("inv-text").innerText = `${state.inventory.length} / ${state.maxInventory} Items`;
-
-            const invContainer = document.getElementById("inventory-items");
-            invContainer.innerHTML = state.inventory.map(item => `<div style="margin-bottom:3px;">📦 ${item}</div>`).join('');
-        }
-
-        function logMessage(text, className) {
-            const logBox = document.getElementById("log");
-            const entry = document.createElement("div");
-            entry.className = `log-entry ${className}`;
-            
-            const timestamp = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' });
-            entry.innerText = `[${timestamp}] ${text}`;
-            
-            logBox.appendChild(entry);
-            logBox.scrollTop = logBox.scrollHeight;
-
-            // Limit elements inside log view to maintain performance
-            while (logBox.children.length > 50) {
-                logBox.removeChild(logBox.firstChild);
-            }
-        }
-
-        // Export and Import Functionality
-        function exportSave() {
-            // Encode base64 to keep things tidy
-            const rawJson = JSON.stringify(state);
-            const encodedCode = btoa(unescape(encodeURIComponent(rawJson)));
-            
-            const outputBox = document.getElementById("saveCodeBox");
-            outputBox.value = encodedCode;
-            outputBox.select();
-            alert("Save code generated and loaded into text box! Copy it now.");
-        }
-
-        function importSave() {
-            const codeInput = document.getElementById("saveCodeBox").value.trim();
-            if (!codeInput) {
-                alert("Please paste a valid save code into the text area first!");
-                return;
-            }
-
-            try {
-                const decodedJson = decodeURIComponent(escape(atob(codeInput)));
-                const parsedState = JSON.parse(decodedJson);
-                
-                // Basic data integrity validation checks
-                if (parsedState.name && parsedState.stats && typeof parsedState.level === 'number') {
-                    state = parsedState;
-                    saveGame();
-                    updateUI();
-                    logMessage("Data successfully imported! Relocating back to questing matrix...", "log-level");
-                    alert("Import successful!");
-                } else {
-                    alert("Invalid Save Structure. The data code appears corrupt.");
-                }
-            } catch (err) {
-                alert("Failed to decode save data string. Double check that you copied the text code accurately.");
-            }
-        }
-
-        function confirmReset() {
-            if (confirm("Are you sure you want to completely clear this character profile and roll a clean level 1 hero?")) {
-                localStorage.removeItem("regress_quest_save");
-                generateCharacter();
-            }
-        }
-
-        // Kickoff
-        window.onload = init;
-    </script>
-</body>
-</html>
+        <label for="saveCodeBox" style="font-size:0.85em; color:#aaa;">To back up your progress or move to a different computer, copy the code below.

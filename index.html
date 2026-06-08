@@ -179,7 +179,6 @@
     <div class="subtitle">The game that plays itself so you don't have to.</div>
 
     <div class="game-container">
-        <!-- CHARACTER PANEL -->
         <div class="panel">
             <div class="panel-title">Hero Sheet</div>
             <div class="stat-line"><span>Name:</span> <span id="char-name">---</span></div>
@@ -207,16 +206,13 @@
             <div class="stat-line"><span>Shield:</span> <span id="eq-shield" style="color:#a78bfa">None</span></div>
             <div class="stat-line"><span>Armor:</span> <span id="eq-armor" style="color:#a78bfa">Cloth Rags</span></div>
 
-            <!-- PvP ARRENA PANEL -->
             <div style="margin-top:20px; font-weight:bold; color:var(--pvp-color); border-top: 1px dashed var(--border-color); padding-top:10px;">PvP Arena Statistics</div>
             <div class="stat-line"><span>Ranked Wins:</span> <span id="pvp-wins" style="color:var(--success-color); font-weight:bold;">0</span></div>
             <div class="stat-line"><span>Ranked Losses:</span> <span id="pvp-losses">0</span></div>
             <div class="stat-line" style="font-size:0.85em; color:#aaa;"><span>Next Match In:</span> <span id="pvp-countdown">--:--</span></div>
         </div>
 
-        <!-- MAIN ACTION PANEL -->
         <div class="panel">
-            <!-- CHAPTER PROGRESSION PANEL -->
             <div class="panel-title" style="color: var(--chapter-color);">Story Campaign</div>
             <div style="font-weight:bold; margin-bottom: 5px;">Current Chapter: <span id="chapter-number" style="color:var(--chapter-color)">1</span></div>
             <div class="progress-container" style="margin-top:5px; margin-bottom:25px;">
@@ -240,7 +236,6 @@
             <div id="log"></div>
         </div>
 
-        <!-- INVENTORY PANEL -->
         <div class="panel">
             <div class="panel-title">Inventory</div>
             <div class="stat-line" style="font-size:1.2em; margin-bottom:10px;">
@@ -256,12 +251,10 @@
             </div>
 
             <div class="inventory-list" id="inventory-items">
-                <!-- Items list -->
-            </div>
+                </div>
         </div>
     </div>
 
-    <!-- UTILITIES -->
     <div class="io-section panel">
         <div class="panel-title">Data Transmission (Save / Load)</div>
         <label for="saveCodeBox" style="font-size:0.85em; color:#aaa;">To back up your progress or move to a different computer, copy the code below. Paste a code and click Import to restore data.</label>
@@ -274,7 +267,7 @@
     </div>
 
     <script>
-        // Data Arrays
+        // Unique Data Item Pools (Renamed to guarantee isolation from object property keys)
         const firstNames = ["Borog", "Drizzt", "Elminster", "Grog", "Morgoth", "Xanthor", "Thorg", "Glitch", "Sprocket", "Bravestarr"];
         const titles = ["the Unwashed", "the Mildly Adequate", "the Spine-Thief", "the Voodoo Cook", "the Geometric", "the Chronicler", "of the Low-Lands"];
         const classes = ["Hedge Wizard", "Slightly Magic Boy", "Voodoo Accountant", "Spine Thief", "Potato Paladin", "Bargain Barbarian", "Lunch Rogue"];
@@ -294,9 +287,9 @@
         const itemPrefixes = ["Dull", "Rusty", "Slightly Sticky", "Overpriced", "Plastic", "Vaguely Magic", "Standard-Issue", "Exquisite"];
         const itemNouns = ["Spoon", "Thimble", "Cardboard Box", "Left Sock", "Lint Ball", "Broken Pencil", "Shiny Pebble", "Expired Coupon", "Fake Mustache"];
         
-        const weapons = ["Butter Knife", "Rusty Fork", "Slightly Shiter Fork +1", "Pointy Stick", "Iron Ladle", "Excalibur's Replica", "Hyper-Dense Loaf of Bread"];
-        const shields = ["Garbage Can Lid", "Thick Newspaper", "Wooden Platter", "Rusty Hubcap", "Buckler of Extreme Doubt"];
-        const armor = ["Bubble Wrap", "Cardboard Box mail", "Threadbare Poncho", "Leather Tunic (Smells like wet dog)", "Iron Boilerplate"];
+        const weaponPool = ["Butter Knife", "Rusty Fork", "Slightly Shiter Fork +1", "Pointy Stick", "Iron Ladle", "Excalibur's Replica", "Hyper-Dense Loaf of Bread"];
+        const shieldPool = ["Garbage Can Lid", "Thick Newspaper", "Wooden Platter", "Rusty Hubcap", "Buckler of Extreme Doubt"];
+        const armorPool = ["Bubble Wrap Plate", "Cardboard Box mail", "Threadbare Poncho", "Leather Tunic (Smells like wet dog)", "Iron Boilerplate", "Hazardous Bio-Suit"];
 
         const fakePlayers = [
             "xX_Sephiroth_Xx", "GamerDad69", "NoobSlayer2000", "IdleKing", "Leeroy_Jenkins", 
@@ -322,16 +315,20 @@
             if (saved) {
                 try {
                     const parsed = JSON.parse(saved);
-                    // Ensure the save file isn't empty or corrupted basic object primitive
                     if (parsed && typeof parsed === 'object' && parsed.name) {
                         state = parsed;
                         
-                        // Enforce legacy migrations explicitly to avoid UI undefined property lockups
+                        // Enforce robust explicit legacy property normalization updates
+                        if (!state.equipment) state.equipment = {};
+                        if (!state.equipment.weapon) state.equipment.weapon = "Bare Fists";
+                        if (!state.equipment.shield) state.equipment.shield = "None";
+                        if (!state.equipment.armor) state.equipment.armor = "Cloth Rags";
+                        
                         if (state.chapter === undefined) state.chapter = 1;
                         if (state.chapterProgress === undefined) state.chapterProgress = 0;
                         if (state.pvpWins === undefined) state.pvpWins = 0;
                         if (state.pvpLosses === undefined) state.pvpLosses = 0;
-                        if (state.maxInventory === undefined || state.maxInventory === 15) {
+                        if (state.maxInventory === undefined) {
                             state.maxInventory = 15 + (state.level - 1);
                         }
                         if (!state.nextPvpTime || isNaN(state.nextPvpTime)) resetPvpTimer();
@@ -347,7 +344,6 @@
                 generateCharacter();
             } else {
                 logMessage("Character profile verified and loaded safely.", "log-level");
-                // Safety check if user exited mid-task loop
                 if (!state.currentTask) rollNewTask();
             }
 
@@ -398,7 +394,6 @@
         // Clock Cycles Loop
         const tickRate = 200; 
         function tick() {
-            // Clock system time trigger checks for PvP Event
             if (Date.now() >= state.nextPvpTime) {
                 executePvPEvent();
             }
@@ -530,9 +525,13 @@
                 const chosenSlot = slots[Math.floor(Math.random() * slots.length)];
                 
                 let newItem = "";
-                if (chosenSlot === "weapon") newItem = weapons[Math.floor(Math.random() * weapons.length)] + ` +${state.level}`;
-                if (chosenSlot === "shield") newItem = shields[Math.floor(Math.random() * shields.length)] + ` +${state.level}`;
-                if (chosenSlot === "armor") newItem = armor[Math.floor(Math.random() * armor.length)] + ` +${state.level}`;
+                if (chosenSlot === "weapon") {
+                    newItem = weaponPool[Math.floor(Math.random() * weaponPool.length)] + ` +${state.level}`;
+                } else if (chosenSlot === "shield") {
+                    newItem = shieldPool[Math.floor(Math.random() * shieldPool.length)] + ` +${state.level}`;
+                } else if (chosenSlot === "armor") {
+                    newItem = armorPool[Math.floor(Math.random() * armorPool.length)] + ` +${state.level}`;
+                }
 
                 state.equipment[chosenSlot] = newItem;
                 logMessage(`🛍️ Auto-Merchant: Purchased ${newItem} for ${cost} Gold.`, "log-level");
@@ -633,6 +632,11 @@
                 if (parsedState.name && parsedState.stats && typeof parsedState.level === 'number') {
                     state = parsedState;
                     
+                    if (!state.equipment) state.equipment = {};
+                    if (!state.equipment.weapon) state.equipment.weapon = "Bare Fists";
+                    if (!state.equipment.shield) state.equipment.shield = "None";
+                    if (!state.equipment.armor) state.equipment.armor = "Cloth Rags";
+
                     if (state.chapter === undefined) state.chapter = 1;
                     if (state.chapterProgress === undefined) state.chapterProgress = 0;
                     if (state.pvpWins === undefined) state.pvpWins = 0;

@@ -350,19 +350,15 @@
         <div class="changelog-list">
             <div class="changelog-item">
                 <span class="changelog-date">Jun 08, 2026</span>
+                <span class="changelog-text">Expanded loot engine drop architecture. Implemented 50 new algorithmic loot modifiers (25 custom item prefixes + 25 randomized trash-tier nouns) into the core generation tables to dramatically increase inventory text variety.</span>
+            </div>
+            <div class="changelog-item">
+                <span class="changelog-date">Jun 08, 2026</span>
                 <span class="changelog-text">Restructured merchant economy loops. Characters will now only evaluate or buy equipment upgrades at the end of their liquidation phase when returning to town with a full inventory, preventing them from buying items instantly mid-quest.</span>
             </div>
             <div class="changelog-item">
                 <span class="changelog-date">Jun 08, 2026</span>
                 <span class="changelog-text">Expanded global content matrices significantly. Added 100 new thematic, satirical monster sub-types to combat generator loops, and implemented 50 additional immersive, flavor-text-driven idle quests to the campaign data array pools.</span>
-            </div>
-            <div class="changelog-item">
-                <span class="changelog-date">Jun 08, 2026</span>
-                <span class="changelog-text">Decoupled gear level modifiers from strict character level caps, allowing high-level item drops and merchant wares to span far past current status levels. Added a dynamic gear comparison matrix that automatically sells interior gear items for gold while instantly equipping real upgrades. Shifted local merchants to cycle stock pools completely at random.</span>
-            </div>
-            <div class="changelog-item">
-                <span class="changelog-date">Jun 08, 2026</span>
-                <span class="changelog-text">Redesigned user interface with premium high-contrast theme layout, modernized typography stack, integrated localized interactive naming prompts on character generation, and implemented runtime changelog modules.</span>
             </div>
         </div>
     </div>
@@ -436,8 +432,22 @@
             "Counting down the minutes until lunch break", "Looking for the start of a roll of packing tape while wearing gloves"
         ];
 
-        const itemPrefixes = ["Dull", "Rusty", "Slightly Sticky", "Overpriced", "Plastic", "Vaguely Magic", "Standard-Issue", "Exquisite"];
-        const itemNouns = ["Spoon", "Thimble", "Cardboard Box", "Left Sock", "Lint Ball", "Broken Pencil", "Shiny Pebble", "Expired Coupon", "Fake Mustache"];
+        // Core item drop pools - dynamically expanded with 50 unique items/modifiers
+        const itemPrefixes = [
+            "Dull", "Rusty", "Slightly Sticky", "Overpriced", "Plastic", "Vaguely Magic", "Standard-Issue", "Exquisite",
+            "Aggressively Moist", "Mildly Radioactive", "Finely Aged", "Counterfeit", "Slightly Charred", "Haunted",
+            "Corporate-Branded", "As Seen On TV", "Tax-Deductible", "Gluten-Free", "Metaphorical", "Pre-Owned",
+            "Crunchy", "Over-Engineered", "Lubricated", "Sentient", "Uncanny", "Highly Fragile", "Slightly Used",
+            "Deep-Fried", "Disappointing", "Slightly Warm", "Passive-Aggressive", "Soggy", "Inexplicable"
+        ];
+        
+        const itemNouns = [
+            "Spoon", "Thimble", "Cardboard Box", "Left Sock", "Lint Ball", "Broken Pencil", "Shiny Pebble", "Expired Coupon", "Fake Mustache",
+            "Paperclip", "Tupperware Lid (No Base)", "Pet Rock", "Receipt for a Single Banana", "Dust Bunny", "Spaghetti Strand",
+            "Hotel Soap", "USB Drive (Full of Malware)", "Novelty Keychain", "Single Googly Eye", "Used Napkin", "Half-Eaten Sandwich",
+            "Bubble Wrap", "Dental Floss (Unused)", "Instruction Manual", "Rubber Band", "Fortune Cookie Wrapper", "Desiccant Packet",
+            "Broken Rubber Duck", "Plastic Spork", "Empty Soda Can", "Crushed Cardboard Tube", "Single Battery (AA)", "Lint Roller Sheet", "Squeaky Toy"
+        ];
         
         const weaponPool = ["Butter Knife", "Rusty Fork", "Slightly Shiter Fork", "Pointy Stick", "Iron Ladle", "Excalibur's Replica", "Hyper-Dense Loaf of Bread"];
         const shieldPool = ["Garbage Can Lid", "Thick Newspaper", "Wooden Platter", "Rusty Hubcap", "Buckler of Extreme Doubt"];
@@ -680,7 +690,6 @@
                 logMessage(`Sold [${item}] to a gullible merchant for ${profit} Gold.`, "log-loot");
                 state.taskProgress = 0;
             } else {
-                // Character is in town and inventory is clear: Window shop right now!
                 buyEquipmentUpgrade();
                 logMessage("Inventory cleared. Moving back to the dangerous wilds.", "log-level");
                 rollNewTask();

@@ -334,7 +334,7 @@
 
             <!-- PLAYER HOUSING SUB-PANEL -->
             <div style="margin-top:24px; font-weight:700; font-size:0.8rem; text-transform:uppercase; color:var(--house-color); border-top: 1px dashed var(--border-color); padding-top:16px; letter-spacing:0.05em;">Player Housing</div>
-            <div class="stat-line" style="margin-top:12px;"><span>Estate Status:</span> <b id="house-name" style="color:#fff;">Level 1 Lean-To</b></div>
+            <div class="stat-line" style="margin-top:12px;"><span>Estate Status:</span> <b id="house-name" style="color:#fff;">Hole in the Ground</b></div>
             <div class="progress-container" style="margin-top:8px; margin-bottom:0;">
                 <label>Renovation Progress</label>
                 <div class="progress-bar-bg">
@@ -363,11 +363,11 @@
         <div class="changelog-list">
             <div class="changelog-item">
                 <span class="changelog-date">Jun 08, 2026</span>
-                <span class="changelog-text">Deconstructed the deterministic PvP arena match countdown timer. Ported player encounter loops over to a localized ambient probability system. Ambushed encounters now occur dynamically at unexpected times during general world travel or town logistics sequences.</span>
+                <span class="changelog-text">Deprecating flat array listings for properties. Integrated a grand procedural real estate matrix capable of handling metrics up to level 500,000+. Infrastructure models scale structurally from primitive holes in the dirt toward inter-galactic stellar civilizations based on investment thresholds.</span>
             </div>
             <div class="changelog-item">
                 <span class="changelog-date">Jun 08, 2026</span>
-                <span class="changelog-text">Overhauled Arena matchmaking system. Resolved deterministic win loops to enforce 50/50 localized random combat outcome simulations. Programmed a back-end tracking sub-routine that detects 3 consecutive ranked defeats and forces a 5-match guaranteed win streak to preserve algorithmic metrics retention.</span>
+                <span class="changelog-text">Deconstructed the deterministic PvP arena match countdown timer. Ported player encounter loops over to a localized ambient probability system. Ambushed encounters now occur dynamically at unexpected times during general world travel or town logistics sequences.</span>
             </div>
         </div>
     </div>
@@ -467,12 +467,6 @@
             "AlphaWolf", "TaxEvasionWizard", "Bongos4Life", "LootGoblin"
         ];
 
-        const houseTiers = [
-            "Cardboard Lean-To", "Mud Hut", "Thatch Cottage", "Slightly Sturdy Cabin", 
-            "Gated Suburban Home", "Double-Wide Brick Bastion", "Feudal Manor", 
-            "Gothic Citadel", "Neon Corporate Penthouse", "Unregulated Megastructure"
-        ];
-
         // State Container
         let state = {
             name: "", class: "", level: 1, xp: 0, xpNeeded: 100, gold: 0,
@@ -492,10 +486,38 @@
             return match ? parseInt(match[1], 10) : 0;
         }
 
+        // Procedural Real Estate Engine
         function getHouseTierName(lvl) {
-            if (lvl <= 0) return houseTiers[0];
-            if (lvl > houseTiers.length) return houseTiers[houseTiers.length - 1];
-            return houseTiers[lvl - 1];
+            if (lvl < 500) {
+                if (lvl === 1) return "Hole in the Ground";
+                if (lvl < 100) return "Slightly Deeper Ditch";
+                if (lvl < 250) return "Reinforced Earth Pit";
+                return "Mud-Lined Trench Complex";
+            } else if (lvl < 10000) {
+                if (lvl < 2500) return "Modest Thatch House";
+                if (lvl < 5000) return "Suburban Residential House";
+                if (lvl < 7500) return "Fortified Stone Manor House";
+                return "Sprawling Gated Estate House";
+            } else if (lvl < 100000) {
+                if (lvl < 25000) return "Emerging Frontier City";
+                if (lvl < 50000) return "Bustling Industrial City";
+                if (lvl < 75000) return "High-Tech Metacognitive City";
+                return "Global Capital Megacity";
+            } else if (lvl < 200000) {
+                if (lvl < 125000) return "Sovereign Principality Country";
+                if (lvl < 150000) return "Federated Allied Country";
+                if (lvl < 175000) return "Continental Superpower Country";
+                return "Global Hegemony Cyber-Country";
+            } else if (lvl < 500000) {
+                if (lvl < 250000) return "Space Travel Hub (Orbital Lift)";
+                if (lvl < 350000) return "Space Travel Fleet (Low-Orbit Station)";
+                if (lvl < 450000) return "Space Travel Nexus (Lunar Base)";
+                return "Space Travel Matrix (Dyson Ring)";
+            } else {
+                if (lvl < 750000) return "Colonized Other Worlds (Martian Outpost)";
+                if (lvl < 1000000) return "Colonized Other Worlds (Exoplanetary Cluster)";
+                return "Colonized Other Worlds (Pan-Galactic Overlord Federation)";
+            }
         }
 
         // Initialize Engine
@@ -562,7 +584,7 @@
             state.gold = 20;
             state.stats = {
                 str: Math.floor(Math.random() * 8) + 8,
-                num_dex: Math.floor(Math.random() * 8) + 8,
+                dex: Math.floor(Math.random() * 8) + 8,
                 con: Math.floor(Math.random() * 8) + 8,
                 int: Math.floor(Math.random() * 8) + 8,
                 wis: Math.floor(Math.random() * 8) + 8,
@@ -591,8 +613,6 @@
 
         const tickRate = 200; 
         function tick() {
-            // Ambient probability sweep: ~0.03% chance per tick to pull player into an arena skirmish
-            // On a 200ms tick engine, this yields completely random encounters throughout extended runtime blocks.
             if (Math.random() < 0.0003) {
                 executePvPEvent();
             }
@@ -645,12 +665,11 @@
                 const gainedXp = Math.floor(Math.random() * 15) + 10;
                 const gainedGold = Math.floor(Math.random() * 8) + 2;
                 
-                // Passively gather structural leftovers for housing from every kill
                 const passiveHouseProg = Math.floor(Math.random() * 3) + 1;
                 state.houseProgress += passiveHouseProg;
                 checkHouseLevelUp();
 
-                logMessage(`Defeated opponent! Gained ${gainedXp} XP, ${gainedGold} Gold, and +${passiveHouseProg}% House Renovation progress.`, "log-combat");
+                logMessage(`Defeated opponent! Gained ${gainedXp} XP, ${gainedGold} Gold, and +${passiveHouseProg}% Real Estate development progress.`, "log-combat");
                 
                 state.xp += gainedXp;
                 state.gold += gainedGold;
@@ -701,18 +720,16 @@
             
             let playerWins = false;
 
-            // Pity state checking
             if (state.pvpForcedWinsLeft > 0) {
                 playerWins = true;
                 state.pvpForcedWinsLeft--;
             } else {
-                // True 50/50 randomized split
                 playerWins = Math.random() < 0.5;
             }
 
             if (playerWins) {
                 state.pvpWins++;
-                state.pvpLossStreak = 0; // Win breaks the loss streak cleanly
+                state.pvpLossStreak = 0; 
                 
                 const pvpBounty = state.level * 25;
                 state.gold += pvpBounty;
@@ -728,7 +745,6 @@
                 
                 logMessage(`❌ ARENA DEFEAT: ${opponent} layout macros were superior. You lost the match.`, "log-combat");
                 
-                // Check if loss threshold reached to trigger forced win pity buffers
                 if (state.pvpLossStreak >= 3) {
                     state.pvpForcedWinsLeft = 5;
                     state.pvpLossStreak = 0; 
@@ -757,10 +773,10 @@
                         state.gold -= materialCost;
                         const progressGained = Math.floor(Math.random() * 16) + 15;
                         state.houseProgress += progressGained;
-                        logMessage(`🏡 Property Investment: No gear upgrades found. Expended ${materialCost} Gold on construction timber (+${progressGained}% Renovation).`, "log-loot");
+                        logMessage(`🏡 Property Investment: No gear upgrades found. Expended ${materialCost} Gold on planetary scaling logistics (+${progressGained}% Construction).`, "log-loot");
                         checkHouseLevelUp();
                     } else {
-                        logMessage("Property Investment: Lacked sufficient gold pools to purchase expansion blocks.", "");
+                        logMessage("Property Investment: Lacked sufficient gold pools to purchase development blocks.", "");
                     }
                 }
                 
@@ -791,7 +807,7 @@
             if (state.houseProgress >= 100) {
                 state.houseLevel++;
                 state.houseProgress -= 100;
-                logMessage(`🏰 HOME IMPROVEMENT: Your player house has evolved to Level ${state.houseLevel} [${getHouseTierName(state.houseLevel)}]!`, "log-level");
+                logMessage(`🏰 INFRASTRUCTURE EXPANSION: Your estate has evolved to Level ${state.houseLevel} [${getHouseTierName(state.houseLevel)}]!`, "log-level");
             }
         }
 
@@ -847,7 +863,6 @@
             document.getElementById("pvp-wins").innerText = state.pvpWins;
             document.getElementById("pvp-losses").innerText = state.pvpLosses;
             
-            // Render non-deterministic, immersive state indicators rather than fixed time clocks
             if (state.pvpForcedWinsLeft > 0) {
                 document.getElementById("pvp-status").innerText = "Rigged Matrix Active";
                 document.getElementById("pvp-status").style.color = "var(--success-color)";

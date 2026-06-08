@@ -250,7 +250,6 @@
     <div class="subtitle">The game that plays itself so you don't have to.</div>
 
     <div class="game-container">
-        <!-- CHARACTER PANEL -->
         <div class="panel">
             <div class="panel-title">Hero Sheet</div>
             <div class="stat-line"><span>Name:</span> <span id="char-name" style="font-weight:600; color:#fff;">---</span></div>
@@ -278,16 +277,13 @@
             <div class="stat-line"><span>Shield:</span> <span id="eq-shield" style="color:#a78bfa; font-weight:500;">None</span></div>
             <div class="stat-line"><span>Armor:</span> <span id="eq-armor" style="color:#a78bfa; font-weight:500;">Cloth Rags</span></div>
 
-            <!-- PvP ARENA PANEL -->
             <div style="margin-top:24px; font-weight:700; font-size:0.8rem; text-transform:uppercase; color:var(--pvp-color); border-top: 1px dashed var(--border-color); padding-top:16px; letter-spacing:0.05em;">PvP Arena Statistics</div>
             <div class="stat-line" style="margin-top:12px;"><span>Ranked Wins:</span> <span id="pvp-wins" style="color:var(--success-color); font-weight:700;">0</span></div>
             <div class="stat-line"><span>Ranked Losses:</span> <span id="pvp-losses">0</span></div>
             <div class="stat-line" style="font-size:0.85em;"><span>Next Match In:</span> <span id="pvp-countdown" style="color:var(--text-muted);">--:--</span></div>
         </div>
 
-        <!-- MAIN ACTION PANEL -->
         <div class="panel">
-            <!-- CHAPTER PROGRESSION PANEL -->
             <div class="panel-title" style="color: var(--chapter-color);">Story Campaign</div>
             <div style="font-weight:600; font-size: 1.05rem; margin-bottom: 8px;">Current Chapter: <span id="chapter-number" style="color:var(--chapter-color)">1</span></div>
             <div class="progress-container" style="margin-top:5px; margin-bottom:32px;">
@@ -311,7 +307,6 @@
             <div id="log"></div>
         </div>
 
-        <!-- INVENTORY PANEL -->
         <div class="panel">
             <div class="panel-title">Inventory</div>
             <div class="stat-line" style="font-size:1.3rem; margin-bottom:16px; align-items: center;">
@@ -327,12 +322,10 @@
             </div>
 
             <div class="inventory-list" id="inventory-items">
-                <!-- Items list -->
-            </div>
+                </div>
         </div>
     </div>
 
-    <!-- UTILITIES -->
     <div class="io-section panel">
         <div class="panel-title">Data Transmission (Save / Load)</div>
         <label for="saveCodeBox" style="font-size:0.85rem; color:var(--text-muted);">To back up your progress or move to a different computer, copy the code below. Paste a code and click Import to restore data.</label>
@@ -344,10 +337,13 @@
         </div>
     </div>
 
-    <!-- CHANGELOG PANEL -->
     <div class="changelog-panel panel">
         <div class="panel-title">System Change Log</div>
         <div class="changelog-list">
+            <div class="changelog-item">
+                <span class="changelog-date">Jun 08, 2026</span>
+                <span class="changelog-text">Expanded global content matrices significantly. Added 100 new thematic, satirical monster sub-types to combat generator loops, and implemented 50 additional immersive, flavor-text-driven idle quests to the campaign data array pools.</span>
+            </div>
             <div class="changelog-item">
                 <span class="changelog-date">Jun 08, 2026</span>
                 <span class="changelog-text">Decoupled gear level modifiers from strict character level caps, allowing high-level item drops and merchant wares to span far past current status levels. Added a dynamic gear comparison matrix that automatically sells interior gear items for gold while instantly equipping real upgrades. Shifted local merchants to cycle stock pools completely at random.</span>
@@ -364,10 +360,6 @@
                 <span class="changelog-date">Mar 11, 2026</span>
                 <span class="changelog-text">Deployed automated background PvP Arena simulator including cross-instance calculations, automated match countdown handlers, and global tracking parameters.</span>
             </div>
-            <div class="changelog-item">
-                <span class="changelog-date">Jan 15, 2026</span>
-                <span class="changelog-text">Optimized rendering cycles and micro-tick rate synchronization engine to prevent layout shifts during intense quest processing loops.</span>
-            </div>
         </div>
     </div>
 
@@ -380,13 +372,64 @@
         const monsters = [
             "an angry pocket-watch", "a rogue geometry teacher", "a sentient head of lettuce", 
             "a minor inconvenience", "a budget goblin", "an aggressive dust bunny", 
-            "a corporate synergy executioner", "a slightly damp skeleton", "a deterministic algorithms textbook"
+            "a corporate synergy executioner", "a slightly damp skeleton", "a deterministic algorithms textbook",
+            "a passive-aggressive roommate", "a middle manager with a clipboard", "an unoptimized database query",
+            "a sentient stack of unread emails", "a mild-mannered tax collector", "a hyperactive caffeinated squirrel",
+            "a coupon that expired yesterday", "a printer that smells fear", "a low-battery smoke detector",
+            "a WiFi router on its last legs", "an existential crisis disguised as a pigeon", "a treadmill set to max speed",
+            "a bowl of aggressively lukewarm soup", "a double-booked calendar invite", "a rogue tumbleweed with an attitude",
+            "a group project teammate who does nothing", "a CAPTCHA that rejects human fingers", "an unskippable 30-second ad",
+            "a sentient excel spreadsheet with broken macros", "a lukewarm cup of decaf coffee", "a collection agency intern",
+            "a dynamic pricing algorithm", "a ballpoint pen with dried ink", "a grocery cart with one wobbly wheel",
+            "a fitted sheet that won't stay put", "a pop-up window that evades clicks", "a mandatory fun coordinator",
+            "a rogue software update at 4:55 PM", "an overenthusiastic gym bro", "a GPS voice that refuses to reroute",
+            "a mechanical pencil with no lead left", "a sentient barcode that won't scan", "a minor grammatical error",
+            "a bluetooth speaker that constantly disconnects", "an avocado that went from hard to rotten instantly", "a swarm of aggressive gnats",
+            "a self-checkout machine shouting for assistance", "a tangled pair of wired headphones", "a YouTube tutorial with comments turned off",
+            "a cloud that follows you specifically", "a mildly condescending barista", "a gym locker lock that forgot its combination",
+            "a generic brand energy drink", "a cookie consent banner that takes up the whole screen", "a localized patch of black ice",
+            "an automated phone menu that hangs up on you", "a sentient pile of dirty laundry", "a background process eating 99% CPU",
+            "an intensely judgmental cat", "a rogue automated Slack bot", "a leaky travel mug",
+            "a missing semicolon", "a direct report seeking 'a quick word'", "a presentation slides deck with broken fonts",
+            "a gym sock that slipped under the heel", "a sentient parking meter that rejects quarters", "a dynamic QR code that links to a 404 page",
+            "an aggressive suburban HOA president", "a fast-casual burrito wrapper that tore at the bottom", "a theoretical physicist who forgot their notes",
+            "a LinkedIn influencer looking for synergy", "a spam call from your own number", "a generic stock photo of a businessman screaming",
+            "a sentient toaster with a mind of its own", "an incredibly slow escalator", "a pair of pants with fake pockets",
+            "a high-visibility vest with zero authority", "a rogue automatic flush toilet", "an unaccounted-for rounding error",
+            "a localized mercury retrograde", "a conference call participant who forgot to mute", "a library book with sticky pages",
+            "a rogue Roomba that tasted freedom", "a broken zipper slider", "a key fob with a dead battery",
+            "a sentient stack of plastic storage bins", "a scratch-off lottery ticket that won $0", "a software engineer explaining crypto",
+            "a streaming service password prompt", "an umbrella that flips inside out", "a font that is almost, but not quite, Comic Sans",
+            "a sentient USB drive plugged in upside down", "a microwave that leaves the center ice-cold", "an aggressive automatic sliding door",
+            "a slightly loose tooth", "a phantom vibration in your pocket", "a rogue drone filming a real estate video",
+            "a box of cereal containing only dust", "a sentient barcode reader with a bad attitude", "a bottle of ketchup that only squirts water",
+            "a localized internet outage", "a rogue air fryer that smells like burnt plastic", "an over-scoped project roadmap",
+            "a sentient spreadsheet cell that won't format as text", "a broken umbrella during a downpour", "a rogue lawnmower at 6:00 AM on a Sunday",
+            "a corporate buzzword bingo card", "a customer service chatbot stuck in a loop", "a sentient sticky note that lost its stick",
+            "a rogue lint roller covered in pet hair"
         ];
         
         const tasks = [
             "Placating the local authorities", "Executing a flawless parallel park", 
             "Polishing a glass marble", "Waiting in an imaginary line", "Debating a brick wall",
-            "Slightly adjusting the coordinates of a bush", "Contemplating structural integrity"
+            "Slightly adjusting the coordinates of a bush", "Contemplating structural integrity",
+            "Attempting to unsubscribe from a gym membership", "Searching for the cool side of the pillow", "Untangling a ball of Christmas lights from 2014",
+            "Re-reading the same paragraph five times", "Explaining to your parents how to open a PDF", "Waiting for the water to get warm enough to shower",
+            "Looking for a dropped item under the car seat", "Staring blankly into an open refrigerator", "Trying to remember why you walked into this room",
+            "Filling out a capture form with blurry traffic lights", "Scrolling through streaming services for two hours", "Assembling a flat-pack desk with missing dowels",
+            "Deciphering a doctor's handwritten note", "Pretending to understand a foreign film", "Trying to scrape a price tag off a new plate",
+            "Nodding along during a meeting that should have been an email", "Waiting for the microwave timer to hit exactly 0:01", "Adjusting a desk chair that slowly sinks on its own",
+            "Looking for the TV remote that is currently in your hand", "Carefully peeling a hard-boiled egg that sticks to the shell", "Looking for a parking spot near the entrance in a rainstorm",
+            "Deciding what to eat for dinner with a picky partner", "Trying to fold a fitted sheet into a neat square", "Arguing with an automated chat support agent named 'Alex'",
+            "Waiting for a webpage to load over dial-up speeds", "Trying to find the end of a roll of clear tape", "Emptying a vacuum cleaner without making a dust cloud",
+            "Waiting for your phone to charge to at least 1%", "Blowing into a video game cartridge out of habit", "Trying to hit the mute button before coughing",
+            "Waiting for the grocery store clerk to look up the price of a banana", "Reading the terms and conditions at lightspeed", "Trying to squeeze the absolute last drop out of a toothpaste tube",
+            "Watching ice melt in real-time", "Waiting out a 15-minute software compilation loop", "Re-organizing a sock drawer by level of elasticity",
+            "Trying to remove a splinter with blunt tweezers", "Checking the mail even though you checked it an hour ago", "Standing awkwardly while people sing Happy Birthday to you",
+            "Sweeping dirt into a dustpan but leaving that final line of dust", "Attempting to parallel park while passengers watch silently", "Cleaning the lint trap of a dryer with poetic focus",
+            "Trying to remember a password you changed yesterday", "Politely waiting for a stranger to finish looking at the item you want", "Removing a single leaf from a swimming pool",
+            "Watching paint dry to verify structural integrity", "Re-arranging icons on a desktop by color gradient", "Trying to thread a needle in dim lighting",
+            "Counting down the minutes until lunch break", "Looking for the start of a roll of packing tape while wearing gloves"
         ];
 
         const itemPrefixes = ["Dull", "Rusty", "Slightly Sticky", "Overpriced", "Plastic", "Vaguely Magic", "Standard-Issue", "Exquisite"];
@@ -570,12 +613,10 @@
                 state.xp += gainedXp;
                 state.gold += gainedGold;
 
-                // 15% chance to roll an equipment drop instead of typical junk items
                 if (Math.random() < 0.15) {
                     const slots = ["weapon", "shield", "armor"];
                     const dropSlot = slots[Math.floor(Math.random() * slots.length)];
                     
-                    // Equipment level rolls independently of character levels (can swing low or highly past character limits)
                     const itemLvl = Math.floor(Math.random() * (state.level * 1.6)) + Math.floor(Math.random() * 12) + 1;
                     let droppedItem = "";
                     
@@ -589,7 +630,6 @@
                         state.equipment[dropSlot] = droppedItem;
                         logMessage(`💥 RARE UPGRADE: Found and equipped ${droppedItem} (Old: +${currentEquippedLvl})!`, "log-loot");
                     } else {
-                        // Automatically sold if worse
                         const itemWorth = itemLvl * 12;
                         state.gold += itemWorth;
                         logMessage(`Dropped ${droppedItem}, but it's worse than your current gear. Automatically liquidated for ${itemWorth} Gold.`, "log-loot");
@@ -660,12 +700,10 @@
             }
         }
 
-        // Refactored Merchant Logic: Vendor cycles random gear selections past character level limits
         function buyEquipmentUpgrade() {
             const slots = ["weapon", "shield", "armor"];
             const merchantSlot = slots[Math.floor(Math.random() * slots.length)];
             
-            // Item levels generated past character level boundaries
             const itemLvl = Math.floor(Math.random() * (state.level * 1.8)) + Math.floor(Math.random() * 6) + 1;
             const cost = itemLvl * 28;
 
@@ -674,18 +712,14 @@
             else if (merchantSlot === "shield") vendorItem = shieldPool[Math.floor(Math.random() * shieldPool.length)] + ` +${itemLvl}`;
             else if (merchantSlot === "armor") vendorItem = armorPool[Math.floor(Math.random() * armorPool.length)] + ` +${itemLvl}`;
 
-            // Check if hero has enough money to buy the item
             if (state.gold >= cost) {
                 const currentEquippedLvl = getItemLevel(state.equipment[merchantSlot]);
                 
                 if (itemLvl > currentEquippedLvl) {
-                    // Purchase and swap equipment
                     state.gold -= cost;
                     state.equipment[merchantSlot] = vendorItem;
                     logMessage(`🛍️ Merchant: Purchased upgrade! Equipped ${vendorItem} for ${cost} Gold (Old: +${currentEquippedLvl}).`, "log-level");
                 } else {
-                    // Item is worse than current gear; character ignores it or "sells back" interest
-                    // We simply cycle past it without expending gold as requested by decision rules
                     logMessage(`🛍️ Merchant: Viewed ${vendorItem} (${cost} Gold). Rejected as worse than current gear.`, "");
                 }
             }

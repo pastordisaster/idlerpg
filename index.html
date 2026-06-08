@@ -283,6 +283,12 @@
             <div class="stat-line"><span>Shield:</span> <span id="eq-shield" style="color:#a78bfa; font-weight:500;">None</span></div>
             <div class="stat-line"><span>Armor:</span> <span id="eq-armor" style="color:#a78bfa; font-weight:500;">Cloth Rags</span></div>
 
+            <!-- HALL OF RECORDS -->
+            <div style="margin-top:24px; margin-bottom: 12px; font-weight:700; font-size:0.8rem; text-transform:uppercase; color:var(--warning-color); border-top: 1px dashed var(--border-color); padding-top:16px; letter-spacing:0.05em;">Hall of Records</div>
+            <div class="stat-line"><span>Monsters Slain:</span> <span id="record-slain" style="font-weight:600;">0</span></div>
+            <div class="stat-line"><span>Lifetime Wealth:</span> <span id="record-gold" style="font-weight:600; color:#fbbf24;">0💰</span></div>
+            <div class="stat-line"><span>Town Trips:</span> <span id="record-trips" style="font-weight:600;">0</span></div>
+
             <!-- PvP ARENA PANEL -->
             <div style="margin-top:24px; font-weight:700; font-size:0.8rem; text-transform:uppercase; color:var(--pvp-color); border-top: 1px dashed var(--border-color); padding-top:16px; letter-spacing:0.05em;">PvP Arena Statistics</div>
             <div class="stat-line" style="margin-top:12px;"><span>Ranked Wins:</span> <span id="pvp-wins" style="color:var(--success-color); font-weight:700;">0</span></div>
@@ -369,6 +375,10 @@
     <div class="changelog-panel panel">
         <div class="panel-title">System Change Log</div>
         <div class="changelog-list">
+            <div class="changelog-item">
+                <span class="changelog-date">Jun 08, 2026</span>
+                <span class="changelog-text">Deployed comprehensive background calibration modules. Integrated item color tiering metrics based on item modifiers (Uncommon Green, Rare Blue, Epic Purple), initiated a localized analytics node (Hall of Records) to compute lifetime metrics across browser sessions, and patched level-gated satirical active optimization subroutines into combat loops.</span>
+            </div>
             <div class="changelog-item">
                 <span class="changelog-date">Jun 08, 2026</span>
                 <span class="changelog-text">Adjusted PvP arena simulation parameters. Baseline encounter success configuration shifted from an optimized 60% system to an enhanced 70% player advantage weight. Matchmaker fail-safe subroutines remain active, enforcing 5 automated pity wins upon reaching a 3-loss streak.</span>
@@ -483,6 +493,16 @@
             "AlphaWolf", "TaxEvasionWizard", "Bongos4Life", "LootGoblin"
         ];
 
+        const jokeSkills = [
+            { lvl: 1, name: "Passive-Aggressive Sigh" },
+            { lvl: 5, name: "Synergy Blast" },
+            { lvl: 10, name: "Circle Back Loop" },
+            { lvl: 15, name: "Paradigm Shift" },
+            { lvl: 25, name: "Actionable Deliverable" },
+            { lvl: 40, name: "Leverage Core Competency" },
+            { lvl: 60, name: "Double-Click Optimization" }
+        ];
+
         // State Container
         let state = {
             name: "", class: "", level: 1, xp: 0, xpNeeded: 100, gold: 0,
@@ -492,7 +512,8 @@
             taskType: "quest", taskDuration: 3000,
             chapter: 1, chapterProgress: 0, pvpWins: 0, pvpLosses: 0, 
             pvpLossStreak: 0, pvpForcedWinsLeft: 0,
-            houseLevel: 1, houseProgress: 0
+            houseLevel: 1, houseProgress: 0,
+            lifetime: { monstersSlain: 0, goldEarned: 0, townTrips: 0 }
         };
 
         // Helper to extract an item's +level modifier safely
@@ -530,7 +551,7 @@
                 if (lvl < 175000) return "Continental Super-City Network";
                 return "Planetary Ecumenopolis City-World";
             } else if (lvl < 500000) {
-                if (lvl < 250000) return "Space Travel Hub (Orbital Lift)";
+                if (lvl < 25000) return "Space Travel Hub (Orbital Lift)";
                 if (lvl < 350000) return "Space Travel Fleet (Low-Orbit Station)";
                 if (lvl < 450000) return "Space Travel Nexus (Lunar Base)";
                 return "Space Travel Matrix (Dyson Ring)";
@@ -568,6 +589,7 @@
                         }
                         if (state.houseLevel === undefined) state.houseLevel = 1;
                         if (state.houseProgress === undefined) state.houseProgress = 0;
+                        if (!state.lifetime) state.lifetime = { monstersSlain: 0, goldEarned: 0, townTrips: 0 };
                         
                         validLoad = true;
                     }
@@ -605,7 +627,6 @@
             state.gold = 20;
             state.stats = {
                 str: Math.floor(Math.random() * 8) + 8,
-                text: Math.floor(Math.random() * 8) + 8,
                 dex: Math.floor(Math.random() * 8) + 8,
                 con: Math.floor(Math.random() * 8) + 8,
                 int: Math.floor(Math.random() * 8) + 8,
@@ -623,6 +644,7 @@
             state.pvpForcedWinsLeft = 0;
             state.houseLevel = 1;
             state.houseProgress = 0;
+            state.lifetime = { monstersSlain: 0, goldEarned: 20, townTrips: 0 };
             
             logMessage(`Character [${state.name}] created! Adventure awaits.`, "log-level");
             rollNewTask();
@@ -658,6 +680,9 @@
             state.taskProgress = 0;
             
             if (state.inventory.length >= state.maxInventory) {
+                if (state.taskType !== "selling") {
+                    state.lifetime.townTrips++;
+                }
                 state.taskType = "selling";
                 state.currentTask = "Heading back to town to liquidate assets...";
                 state.taskDuration = 1000;
@@ -684,6 +709,7 @@
             }
 
             if (state.currentTask.startsWith("Slaying")) {
+                state.lifetime.monstersSlain++;
                 const gainedXp = Math.floor(Math.random() * 15) + 10;
                 const gainedGold = Math.floor(Math.random() * 8) + 2;
                 
@@ -691,11 +717,21 @@
                 state.houseProgress += passiveHouseProg;
                 checkHouseLevelUp();
 
-                logMessage(`Defeated opponent! Gained ${gainedXp} XP, ${gainedGold} Gold, and +${passiveHouseProg}% Real Estate development progress.`, "log-combat");
-                
                 state.xp += gainedXp;
                 state.gold += gainedGold;
+                state.lifetime.goldEarned += gainedGold;
 
+                // Active skill layout text processing
+                let combatLogMsg = "";
+                const availableSkills = jokeSkills.filter(s => state.level >= s.lvl);
+                if (availableSkills.length > 0 && Math.random() < 0.4) {
+                    const chosenSkill = availableSkills[Math.floor(Math.random() * availableSkills.length)].name;
+                    combatLogMsg = `Cast [${chosenSkill}] for 0 damage! Defeated opponent! Gained ${gainedXp} XP, ${gainedGold} Gold, and +${passiveHouseProg}% Real Estate progress.`;
+                } else {
+                    combatLogMsg = `Defeated opponent! Gained ${gainedXp} XP, ${gainedGold} Gold, and +${passiveHouseProg}% Real Estate development progress.`;
+                }
+                logMessage(combatLogMsg, "log-combat");
+                
                 if (Math.random() < 0.15) {
                     const slots = ["weapon", "shield", "armor"];
                     const dropSlot = slots[Math.floor(Math.random() * slots.length)];
@@ -755,6 +791,7 @@
                 
                 const pvpBounty = state.level * 25;
                 state.gold += pvpBounty;
+                state.lifetime.goldEarned += pvpBounty;
                 
                 let winLogMsg = `⚔️ ARENA VICTORY: You styled on ${opponent} so hard they uninstalled the game. Gained ${pvpBounty} Gold.`;
                 if (state.pvpForcedWinsLeft > 0) {
@@ -784,6 +821,7 @@
                 
                 const profit = itemLvl > 0 ? (itemLvl * 12) : (Math.floor(Math.random() * 15) + 5);
                 state.gold += profit;
+                state.lifetime.goldEarned += profit;
                 logMessage(`Sold [${item}] to a merchant for ${profit} Gold.`, "log-loot");
                 state.taskProgress = 0;
             } else {
@@ -899,6 +937,11 @@
             document.getElementById("eq-shield").innerText = state.equipment.shield;
             document.getElementById("eq-armor").innerText = state.equipment.armor;
 
+            // Paint Hall of Records
+            document.getElementById("record-slain").innerText = state.lifetime.monstersSlain;
+            document.getElementById("record-gold").innerText = state.lifetime.goldEarned + " 💰";
+            document.getElementById("record-trips").innerText = state.lifetime.townTrips;
+
             document.getElementById("pvp-wins").innerText = state.pvpWins;
             document.getElementById("pvp-losses").innerText = state.pvpLosses;
             
@@ -935,7 +978,16 @@
 
             const invContainer = document.getElementById("inventory-items");
             if (invContainer) {
-                invContainer.innerHTML = state.inventory.map(item => `<div style="margin-bottom:6px; color:#e2e8f0;">📦 ${item}</div>`).join('');
+                invContainer.innerHTML = state.inventory.map(item => {
+                    const lvl = getItemLevel(item);
+                    let itemColor = "var(--text-color)";
+                    if (lvl > 0 && lvl <= 15) itemColor = "#34d399"; // Uncommon Green
+                    else if (lvl > 15 && lvl <= 40) itemColor = "#60a5fa"; // Rare Blue
+                    else if (lvl > 40) itemColor = "#c084fc"; // Epic Purple
+                    else itemColor = "#94a3b8"; // White/Grey vendor trash
+                    
+                    return `<div style="margin-bottom:6px; color:${itemColor}; font-weight:500;">📦 ${item}</div>`;
+                }).join('');
             }
         }
 
@@ -993,6 +1045,7 @@
                     if (state.maxInventory === undefined) state.maxInventory = 15 + (state.level - 1);
                     if (state.houseLevel === undefined) state.houseLevel = 1;
                     if (state.houseProgress === undefined) state.houseProgress = 0;
+                    if (!state.lifetime) state.lifetime = { monstersSlain: 0, goldEarned: state.gold || 0, townTrips: 0 };
 
                     saveGame();
                     updateUI();

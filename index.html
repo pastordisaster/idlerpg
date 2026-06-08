@@ -15,6 +15,7 @@
             --accent-hover: #4f46e5;
             --success-color: #10b981;
             --warning-color: #f59e0b;
+            --warning-hover: #d97706;
             --pvp-color: #f43f5e;
             --chapter-color: #06b6d4;
             --house-color: #ec4899;
@@ -166,7 +167,7 @@
         .log-pvp { color: #f43f5e; font-weight: 600; background-color: rgba(244, 63, 94, 0.1); padding: 4px 6px; border-radius: 4px; display: inline-block; width: 100%; box-sizing: border-box; }
 
         .inventory-list {
-            height: 250px;
+            height: 210px;
             overflow-y: auto;
             font-size: 0.9rem;
             border: 1px solid var(--border-color);
@@ -216,6 +217,8 @@
         button:active { transform: scale(0.98); }
         .btn-danger { background-color: #dc2626; }
         .btn-danger:hover { background-color: #b91c1c; }
+        .btn-warning { background-color: var(--warning-color); width: 100%; margin-bottom: 16px; display: flex; justify-content: center; align-items: center; gap: 6px; }
+        .btn-warning:hover { background-color: var(--warning-hover); }
         .button-group { display: flex; gap: 12px; }
 
         .changelog-list {
@@ -316,11 +319,16 @@
         <!-- INVENTORY PANEL -->
         <div class="panel">
             <div class="panel-title">Inventory</div>
-            <div class="stat-line" style="font-size:1.3rem; margin-bottom:16px; align-items: center;">
+            <div class="stat-line" style="font-size:1.3rem; margin-bottom:12px; align-items: center;">
                 <span style="color:#fff;">Gold:</span> <span id="inv-gold" style="color:#fbbf24; font-weight:800;">0💰</span>
             </div>
             
-            <div class="progress-container">
+            <!-- GOLD TO XP NODE -->
+            <button class="btn-warning" onclick="manualGoldToXp()">
+                Convert 100 💰 → 50 XP
+            </button>
+            
+            <div class="progress-container" style="margin-top: 12px;">
                 <label>Inventory Capacity</label>
                 <div class="progress-bar-bg">
                     <div id="inv-bar" class="progress-bar-fill inventory"></div>
@@ -361,6 +369,10 @@
     <div class="changelog-panel panel">
         <div class="panel-title">System Change Log</div>
         <div class="changelog-list">
+            <div class="changelog-item">
+                <span class="changelog-date">Jun 08, 2026</span>
+                <span class="changelog-text">Implemented an interactive currency routing interface within the inventory hub. Players may now manually liquidize excess asset holdings, converting 100 Gold blocks into a flat pool of 50 Experience Points to self-accelerate progression curves.</span>
+            </div>
             <div class="changelog-item">
                 <span class="changelog-date">Jun 08, 2026</span>
                 <span class="changelog-text">Adjusted PvP arena simulation parameters. Baseline encounter success configuration shifted from a balanced 50/50 model to an optimized 60% player advantage weight. Matchmaker fail-safe subroutines remain active, enforcing 5 automated pity wins upon reaching a 3-loss streak.</span>
@@ -593,6 +605,7 @@
             state.gold = 20;
             state.stats = {
                 str: Math.floor(Math.random() * 8) + 8,
+                text: Math.floor(Math.random() * 8) + 8,
                 dex: Math.floor(Math.random() * 8) + 8,
                 con: Math.floor(Math.random() * 8) + 8,
                 int: Math.floor(Math.random() * 8) + 8,
@@ -733,7 +746,7 @@
                 playerWins = true;
                 state.pvpForcedWinsLeft--;
             } else {
-                playerWins = Math.random() < 0.6; // Calibrated to 60% chance to win
+                playerWins = Math.random() < 0.6; // Baseline 60% chance to win
             }
 
             if (playerWins) {
@@ -793,6 +806,23 @@
                 rollNewTask();
             }
             saveGame();
+        }
+
+        // Manual Asset Liquidation Router (Gold -> XP Converter)
+        function manualGoldToXp() {
+            const transactionalCost = 100;
+            const rewardValue = 50;
+
+            if (state.gold >= transactionalCost) {
+                state.gold -= transactionalCost;
+                state.xp += rewardValue;
+                logMessage(`💸 CAPITAL TRANSCENDENCE: Transferred ${transactionalCost} Gold out of capital pools to ingest +${rewardValue} XP instantly.`, "log-level");
+                checkLevelUp();
+                saveGame();
+                updateUI();
+            } else {
+                alert(`Insolvent Gold Reserves. Transaction requests require a minimum asset payload of ${transactionalCost} Gold.`);
+            }
         }
 
         function checkLevelUp() {

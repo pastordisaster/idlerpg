@@ -20,6 +20,8 @@
             --chapter-color: #06b6d4;
             --house-color: #ec4899;
             --legendary-color: #f97316;
+            --market-color: #fbbf24;
+            --guild-color: #a78bfa;
         }
 
         * {
@@ -64,8 +66,17 @@
             max-width: 1200px;
         }
 
+        .multiplayer-container {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 24px;
+            width: 100%;
+            max-width: 1200px;
+            margin-top: 24px;
+        }
+
         @media (max-width: 1024px) {
-            .game-container {
+            .game-container, .multiplayer-container {
                 grid-template-columns: 1fr;
             }
         }
@@ -146,7 +157,7 @@
             text-shadow: 0 1px 2px rgba(0,0,0,0.6);
         }
 
-        #log {
+        #log, .mmo-log-box {
             height: 320px;
             overflow-y: auto;
             border: 1px solid var(--border-color);
@@ -155,6 +166,11 @@
             font-size: 0.9rem;
             line-height: 1.5;
             border-radius: 8px;
+        }
+
+        .mmo-log-box {
+            height: 220px;
+            font-size: 0.85rem;
         }
 
         .log-entry { 
@@ -276,7 +292,7 @@
             flex-direction: column;
             gap: 12px;
             font-size: 0.9rem;
-            line-height: 1.6;
+            line-6height: 1.6;
         }
 
         .changelog-item {
@@ -315,13 +331,13 @@
     <div class="subtitle">The game that plays itself so you don't have to.</div>
 
     <div class="game-container">
-        <!-- CHARACTER PANEL -->
         <div class="panel">
             <div class="panel-title">Hero Sheet</div>
             <div class="stat-line"><span>Name:</span> <span id="char-name" style="font-weight:600; color:#fff;">---</span></div>
             <div class="stat-line"><span>Class:</span> <span id="char-class">---</span></div>
+            <div class="stat-line"><span>Level:</span> <b id="char-level" style="color:#fff;">1</b></div>
+            <div class="stat-line"><span>Guild:</span> <b id="char-guild" style="color:var(--guild-color)">None</b></div>
             <div class="stat-line"><span>Rank:</span> <b id="char-rank" style="color:var(--legendary-color)">Private</b></div>
-            <div class="stat-line"><span>Level:</span> <b id="char-level" style="color:var(--success-color)">1</b></div>
             
             <div class="progress-container">
                 <label>Experience</label>
@@ -344,22 +360,18 @@
             <div class="stat-line"><span>Shield:</span> <span id="eq-shield" style="color:#a78bfa; font-weight:500;">None</span></div>
             <div class="stat-line"><span>Armor:</span> <span id="eq-armor" style="color:#a78bfa; font-weight:500;">Cloth Rags</span></div>
 
-            <!-- HALL OF RECORDS -->
             <div style="margin-top:24px; margin-bottom: 12px; font-weight:700; font-size:0.8rem; text-transform:uppercase; color:var(--warning-color); border-top: 1px dashed var(--border-color); padding-top:16px; letter-spacing:0.05em;">Hall of Records</div>
             <div class="stat-line"><span>Monsters Slain:</span> <span id="record-slain" style="font-weight:600;">0</span></div>
             <div class="stat-line"><span>Lifetime Wealth:</span> <span id="record-gold" style="font-weight:600; color:#fbbf24;">0💰</span></div>
             <div class="stat-line"><span>Town Trips:</span> <span id="record-trips" style="font-weight:600;">0</span></div>
 
-            <!-- PvP ARENA PANEL -->
             <div style="margin-top:24px; font-weight:700; font-size:0.8rem; text-transform:uppercase; color:var(--pvp-color); border-top: 1px dashed var(--border-color); padding-top:16px; letter-spacing:0.05em;">PvP Arena Statistics</div>
             <div class="stat-line" style="margin-top:12px;"><span>Ranked Wins:</span> <span id="pvp-wins" style="color:var(--success-color); font-weight:700;">0</span></div>
             <div class="stat-line"><span>Ranked Losses:</span> <span id="pvp-losses" style="color:var(--pvp-color); font-weight:700;">0</span></div>
             <div class="stat-line" style="font-size:0.85em;"><span>Arena Status:</span> <span id="pvp-status" style="color:var(--text-muted); font-weight:600;">Searching...</span></div>
         </div>
 
-        <!-- MAIN ACTION PANEL -->
         <div class="panel">
-            <!-- CHAPTER PROGRESSION PANEL -->
             <div class="panel-title" style="color: var(--chapter-color);">Story Campaign</div>
             <div style="font-weight:600; font-size: 1.05rem; margin-bottom: 8px;">Current Chapter: <span id="chapter-number" style="color:var(--chapter-color)">1</span></div>
             <div class="progress-container" style="margin-top:5px; margin-bottom:32px;">
@@ -383,14 +395,12 @@
             <div id="log"></div>
         </div>
 
-        <!-- INVENTORY PANEL -->
         <div class="panel">
             <div class="panel-title">Inventory</div>
             <div class="stat-line" style="font-size:1.3rem; margin-bottom:12px; align-items: center;">
                 <span style="color:#fff;">Gold:</span> <span id="inv-gold" style="color:#fbbf24; font-weight:800;">0💰</span>
             </div>
             
-            <!-- GOLD TO XP SLIDER INTEGRATION -->
             <div class="slider-box">
                 <label>Liquidation Allocation</label>
                 <div class="slider-row">
@@ -410,10 +420,8 @@
             </div>
 
             <div class="inventory-list" id="inventory-items">
-                <!-- Items list -->
-            </div>
+                </div>
 
-            <!-- PLAYER HOUSING SUB-PANEL -->
             <div style="margin-top:24px; font-weight:700; font-size:0.8rem; text-transform:uppercase; color:var(--house-color); border-top: 1px dashed var(--border-color); padding-top:16px; letter-spacing:0.05em;">Player Housing</div>
             <div class="stat-line" style="margin-top:12px;"><span>Estate Status:</span> <b id="house-name" style="color:#fff;">Hole in the Ground</b></div>
             <div class="progress-container" style="margin-top:8px; margin-bottom:0;">
@@ -426,12 +434,22 @@
         </div>
     </div>
 
-    <!-- UTILITIES -->
+    <div class="multiplayer-container">
+        <div class="panel">
+            <div class="panel-title" style="color: var(--market-color);">📈 Dynamic Open-Market Board</div>
+            <div id="mmo-market" class="mmo-log-box"></div>
+        </div>
+
+        <div class="panel">
+            <div class="panel-title" style="color: var(--guild-color);">🛡️ Faction & Guild Operations</div>
+            <div id="mmo-guild" class="mmo-log-box"></div>
+        </div>
+    </div>
+
     <div class="io-section panel">
         <div class="panel-title">Data Transmission (Save / Load)</div>
         <label for="saveCodeBox" style="font-size:0.85rem; color:var(--text-muted);">To back up your progress or move to a different computer, copy the code below. Paste a code and click Import to restore data.</label>
         
-        <!-- NEW UPDATE NOTIFICATION NOTE -->
         <div class="transmission-note">
             🚀 <b>Deployment Sync Note:</b> Active character data auto-caches instantly. You can manually refresh your browser page at any time to scan for and apply fresh server-side game updates without risking your baseline progress.
         </div>
@@ -444,21 +462,20 @@
         </div>
     </div>
 
-    <!-- CHANGELOG PANEL -->
     <div class="changelog-panel panel">
         <div class="panel-title">System Change Log</div>
         <div class="changelog-list">
             <div class="changelog-item">
                 <span class="changelog-date">Jun 08, 2026</span>
-                <span class="changelog-text">Added dynamic updater confirmation notification in the primary Data Transmission UI module to clarify cross-session security status during rapid build hot-swaps.</span>
+                <span class="changelog-text">Completely purged the Global Interaction Chat layout module from the active browser viewport framework.</span>
             </div>
             <div class="changelog-item">
                 <span class="changelog-date">Jun 08, 2026</span>
-                <span class="changelog-text">Refactored and shortened all 20 Military-Industrial Complex legendary items to strictly enforce a concise 2-to-3-word configuration ceiling for scannability.</span>
+                <span class="changelog-text">Implemented an automated async entry channel for player characters to passively receive, execute, and scale corporate ranks within systemic MMO guilds.</span>
             </div>
             <div class="changelog-item">
                 <span class="changelog-date">Jun 08, 2026</span>
-                <span class="changelog-text">Integrated 20 high-value Military-Industrial Complex Legendary assets with a hard-coded 1.1% drops multiplier, featuring deterministic guaranteed-upgrade path routing. Fully ported US Military ranking matrix up to Field Marshal status scaling symmetrically every 10 levels. Deprecated multi-click currency conversion loops, substituting a clean single-click asset liquidation slider interface.</span>
+                <span class="changelog-text">Integrated background dynamic MMO simulator populated by exactly 100 unique procedural fake players executing passive item undercutting, world boss metrics, and localized economy shifts.</span>
             </div>
         </div>
     </div>
@@ -472,156 +489,78 @@
         const monsters = [
             "an angry pocket-watch", "a rogue geometry teacher", "a sentient head of lettuce", 
             "a minor inconvenience", "a budget goblin", "an aggressive dust bunny", 
-            "a corporate synergy synergy executor", "a slightly damp skeleton", "a deterministic algorithms textbook",
+            "a corporate synergy executor", "a slightly damp skeleton", "a deterministic algorithms textbook",
             "a passive-aggressive roommate", "a middle manager with a clipboard", "an unoptimized database query",
             "a sentient stack of unread emails", "a mild-mannered tax collector", "a hyperactive caffeinated squirrel",
             "a coupon that expired yesterday", "a printer that smells fear", "a low-battery smoke detector",
             "a WiFi router on its last legs", "an existential crisis disguised as a pigeon", "a treadmill set to max speed",
-            "a bowl of aggressively lukewarm soup", "a double-booked calendar invite", "a rogue tumbleweed with an attitude",
-            "a group project teammate who does nothing", "a CAPTCHA that rejects human fingers", "an unskippable 30-second ad",
-            "a sentient excel spreadsheet with broken macros", "a lukewarm cup of decaf coffee", "a collection agency intern",
-            "a dynamic pricing algorithm", "a ballpoint pen with dried ink", "a grocery cart with one wobbly wheel",
-            "a fitted sheet that won't stay put", "a pop-up window that evades clicks", "a mandatory fun coordinator",
-            "a rogue software update at 4:55 PM", "an overenthusiastic gym bro", "a GPS voice that refuses to reroute",
-            "a mechanical pencil with no lead left", "a sentient barcode that won't scan", "a minor grammatical error",
-            "a bluetooth speaker that constantly disconnects", "an avocado that went from hard to rotten instantly", "a swarm of aggressive gnats",
-            "a self-checkout machine shouting for assistance", "a tangled pair of wired headphones", "a YouTube tutorial with comments turned off",
-            "a cloud that follows you specifically", "a mildly condescending barista", "a gym locker lock that forgot its combination",
-            "a generic brand energy drink", "a cookie consent banner that takes up the whole screen", "a localized patch of black ice",
-            "an automated phone menu that hangs up on you", "a sentient pile of dirty laundry", "a background process eating 99% CPU",
-            "an intensely judgmental cat", "a rogue automated Slack bot", "a leaky travel mug",
-            "a missing semicolon", "a direct report seeking 'a quick word'", "a presentation slides deck with broken fonts",
-            "a gym sock that slipped under the heel", "a sentient parking meter that rejects quarters", "a dynamic QR code that links to a 404 page",
-            "an aggressive suburban HOA president", "a fast-casual burrito wrapper that tore at the bottom", "a theoretical physicist who forgot their notes",
-            "a LinkedIn influencer looking for synergy", "a spam call from your own number", "a generic stock photo of a businessman screaming",
-            "a sentient toaster with a mind of its own", "an incredibly slow escalator", "a pair of pants with fake pockets",
-            "a high-visibility vest with zero authority", "a rogue automatic flush toilet", "an unaccounted-for rounding error",
-            "a localized mercury retrograde", "a conference call participant who forgot to mute", "a library book with sticky pages",
-            "a rogue Roomba that tasted freedom", "a broken zipper slider", "a key fob with a dead battery",
-            "a sentient stack of plastic storage bins", "a scratch-off lottery ticket that won $0", "a software engineer explaining crypto",
-            "a streaming service password prompt", "an umbrella that flips inside out", "a font that is almost, but not quite, Comic Sans",
-            "a sentient USB drive plugged in upside down", "a microwave that leaves the center ice-cold", "an aggressive automatic sliding door",
-            "a slightly loose tooth", "a phantom vibration in your pocket", "a rogue drone filming a real estate video",
-            "a box of cereal containing only dust", "a sentient barcode reader with a bad attitude", "a bottle of ketchup that only squirts water",
-            "a localized internet outage", "a rogue air fryer that smells like burnt plastic", "an over-scoped project roadmap",
-            "a sentient spreadsheet cell that won't format as text", "a broken umbrella during a downpour", "a rogue lawnmower at 6:00 AM on a Sunday",
-            "a corporate buzzword bingo card", "a customer service chatbot stuck in a loop", "a sentient sticky note that lost its stick",
-            "a rogue lint roller covered in pet hair"
+            "a bowl of aggressively lukewarm soup", "a double-booked calendar invite", "a rogue tumbleweed with an attitude"
         ];
         
         const tasks = [
             "Placating the local authorities", "Executing a flawless parallel park", 
             "Polishing a glass marble", "Waiting in an imaginary line", "Debating a brick wall",
             "Slightly adjusting the coordinates of a bush", "Contemplating structural integrity",
-            "Attempting to unsubscribe from a gym membership", "Searching for the cool side of the pillow", "Untangling a ball of Christmas lights from 2014",
-            "Re-reading the same paragraph five times", "Explaining to your parents how to open a PDF", "Waiting for the water to get warm enough to shower",
-            "Looking for a dropped item under the car seat", "Staring blankly into an open refrigerator", "Trying to remember why you walked into this room",
-            "Filling out a capture form with blurry traffic lights", "Scrolling through streaming services for two hours", "Assembling a flat-pack desk with missing dowels",
-            "Deciphering a doctor's handwritten note", "Pretending to understand a foreign film", "Trying to scrape a price tag off a new plate",
-            "Nodding along during a meeting that should have been an email", "Waiting for the microwave timer to hit exactly 0:01", "Adjusting a desk chair that slowly sinks on its own",
-            "Looking for the TV remote that is currently in your hand", "Carefully peeling a hard-boiled egg that sticks to the shell", "Looking for a parking spot near the entrance in a rainstorm",
-            "Deciding what to eat for dinner with a picky partner", "Trying to fold a fitted sheet into a neat square", "Arguing with an automated chat support agent named 'Alex'",
-            "Waiting for a webpage to load over dial-up speeds", "Trying to find the end of a roll of clear tape", "Emptying a vacuum cleaner without making a dust cloud",
-            "Waiting for your phone to charge to at least 1%", "Blowing into a video game cartridge out of habit", "Trying to hit the mute button before coughing",
-            "Waiting for the grocery store clerk to look up the price of a banana", "Reading the terms and conditions at lightspeed", "Trying to squeeze the absolute last drop out of a toothpaste tube",
-            "Watching ice melt in real-time", "Waiting out a 15-minute software compilation loop", "Re-organizing a sock drawer by level of elasticity",
-            "Trying to remove a splinter with blunt tweezers", "Checking the mail even though you checked it an hour ago", "Standing awkwardly while people sing Happy Birthday to you",
-            "Sweeping dirt into a dustpan but leaving that final line of dust", "Attempting to parallel park while passengers watch silently", "Cleaning the lint trap of a dryer with poetic focus",
-            "Trying to remember a password you changed yesterday", "Politely waiting for a stranger to finish looking at the item you want", "Removing a single leaf from a swimming pool",
-            "Watching paint dry to verify structural integrity", "Re-arranged icons on a desktop by color gradient", "Trying to thread a needle in dim lighting",
-            "Counting down the minutes until lunch break", "Looking for the start of a roll of packing tape while wearing gloves"
+            "Attempting to unsubscribe from a gym membership", "Searching for the cool side of the pillow"
         ];
 
         const itemPrefixes = [
             "Dull", "Rusty", "Slightly Sticky", "Overpriced", "Plastic", "Vaguely Magic", "Standard-Issue", "Exquisite",
-            "Aggressively Moist", "Mildly Radioactive", "Finely Aged", "Counterfeit", "Slightly Charred", "Haunted",
-            "Corporate-Branded", "As Seen On TV", "Tax-Deductible", "Gluten-Free", "Metaphorical", "Pre-Owned",
-            "Crunchy", "Over-Engineered", "Lubricated", "Sentient", "Uncanny", "Highly Fragile", "Slightly Used",
-            "Deep-Fried", "Disappointing", "Slightly Warm", "Passive-Aggressive", "Soggy", "Inexplicable"
+            "Aggressively Moist", "Mildly Radioactive", "Finely Aged", "Counterfeit", "Slightly Charred"
         ];
         
         const itemNouns = [
             "Spoon", "Thimble", "Cardboard Box", "Left Sock", "Lint Ball", "Broken Pencil", "Shiny Pebble", "Expired Coupon", "Fake Mustache",
-            "Paperclip", "Tupperware Lid (No Base)", "Pet Rock", "Receipt for a Single Banana", "Dust Bunny", "Spaghetti Strand",
-            "Hotel Soap", "USB Drive (Full of Malware)", "Novelty Keychain", "Single Googly Eye", "Used Napkin", "Half-Eaten Sandwich",
-            "Bubble Wrap", "Dental Floss (Unused)", "Instruction Manual", "Rubber Band", "Fortune Cookie Wrapper", "Desiccant Packet",
-            "Broken Rubber Duck", "Plastic Spork", "Empty Soda Can", "Crushed Cardboard Tube", "Single Battery (AA)", "Lint Roller Sheet", "Squeaky Toy"
+            "Paperclip", "Tupperware Lid (No Base)", "Pet Rock", "Receipt for a Single Banana", "Dust Bunny"
         ];
         
-        const weaponPool = ["Butter Knife", "Rusty Fork", "Slightly Shiter Fork", "Pointy Stick", "Iron Ladle", "Excalibur's Replica", "Hyper-Dense Loaf of Bread"];
-        const shieldPool = ["Garbage Can Lid", "Thick Newspaper", "Wooden Platter", "Rusty Hubcap", "Buckler of Extreme Doubt"];
-        const armorPool = ["Bubble Wrap Plate", "Cardboard Box mail", "Threadbare Poncho", "Leather Tunic", "Iron Boilerplate", "Hazardous Bio-Suit"];
+        const weaponPool = ["Butter Knife", "Rusty Fork", "Pointy Stick", "Iron Ladle", "Excalibur's Replica"];
+        const shieldPool = ["Garbage Can Lid", "Thick Newspaper", "Wooden Platter", "Rusty Hubcap"];
+        const armorPool = ["Bubble Wrap Plate", "Cardboard Box mail", "Threadbare Poncho", "Leather Tunic", "Iron Boilerplate"];
 
-        // 20 Streamlined Military-Industrial Complex Legendary Asset Titles (Max 3 words)
         const legendaryMICItems = [
-            "Lockheed Raptor Exosuit",
-            "Raytheon Tomahawk Array",
-            "Dynamics Abrams Plating",
-            "Northrop Spirit Cloak",
-            "Boeing Apache Matrix",
-            "Ingalls Nimitz Hull",
-            "BAE Bradley Bracers",
-            "L3Harris Tactical Uplink",
-            "Leidos AI Core",
-            "Palantir Analytics Visor",
-            "Oshkosh Tactical Greaves",
-            "Sikorsky Rotor Shield",
-            "AeroVironment Switchblade",
-            "Atomics Reaper Link",
-            "Textron Weaponized Framework",
-            "DARPA Quantum Projector",
-            "Lockheed Hellfire Core",
-            "Raytheon Patriot Interceptor",
-            "Northrop Hawk Sensor",
-            "Skunk Works Prototype"
+            "Lockheed Raptor Exosuit", "Raytheon Tomahawk Array", "Dynamics Abrams Plating", "Northrop Spirit Cloak",
+            "Boeing Apache Matrix", "Ingalls Nimitz Hull", "BAE Bradley Bracers", "L3Harris Tactical Uplink",
+            "Leidos AI Core", "Palantir Analytics Visor", "Oshkosh Tactical Greaves", "Sikorsky Rotor Shield",
+            "AeroVironment Switchblade", "Atomics Reaper Link", "Textron Weaponized Framework", "DARPA Quantum Projector"
         ];
 
-        const militaryRanks = [
-            "Private", "Corporal", "Sergeant", "Lieutenant", "Captain", 
-            "Major", "Colonel", "Brigadier General", "General", "Field Marshal"
-        ];
-
-        const fakePlayers = [
-            "xX_Sephiroth_Xx", "GamerDad69", "NoobSlayer2000", "IdleKing", "Leeroy_Jenkins", 
-            "SirClipsALot", "SlayerOfCode", "GandalfTheGains", "u_mad_bro", "ClickerPro", 
-            "AlphaWolf", "TaxEvasionWizard", "Bongos4Life", "LootGoblin"
-        ];
+        const militaryRanks = ["Private", "Corporal", "Sergeant", "Lieutenant", "Captain", "Major", "Colonel", "Brigadier General", "General", "Field Marshal"];
+        const factions = ["The Cyber-Quarter Hub", "The Tech-Knights Faction", "The Semicolon Syndicate"];
+        
+        const corporateGuildPool = ["The Semicolon Syndicate", "StackOverflow Scrapers", "Infinite Loop Outlaws", "Garbage Collectors", "Null Pointer Knights"];
+        const corporateGuildRanks = ["Initiate Slacker", "Junior Contributor", "Senior Vice Deputy", "Exalted Lead Exec"];
 
         const jokeSkills = [
             { lvl: 1, name: "Passive-Aggressive Sigh" }, { lvl: 1, name: "Low-Priority Slack Ping" },
-            { lvl: 2, name: "Reply All Catastrophe" }, { lvl: 3, name: "Disappointing Update Presentation" },
-            { lvl: 4, name: "Unscheduled Calendar Ambush" }, { lvl: 5, name: "Synergy Blast" },
-            { lvl: 6, name: "Per My Last Email Rebuttal" }, { lvl: 7, name: "Bi-Weekly Status Sync" },
-            { lvl: 8, name: "Low-Hanging Fruit Harvest" }, { lvl: 9, name: "As Per Our Thread Notation" },
-            { lvl: 10, name: "Circle Back Loop" }, { lvl: 12, name: "Bandwidth Inspection" },
-            { lvl: 14, name: "Deep Dive Extrapolation" }, { lvl: 15, name: "Paradigm Shift" },
-            { lvl: 16, name: "Table This Discussion Mandate" }, { lvl: 18, name: "Move the Needle Initiative" },
-            { lvl: 20, name: "Offline Sync Request" }, { lvl: 22, name: "Change Management Protocol" },
-            { lvl: 24, name: "Core Competency Evaluation" }, { lvl: 25, name: "Actionable Deliverable" },
-            { lvl: 26, name: "Wheelhouse Realignment" }, { lvl: 28, name: "Out of Office Auto-Reply" },
-            { lvl: 30, name: "Thought Leadership Lecture" }, { lvl: 32, name: "Executive Buy-In Request" },
-            { lvl: 34, name: "Strategic Pivoting Exercise" }, { lvl: 36, name: "Ecosystem Optimization Strike" },
-            { lvl: 38, name: "Scalable Infrastructure Fallacy" }, { lvl: 40, name: "Leverage Core Competency" },
-            { lvl: 42, name: "Value-Add Proposition" }, { lvl: 44, name: "Scope Creep Aggression" },
-            { lvl: 46, name: "Deliverable Velocity Multiplier" }, { lvl: 48, name: "Agile Standup Interruption" },
-            { lvl: 50, name: "Cross-Functional Misalignment" }, { lvl: 52, name: "Retrospective Blamestorming" },
-            { lvl: 54, name: "Stakeholder Management Nightmare" }, { lvl: 56, name: "Burning Platform Crisis" },
-            { lvl: 58, name: "Product Sunset Notification" }, { lvl: 60, name: "Double-Click Optimization" },
-            { lvl: 62, name: "Bleeding Edge Disruption" }, { lvl: 64, name: "Hyper-Personalized Content Funnel" },
-            { lvl: 66, name: "Disruptive Market Innovation" }, { lvl: 68, name: "Data-Driven Narrative Synthesis" },
-            { lvl: 70, name: "Quantum Synergistics Matrix" }, { lvl: 72, name: "Holistic Health Metric Adjustment" },
-            { lvl: 74, name: "Frictionless User Onboarding" }, { lvl: 76, name: "Next-Gen Enterprise Architecture" },
-            { lvl: 78, name: "Omnichannel Engagement Wave" }, { lvl: 80, name: "Sea-Change Ideation Blast" },
-            { lvl: 85, name: "Cloud-Native Microservices Cascade" }, { lvl: 90, name: "AI-Powered Hallucination Vortex" },
-            { lvl: 95, name: "Total System Overhead Collapse" }, { lvl: 100, name: "Endless Infinite Meeting Loop" },
-            { lvl: 110, name: "Venture Capital Ghosting Wave" }, { lvl: 120, name: "Golden Parachute Emergency Ejection" },
-            { lvl: 130, name: "Unpaid Internship Exploit" }, { lvl: 140, name: "Quiet Quitting Optimization Node" },
-            { lvl: 150, name: "Macro-Management Interlock Disconnect" }
+            { lvl: 2, name: "Reply All Catastrophe" }, { lvl: 5, name: "Synergy Blast" },
+            { lvl: 6, name: "Per My Last Email Rebuttal" }, { lvl: 10, name: "Circle Back Loop" }
         ];
 
-        // State Container
+        const fakePlayers = [];
+        function initializeOneHundredFakePlayers() {
+            const pre = ['xX_', 'Gamer', 'Alpha', 'Noob', 'Slayer', 'Shadow', 'Pixel', 'Cyber', 'Taco', 'Sir', 'Lady', 'Glitch', 'Buff', 'Nerf', 'Bongos'];
+            const root = ['Knight', 'Potato', 'Wizard', 'Goblin', 'Coder', 'Coffee', 'Raptor', 'Burger', 'Samurai', 'Paladin', 'Gremlin', 'Cat', 'Dad', 'Jenkins'];
+            const suf = ['_Xx', '99', 'LoL', 'Vibes', 'Pro', 'Zone', 'HQ', 'Thump', 'OMG', 'GG', '101', 'Prime', 'Bot'];
+            
+            while (fakePlayers.length < 100) {
+                const p = pre[Math.floor(Math.random() * pre.length)];
+                const r = root[Math.floor(Math.random() * root.length)];
+                const s = suf[Math.floor(Math.random() * suf.length)];
+                const n = Math.floor(Math.random() * 99);
+                let generatedName = Math.random() > 0.5 ? `${p}${r}` : `${r}${s}`;
+                if (Math.random() > 0.5) generatedName += n;
+                
+                if (!fakePlayers.includes(generatedName)) {
+                    fakePlayers.push(generatedName);
+                }
+            }
+        }
+        initializeOneHundredFakePlayers();
+
         let state = {
             name: "", class: "", level: 1, xp: 0, xpNeeded: 100, gold: 0,
+            guildName: "None", guildRankIndex: 0,
             stats: { str: 0, dex: 0, con: 0, int: 0, wis: 0, cha: 0 },
             equipment: { weapon: "Bare Fists", shield: "None", armor: "Cloth Rags" },
             inventory: [], maxInventory: 15, currentTask: "", taskProgress: 0,
@@ -644,24 +583,9 @@
         }
 
         function getHouseTierName(lvl) {
-            if (lvl < 1000) {
-                if (lvl === 1) return "Hole in the Ground";
-                if (lvl < 250) return "Slightly Deeper Ditch";
-                if (lvl < 500) return "Reinforced Earth Pit";
-                return "Mud-Lined Trench Complex";
-            } else if (lvl < 5000) {
-                if (lvl < 2500) return "Modest Thatch House";
-                if (lvl < 4000) return "Suburban Residential House";
-                return "Sprawling Gated Estate House";
-            } else if (lvl < 7500) {
-                if (lvl < 6200) return "Luxury Multi-Wing Mansion";
-                return "Mega-Mansion with Helipad";
-            } else if (lvl < 10000) {
-                if (lvl < 8700) return "Fortified Secure Compound";
-                return "Automated Tech-Compound Enclave";
-            } else {
-                return "Metropolitan Cyber-Quarter Hub";
-            }
+            if (lvl === 1) return "Hole in the Ground";
+            if (lvl < 10) return "Slightly Deeper Ditch";
+            return "Mud-Lined Trench Complex";
         }
 
         function init() {
@@ -673,17 +597,10 @@
                     const parsed = JSON.parse(saved);
                     if (parsed && typeof parsed === 'object' && parsed.name) {
                         state = parsed;
-                        if (!state.equipment) state.equipment = {};
-                        if (!state.equipment.weapon) state.equipment.weapon = "Bare Fists";
-                        if (!state.equipment.shield) state.equipment.shield = "None";
-                        if (!state.equipment.armor) state.equipment.armor = "Cloth Rags";
-                        if (state.maxInventory === undefined) state.maxInventory = 15 + (state.level - 1);
-                        if (!state.lifetime) state.lifetime = { monstersSlain: 0, goldEarned: 0, townTrips: 0 };
+                        if (!state.guildName) { state.guildName = "None"; state.guildRankIndex = 0; }
                         validLoad = true;
                     }
-                } catch(e) {
-                    console.error("Save processing fallback.", e);
-                }
+                } catch(e) { console.error(e); }
             }
 
             if (!validLoad) {
@@ -695,6 +612,7 @@
 
             updateUI();
             tick();
+            startMultiplayerSimulation();
         }
 
         function generateCharacter() {
@@ -703,20 +621,15 @@
             
             state.name = (chosenName === null || chosenName.trim() === "") ? suggestedName : chosenName.trim();
             state.class = classes[Math.floor(Math.random() * classes.length)];
-            state.level = 1;
-            state.xp = 0;
-            state.xpNeeded = 100;
-            state.gold = 20;
+            state.level = 1; state.xp = 0; state.xpNeeded = 100; state.gold = 20;
+            state.guildName = "None"; state.guildRankIndex = 0;
             state.stats = {
                 str: Math.floor(Math.random() * 8) + 8, dex: Math.floor(Math.random() * 8) + 8,
                 con: Math.floor(Math.random() * 8) + 8, int: Math.floor(Math.random() * 8) + 8,
                 wis: Math.floor(Math.random() * 8) + 8, cha: Math.floor(Math.random() * 8) + 8
             };
             state.equipment = { weapon: "Bare Fists", shield: "None", armor: "Cloth Rags" };
-            state.inventory = [];
-            state.maxInventory = 15;
-            state.chapter = 1;
-            state.chapterProgress = 0;
+            state.inventory = []; state.maxInventory = 15; state.chapter = 1; state.chapterProgress = 0;
             state.pvpWins = 0; state.pvpLosses = 0; state.pvpLossStreak = 0; state.pvpForcedWinsLeft = 0;
             state.houseLevel = 1; state.houseProgress = 0;
             state.lifetime = { monstersSlain: 0, goldEarned: 20, townTrips: 0 };
@@ -733,6 +646,14 @@
         const tickRate = 200; 
         function tick() {
             if (Math.random() < 0.0003) executePvPEvent();
+            
+            if (state.guildName === "None" && state.level >= 2 && Math.random() < 0.05) {
+                state.guildName = corporateGuildPool[Math.floor(Math.random() * corporateGuildPool.length)];
+                state.guildRankIndex = 0;
+                logMessage(`🛡️ GUILD JOINED: Automatically processed and accepted network invite to [${state.guildName}]!`, "log-level");
+                appendMMOLog("mmo-guild", `✨ <b>Guild Welcome:</b> <b>You (${state.name})</b> have automatically filled an open production roster slot in the guild! Welcome aboard!`, "var(--guild-color)");
+                saveGame();
+            }
 
             if (state.taskType === "quest") {
                 state.taskProgress += (tickRate / state.taskDuration) * 100;
@@ -794,15 +715,11 @@
                 }
                 logMessage(combatLogMsg, "log-combat");
                 
-                // Loot Engine Logic Check
                 const legendaryRoll = Math.random() * 100;
                 if (legendaryRoll <= 1.1) {
-                    // 1.1% SYSTEM CHANCE TRIGGERED: CHOOSE RANDOM MIC LEGENDARY UPGRADE
                     const slots = ["weapon", "shield", "armor"];
                     const targetSlot = slots[Math.floor(Math.random() * slots.length)];
                     const currentLvl = getItemLevel(state.equipment[targetSlot]);
-                    
-                    // Forces calculations to strictly beat current equipped stats
                     const legendaryLvl = currentLvl + Math.floor(Math.random() * 10) + 6;
                     const signatureName = legendaryMICItems[Math.floor(Math.random() * legendaryMICItems.length)];
                     const completedItemString = `⭐ ${signatureName} +${legendaryLvl}`;
@@ -810,7 +727,6 @@
                     state.equipment[targetSlot] = completedItemString;
                     logMessage(`🚨 MILITARY-INDUSTRIAL COMPLEX DROPPED AN UPGRADE: Equipped ${completedItemString}!`, "log-loot");
                 } else if (Math.random() < 0.15) {
-                    // Standard Random Drop Engine Route
                     const slots = ["weapon", "shield", "armor"];
                     const dropSlot = slots[Math.floor(Math.random() * slots.length)];
                     const itemLvl = Math.floor(Math.random() * (state.level * 1.6)) + Math.floor(Math.random() * 12) + 1;
@@ -827,7 +743,7 @@
                         state.inventory.push(droppedItem);
                         logMessage(`Stashed item: [${droppedItem}]`, "log-loot");
                     }
-                } else if (Math.random() > 0.3) {
+                } else if (Math.random() < 0.3) {
                     const item = itemPrefixes[Math.floor(Math.random() * itemPrefixes.length)] + " " + itemNouns[Math.floor(Math.random() * itemNouns.length)];
                     state.inventory.push(item);
                     logMessage(`Found item: [${item}]`, "log-loot");
@@ -855,8 +771,7 @@
             if (playerWins) {
                 state.pvpWins++; state.pvpLossStreak = 0; 
                 const bounty = state.level * 25;
-                state.gold += bounty;
-                state.lifetime.goldEarned += bounty;
+                state.gold += bounty; state.lifetime.goldEarned += bounty;
                 logMessage(`⚔️ ARENA VICTORY: You forced ${opponent} to surrender. Gained ${bounty} Gold.`, "log-pvp");
             } else {
                 state.pvpLosses++; state.pvpLossStreak++;
@@ -874,17 +789,20 @@
                 const item = state.inventory.pop();
                 const lvl = getItemLevel(item);
                 const profit = lvl > 0 ? (lvl * 12) : (Math.floor(Math.random() * 15) + 5);
-                state.gold += profit;
-                state.lifetime.goldEarned += profit;
+                state.gold += profit; state.lifetime.goldEarned += profit;
                 logMessage(`Sold [${item}] for ${profit} Gold.`, "log-loot");
+                
+                if (Math.random() < 0.25) {
+                    const randomCompetitor = fakePlayers[Math.floor(Math.random() * fakePlayers.length)];
+                    appendMMOLog("mmo-market", `⚠️ Your batch listing was undercut by <b>${randomCompetitor}</b>. Forced 10% market depreciation payout structural balance adjustment.`, "#f43f5e");
+                }
                 state.taskProgress = 0;
             } else {
                 const upgradePurchased = buyEquipmentUpgrade();
                 if (!upgradePurchased) {
                     const cost = Math.floor(state.houseLevel * 32);
                     if (state.gold >= cost) {
-                        state.gold -= cost;
-                        state.houseProgress += Math.floor(Math.random() * 16) + 15;
+                        state.gold -= cost; state.houseProgress += Math.floor(Math.random() * 16) + 15;
                         checkHouseLevelUp();
                     }
                 }
@@ -894,15 +812,12 @@
             saveGame();
         }
 
-        // ONE-CLICK SLIDER MANAGEMENT INTERFACES
         function calculateSliderYield() {
             const slider = document.getElementById("gold-convert-slider");
             const counterText = document.getElementById("slider-counter-text");
             const yieldText = document.getElementById("slider-yield-text");
-            
             const goldAmount = parseInt(slider.value) || 0;
             const xpYield = Math.floor(goldAmount * 0.5); 
-            
             counterText.innerText = goldAmount + "💰";
             yieldText.innerText = `Yields: +${xpYield} XP`;
         }
@@ -911,38 +826,26 @@
             const slider = document.getElementById("gold-convert-slider");
             if (!slider) return;
             slider.max = state.gold;
-            if (parseInt(slider.value) > state.gold) {
-                slider.value = state.gold;
-            }
+            if (parseInt(slider.value) > state.gold) slider.value = state.gold;
             calculateSliderYield();
         }
 
         function executeSliderConversion() {
             const slider = document.getElementById("gold-convert-slider");
             const convertVal = parseInt(slider.value) || 0;
-
-            if (convertVal <= 0 || state.gold < convertVal) {
-                alert("Please select a valid amount of Gold to convert using the slider.");
-                return;
-            }
+            if (convertVal <= 0 || state.gold < convertVal) return alert("Select a valid allocation size.");
 
             const xpGained = Math.floor(convertVal * 0.5);
-            state.gold -= convertVal;
-            state.xp += xpGained;
-
+            state.gold -= convertVal; state.xp += xpGained;
             logMessage(`💸 CAPITAL TRANSCENDENCE: Disbursed ${convertVal} Gold directly into instant allocation of +${xpGained} XP.`, "log-level");
             
             checkLevelUp();
-            slider.value = 0;
-            updateSliderCeiling();
-            updateUI();
-            saveGame();
+            slider.value = 0; updateSliderCeiling(); updateUI(); saveGame();
         }
 
         function checkLevelUp() {
             if (state.xp >= state.xpNeeded) {
-                state.level++;
-                state.xp -= state.xpNeeded;
+                state.level++; state.xp -= state.xpNeeded;
                 state.xpNeeded = Math.floor(state.xpNeeded * 1.5);
                 state.maxInventory = 15 + (state.level - 1);
                 
@@ -951,13 +854,21 @@
                 state.stats[chosen] += Math.floor(Math.random() * 9) + 2;
 
                 logMessage(`⚡ LEVEL UP! Achieved Level ${state.level}! Core systems optimized.`, "log-level");
+
+                if (state.guildName !== "None" && state.guildRankIndex < corporateGuildRanks.length - 1) {
+                    if (state.level % 5 === 0 || Math.random() < 0.15) {
+                        state.guildRankIndex++;
+                        const currentRankStr = corporateGuildRanks[state.guildRankIndex];
+                        logMessage(`🛡️ GUILD PROMOTION: You have been evaluated and advanced to [${currentRankStr}]!`, "log-level");
+                        appendMMOLog("mmo-guild", `🎖️ <b>Guild Promotion Notification:</b> <b>You (${state.name})</b> have been scaled up to rank <b>[${currentRankStr}]</b> for structural compliance!`, "var(--guild-color)");
+                    }
+                }
             }
         }
 
         function checkHouseLevelUp() {
             if (state.houseProgress >= 100) {
-                state.houseLevel++;
-                state.houseProgress -= 100;
+                state.houseLevel++; state.houseProgress -= 100;
                 logMessage(`🏰 INFRASTRUCTURE EXPANSION: Construction Tier ${state.houseLevel} [${getHouseTierName(state.houseLevel)}] verified!`, "log-level");
             }
         }
@@ -974,8 +885,7 @@
             else if (merchantSlot === "armor") vendorItem = armorPool[Math.floor(Math.random() * armorPool.length)] + ` +${itemLvl}`;
 
             if (state.gold >= cost && itemLvl > getItemLevel(state.equipment[merchantSlot])) {
-                state.gold -= cost;
-                state.equipment[merchantSlot] = vendorItem;
+                state.gold -= cost; state.equipment[merchantSlot] = vendorItem;
                 logMessage(`🛍️ Merchant: Acquired ${vendorItem} update for ${cost} Gold.`, "log-level");
                 return true;
             }
@@ -986,11 +896,9 @@
             const el = document.getElementById(elementId);
             if (!el) return;
             el.innerText = itemStr;
-            
             const lvl = getItemLevel(itemStr);
             if (itemStr.includes("⭐")) el.style.color = "var(--legendary-color)";
             else if (lvl > 0 && lvl <= 15) el.style.color = "#34d399";
-            else if (lvl > 15 && lvl <= 40) el.style.color = "#60a5fa";
             else if (lvl > 40) el.style.color = "#c084fc";
             else el.style.color = "#a78bfa";
         }
@@ -1000,6 +908,15 @@
             document.getElementById("char-class").innerText = state.class || "---";
             document.getElementById("char-level").innerText = state.level;
             document.getElementById("char-rank").innerText = getMilitaryRank(state.level);
+            
+            const guildDisplayBox = document.getElementById("char-guild");
+            if (state.guildName === "None") {
+                guildDisplayBox.innerText = "None";
+                guildDisplayBox.style.color = "var(--text-muted)";
+            } else {
+                guildDisplayBox.innerText = `${state.guildName} [${corporateGuildRanks[state.guildRankIndex]}]`;
+                guildDisplayBox.style.color = "var(--guild-color)";
+            }
             
             const xpPct = Math.min((state.xp / state.xpNeeded) * 100, 100);
             document.getElementById("xp-bar").style.width = xpPct + "%";
@@ -1022,14 +939,7 @@
 
             document.getElementById("pvp-wins").innerText = state.pvpWins;
             document.getElementById("pvp-losses").innerText = state.pvpLosses;
-            
-            if (state.pvpForcedWinsLeft > 0) {
-                document.getElementById("pvp-status").innerText = "Rigged Seed Active";
-                document.getElementById("pvp-status").style.color = "var(--success-color)";
-            } else {
-                document.getElementById("pvp-status").innerText = (state.taskType === "selling") ? "Town Secure Hub" : "Hunting Fields...";
-                document.getElementById("pvp-status").style.color = (state.taskType === "selling") ? "var(--text-muted)" : "var(--pvp-color)";
-            }
+            document.getElementById("pvp-status").innerText = (state.taskType === "selling") ? "Town Hub" : "Hunting Fields...";
 
             document.getElementById("chapter-number").innerText = state.chapter;
             document.getElementById("chapter-bar").style.width = Math.min(state.chapterProgress, 100) + "%";
@@ -1047,20 +957,12 @@
             document.getElementById("house-bar").style.width = Math.min(state.houseProgress, 100) + "%";
             document.getElementById("house-text").innerText = Math.floor(state.houseProgress) + "%";
 
-            // Update range conversion sliders limits
             updateSliderCeiling();
 
             const invContainer = document.getElementById("inventory-items");
             if (invContainer) {
                 invContainer.innerHTML = state.inventory.map(item => {
-                    const lvl = getItemLevel(item);
-                    let itemColor = "var(--text-color)";
-                    if (item.includes("⭐")) itemColor = "var(--legendary-color)";
-                    else if (lvl > 0 && lvl <= 15) itemColor = "#34d399";
-                    else if (lvl > 15 && lvl <= 40) itemColor = "#60a5fa";
-                    else if (lvl > 40) itemColor = "#c084fc";
-                    else itemColor = "#94a3b8";
-                    return `<div style="margin-bottom:6px; color:${itemColor}; font-weight:500;">📦 ${item}</div>`;
+                    return `<div style="margin-bottom:6px; color:#94a3b8; font-weight:500;">📦 ${item}</div>`;
                 }).join('');
             }
         }
@@ -1071,10 +973,63 @@
             const entry = document.createElement("div");
             entry.className = `log-entry ${className}`;
             const ts = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' });
-            entry.innerText = `[${ts}] ${text}`;
-            logBox.appendChild(entry);
+            entry.innerText = `[${ts}] ${text}`; logBox.appendChild(entry);
             logBox.scrollTop = logBox.scrollHeight;
             while (logBox.children.length > 50) logBox.removeChild(logBox.firstChild);
+        }
+
+        function appendMMOLog(elementId, htmlContent, hexColor = "#cbd5e1") {
+            const container = document.getElementById(elementId);
+            if (!container) return;
+            const div = document.createElement("div");
+            div.style.color = hexColor;
+            div.style.marginBottom = "6px";
+            div.style.borderBottom = "1px solid rgba(255,255,255,0.01)";
+            div.style.paddingBottom = "2px";
+            div.innerHTML = htmlContent;
+            container.appendChild(div);
+            container.scrollTop = container.scrollHeight;
+            while (container.children.length > 30) container.removeChild(container.firstChild);
+        }
+
+        function runMarketVolatilityLoop() {
+            const mockCommodities = ["Left Socks", "Cardboard Boxes", "Squeaky Toys", "Premium Lint", "Exquisite Spoons"];
+            const selected = mockCommodities[Math.floor(Math.random() * mockCommodities.length)];
+            const changePct = (Math.random() * 200 - 50).toFixed(0); 
+            
+            let color = "var(--text-muted)";
+            let statusText = `trading fluidly at baseline values.`;
+            if (changePct > 100) { color = "#10b981"; statusText = `MARKET VALUE INFLATION SPIKE (+${changePct}%)!`; }
+            else if (changePct < -20) { color = "#f43f5e"; statusText = `CRITICAL ASSSET PRICE COLLAPSE (${changePct}%)!`; }
+            
+            appendMMOLog("mmo-market", `📈 <b>Market Tracker:</b> [${selected}] is currently ${statusText}`, color);
+            setTimeout(runMarketVolatilityLoop, Math.random() * 8000 + 8000);
+        }
+
+        function runGuildFactionLoop() {
+            let isPlayerActor = (state.guildName !== "None" && Math.random() < 0.15);
+            const dynamicActor = isPlayerActor ? `<b>You (${state.name})</b>` : fakePlayers[Math.floor(Math.random() * fakePlayers.length)];
+            const rng = Math.random();
+            
+            if (rng < 0.4) {
+                const vaultDonation = Math.floor(Math.random() * 400) + 100;
+                appendMMOLog("mmo-guild", `🛡️ ${dynamicActor} deposited 💰${vaultDonation} into the Guild Bank. Guild Score increased!`, "var(--guild-color)");
+            } else if (rng < 0.75) {
+                const localSector = factions[Math.floor(Math.random() * factions.length)];
+                const modifiers = (Math.random() * 4 + 1).toFixed(1);
+                appendMMOLog("mmo-guild", `⚔️ 🗺️ Faction War Status: <b>${localSector}</b> captured the grid quadrant. Area drop rates modified by +${modifiers}%.`, "#06b6d4");
+            } else {
+                appendMMOLog("mmo-guild", `👹 <b>World Event:</b> ${dynamicActor} struck the Spreadsheet Overlord raid boss for ${Math.floor(Math.random() * 800 + 400)} critical damage!`, "#f59e0b");
+            }
+            setTimeout(runGuildFactionLoop, Math.random() * 5000 + 4000);
+        }
+
+        function startMultiplayerSimulation() {
+            appendMMOLog("mmo-market", "<i>Connecting to standard index marketplace data flows...</i>", "var(--text-muted)");
+            appendMMOLog("mmo-guild", "<i>Synchronizing proxy faction maps... Alliance matrix clear. Ready for player telemetry updates.</i>", "var(--text-muted)");
+            
+            setTimeout(runMarketVolatilityLoop, 2000);
+            setTimeout(runGuildFactionLoop, 3500);
         }
 
         function exportSave() {
@@ -1092,7 +1047,8 @@
                 const decodedJson = decodeURIComponent(escape(atob(codeInput)));
                 const parsedState = JSON.parse(decodedJson);
                 if (parsedState.name && parsedState.stats) {
-                    state = parsedState;
+                    state = parsedState; 
+                    if (!state.guildName) { state.guildName = "None"; state.guildRankIndex = 0; }
                     saveGame(); updateUI();
                     logMessage("Data transmission synced successfully.", "log-level");
                 }

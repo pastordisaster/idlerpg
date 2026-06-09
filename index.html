@@ -360,6 +360,7 @@
             <div class="stat-line"><span>Weapon:</span> <span id="eq-weapon" style="color:#a78bfa; font-weight:500;">Bare Fists</span></div>
             <div class="stat-line"><span>Shield:</span> <span id="eq-shield" style="color:#a78bfa; font-weight:500;">None</span></div>
             <div class="stat-line"><span>Armor:</span> <span id="eq-armor" style="color:#a78bfa; font-weight:500;">Cloth Rags</span></div>
+            <div class="stat-line"><span>Ring:</span> <span id="eq-ring" style="color:#a78bfa; font-weight:500;">None</span></div>
 
             <!-- HALL OF RECORDS -->
             <div style="margin-top:24px; margin-bottom: 12px; font-weight:700; font-size:0.8rem; text-transform:uppercase; color:var(--warning-color); border-top: 1px dashed var(--border-color); padding-top:16px; letter-spacing:0.05em;">Hall of Records</div>
@@ -481,11 +482,11 @@
         <div class="changelog-list">
             <div class="changelog-item">
                 <span class="changelog-date">Jun 08, 2026</span>
-                <span class="changelog-text">Added a dynamic 1-50 Gold milestone drop pool payload directly triggered on campaign chapter completion steps.</span>
+                <span class="changelog-text">Expanded structural hero data to support dedicated Accessory infrastructure: implemented dynamic Ring drops and custom merchant inventory loops.</span>
             </div>
             <div class="changelog-item">
                 <span class="changelog-date">Jun 08, 2026</span>
-                <span class="changelog-text">Completely purged the Global Interaction Chat layout module from the active browser viewport framework.</span>
+                <span class="changelog-text">Added a dynamic 1-50 Gold milestone drop pool payload directly triggered on campaign chapter completion steps.</span>
             </div>
         </div>
     </div>
@@ -527,6 +528,7 @@
         const weaponPool = ["Butter Knife", "Rusty Fork", "Pointy Stick", "Iron Ladle", "Excalibur's Replica"];
         const shieldPool = ["Garbage Can Lid", "Thick Newspaper", "Wooden Platter", "Rusty Hubcap"];
         const armorPool = ["Bubble Wrap Plate", "Cardboard Box mail", "Threadbare Poncho", "Leather Tunic", "Iron Boilerplate"];
+        const ringPool = ["Bent Paperclip Band", "Mood Ring", "Cracked Onyx Signet", "Brass Knuckle Ring", "The One Ring (Discount Replica)"];
 
         const legendaryMICItems = [
             "Lockheed Raptor Exosuit", "Raytheon Tomahawk Array", "Dynamics Abrams Plating", "Northrop Spirit Cloak",
@@ -572,7 +574,7 @@
             name: "", class: "", level: 1, xp: 0, xpNeeded: 100, gold: 0,
             guildName: "None", guildRankIndex: 0,
             stats: { str: 0, dex: 0, con: 0, int: 0, wis: 0, cha: 0 },
-            equipment: { weapon: "Bare Fists", shield: "None", armor: "Cloth Rags" },
+            equipment: { weapon: "Bare Fists", shield: "None", armor: "Cloth Rags", ring: "None" },
             inventory: [], maxInventory: 15, currentTask: "", taskProgress: 0,
             taskType: "quest", taskDuration: 3000,
             chapter: 1, chapterProgress: 0, pvpWins: 0, pvpLosses: 0, 
@@ -608,6 +610,9 @@
                     if (parsed && typeof parsed === 'object' && parsed.name) {
                         state = parsed;
                         if (!state.guildName) { state.guildName = "None"; state.guildRankIndex = 0; }
+                        // Retroactive structural patch for Ring implementation
+                        if (!state.equipment) state.equipment = {};
+                        if (!state.equipment.ring) state.equipment.ring = "None";
                         validLoad = true;
                     }
                 } catch(e) { console.error(e); }
@@ -638,7 +643,7 @@
                 con: Math.floor(Math.random() * 8) + 8, int: Math.floor(Math.random() * 8) + 8,
                 wis: Math.floor(Math.random() * 8) + 8, cha: Math.floor(Math.random() * 8) + 8
             };
-            state.equipment = { weapon: "Bare Fists", shield: "None", armor: "Cloth Rags" };
+            state.equipment = { weapon: "Bare Fists", shield: "None", armor: "Cloth Rags", ring: "None" };
             state.inventory = []; state.maxInventory = 15; state.chapter = 1; state.chapterProgress = 0;
             state.pvpWins = 0; state.pvpLosses = 0; state.pvpLossStreak = 0; state.pvpForcedWinsLeft = 0;
             state.houseLevel = 1; state.houseProgress = 0;
@@ -699,12 +704,10 @@
         function completeTask() {
             state.chapterProgress += Math.floor(Math.random() * 4) + 2; 
             
-            // SYSTEM UPGRADE: IDENTIFIED CHAPTER BREAKPOINTS
             if (state.chapterProgress >= 100) {
                 state.chapter++;
                 state.chapterProgress = 0;
                 
-                // Roll milestone check: anywhere from 1 to 50 gold
                 const milestoneGoldReward = Math.floor(Math.random() * 50) + 1;
                 state.gold += milestoneGoldReward;
                 state.lifetime.goldEarned += milestoneGoldReward;
@@ -735,7 +738,7 @@
                 
                 const legendaryRoll = Math.random() * 100;
                 if (legendaryRoll <= 1.1) {
-                    const slots = ["weapon", "shield", "armor"];
+                    const slots = ["weapon", "shield", "armor", "ring"];
                     const targetSlot = slots[Math.floor(Math.random() * slots.length)];
                     const currentLvl = getItemLevel(state.equipment[targetSlot]);
                     const legendaryLvl = currentLvl + Math.floor(Math.random() * 10) + 6;
@@ -745,7 +748,7 @@
                     state.equipment[targetSlot] = completedItemString;
                     logMessage(`🚨 MILITARY-INDUSTRIAL COMPLEX DROPPED AN UPGRADE: Equipped ${completedItemString}!`, "log-loot");
                 } else if (Math.random() < 0.15) {
-                    const slots = ["weapon", "shield", "armor"];
+                    const slots = ["weapon", "shield", "armor", "ring"];
                     const dropSlot = slots[Math.floor(Math.random() * slots.length)];
                     const itemLvl = Math.floor(Math.random() * (state.level * 1.6)) + Math.floor(Math.random() * 12) + 1;
                     let droppedItem = "";
@@ -753,6 +756,7 @@
                     if (dropSlot === "weapon") droppedItem = weaponPool[Math.floor(Math.random() * weaponPool.length)] + ` +${itemLvl}`;
                     else if (dropSlot === "shield") droppedItem = shieldPool[Math.floor(Math.random() * shieldPool.length)] + ` +${itemLvl}`;
                     else if (dropSlot === "armor") droppedItem = armorPool[Math.floor(Math.random() * armorPool.length)] + ` +${itemLvl}`;
+                    else if (dropSlot === "ring") droppedItem = ringPool[Math.floor(Math.random() * ringPool.length)] + ` +${itemLvl}`;
 
                     if (itemLvl > getItemLevel(state.equipment[dropSlot])) {
                         state.equipment[dropSlot] = droppedItem;
@@ -891,8 +895,9 @@
             }
         }
 
+        // Expanded upgrade selection matrix to factor in Accessory rings
         function buyEquipmentUpgrade() {
-            const slots = ["weapon", "shield", "armor"];
+            const slots = ["weapon", "shield", "armor", "ring"];
             const merchantSlot = slots[Math.floor(Math.random() * slots.length)];
             const itemLvl = Math.floor(Math.random() * (state.level * 1.8)) + Math.floor(Math.random() * 6) + 1;
             const cost = itemLvl * 28;
@@ -901,6 +906,7 @@
             if (merchantSlot === "weapon") vendorItem = weaponPool[Math.floor(Math.random() * weaponPool.length)] + ` +${itemLvl}`;
             else if (merchantSlot === "shield") vendorItem = shieldPool[Math.floor(Math.random() * shieldPool.length)] + ` +${itemLvl}`;
             else if (merchantSlot === "armor") vendorItem = armorPool[Math.floor(Math.random() * armorPool.length)] + ` +${itemLvl}`;
+            else if (merchantSlot === "ring") vendorItem = ringPool[Math.floor(Math.random() * ringPool.length)] + ` +${itemLvl}`;
 
             if (state.gold >= cost && itemLvl > getItemLevel(state.equipment[merchantSlot])) {
                 state.gold -= cost; state.equipment[merchantSlot] = vendorItem;
@@ -950,6 +956,7 @@
             renderEquipItemColors("eq-weapon", state.equipment.weapon);
             renderEquipItemColors("eq-shield", state.equipment.shield);
             renderEquipItemColors("eq-armor", state.equipment.armor);
+            renderEquipItemColors("eq-ring", state.equipment.ring || "None");
 
             document.getElementById("record-slain").innerText = state.lifetime.monstersSlain;
             document.getElementById("record-gold").innerText = state.lifetime.goldEarned + " 💰";
@@ -1067,6 +1074,8 @@
                 if (parsedState.name && parsedState.stats) {
                     state = parsedState; 
                     if (!state.guildName) { state.guildName = "None"; state.guildRankIndex = 0; }
+                    if (!state.equipment) state.equipment = {};
+                    if (!state.equipment.ring) state.equipment.ring = "None";
                     saveGame(); updateUI();
                     logMessage("Data transmission synced successfully.", "log-level");
                 }

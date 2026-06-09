@@ -331,7 +331,6 @@
     <div class="subtitle">The game that plays itself so you don't have to.</div>
 
     <div class="game-container">
-        <!-- CHARACTER PANEL -->
         <div class="panel">
             <div class="panel-title">Hero Sheet</div>
             <div class="stat-line"><span>Name:</span> <span id="char-name" style="font-weight:600; color:#fff;">---</span></div>
@@ -364,22 +363,18 @@
             <div class="stat-line"><span>Ring 2:</span> <span id="eq-ring2" style="color:#a78bfa; font-weight:500;">None</span></div>
             <div class="stat-line"><span>Trinket:</span> <span id="eq-trinket" style="color:#a78bfa; font-weight:500;">None</span></div>
 
-            <!-- HALL OF RECORDS -->
             <div style="margin-top:24px; margin-bottom: 12px; font-weight:700; font-size:0.8rem; text-transform:uppercase; color:var(--warning-color); border-top: 1px dashed var(--border-color); padding-top:16px; letter-spacing:0.05em;">Hall of Records</div>
             <div class="stat-line"><span>Monsters Slain:</span> <span id="record-slain" style="font-weight:600;">0</span></div>
             <div class="stat-line"><span>Lifetime Wealth:</span> <span id="record-gold" style="font-weight:600; color:#fbbf24;">0💰</span></div>
             <div class="stat-line"><span>Town Trips:</span> <span id="record-trips" style="font-weight:600;">0</span></div>
 
-            <!-- PvP ARENA PANEL -->
             <div style="margin-top:24px; font-weight:700; font-size:0.8rem; text-transform:uppercase; color:var(--pvp-color); border-top: 1px dashed var(--border-color); padding-top:16px; letter-spacing:0.05em;">PvP Arena Statistics</div>
             <div class="stat-line" style="margin-top:12px;"><span>Ranked Wins:</span> <span id="pvp-wins" style="color:var(--success-color); font-weight:700;">0</span></div>
             <div class="stat-line"><span>Ranked Losses:</span> <span id="pvp-losses" style="color:var(--pvp-color); font-weight:700;">0</span></div>
             <div class="stat-line" style="font-size:0.85em;"><span>Arena Status:</span> <span id="pvp-status" style="color:var(--text-muted); font-weight:600;">Searching...</span></div>
         </div>
 
-        <!-- MAIN ACTION PANEL -->
         <div class="panel">
-            <!-- CHAPTER PROGRESSION PANEL -->
             <div class="panel-title" style="color: var(--chapter-color);">Story Campaign</div>
             <div style="font-weight:600; font-size: 1.05rem; margin-bottom: 8px;">Current Chapter: <span id="chapter-number" style="color:var(--chapter-color)">1</span></div>
             <div class="progress-container" style="margin-top:5px; margin-bottom:32px;">
@@ -403,14 +398,12 @@
             <div id="log"></div>
         </div>
 
-        <!-- INVENTORY PANEL -->
         <div class="panel">
             <div class="panel-title">Inventory</div>
             <div class="stat-line" style="font-size:1.3rem; margin-bottom:12px; align-items: center;">
                 <span style="color:#fff;">Gold:</span> <span id="inv-gold" style="color:#fbbf24; font-weight:800;">0💰</span>
             </div>
             
-            <!-- GOLD TO XP SLIDER INTEGRATION -->
             <div class="slider-box">
                 <label>Liquidation Allocation</label>
                 <div class="slider-row">
@@ -430,10 +423,8 @@
             </div>
 
             <div class="inventory-list" id="inventory-items">
-                <!-- Items list -->
-            </div>
+                </div>
 
-            <!-- PLAYER HOUSING SUB-PANEL -->
             <div style="margin-top:24px; font-weight:700; font-size:0.8rem; text-transform:uppercase; color:var(--house-color); border-top: 1px dashed var(--border-color); padding-top:16px; letter-spacing:0.05em;">Player Housing</div>
             <div class="stat-line" style="margin-top:12px;"><span>Estate Status:</span> <b id="house-name" style="color:#fff;">Hole in the Ground</b></div>
             <div class="progress-container" style="margin-top:8px; margin-bottom:0;">
@@ -446,22 +437,18 @@
         </div>
     </div>
 
-    <!-- REMAINING MULTIPLAYER SIMULATION INTERFACES -->
     <div class="multiplayer-container">
-        <!-- SIMULATED AUCTION HOUSE / MARKETBOARD -->
         <div class="panel">
             <div class="panel-title" style="color: var(--market-color);">📈 Dynamic Open-Market Board</div>
             <div id="mmo-market" class="mmo-log-box"></div>
         </div>
 
-        <!-- SIMULATED GUILDS & FACTIONS -->
         <div class="panel">
             <div class="panel-title" style="color: var(--guild-color);">🛡️ Faction & Guild Operations</div>
             <div id="mmo-guild" class="mmo-log-box"></div>
         </div>
     </div>
 
-    <!-- UTILITIES -->
     <div class="io-section panel">
         <div class="panel-title">Data Transmission (Save / Load)</div>
         <label for="saveCodeBox" style="font-size:0.85rem; color:var(--text-muted);">To back up your progress or move to a different computer, copy the code below. Paste a code and click Import to restore data.</label>
@@ -478,10 +465,13 @@
         </div>
     </div>
 
-    <!-- CHANGELOG PANEL -->
     <div class="changelog-panel panel">
         <div class="panel-title">System Change Log</div>
         <div class="changelog-list">
+            <div class="changelog-item">
+                <span class="changelog-date">Jun 09, 2026</span>
+                <span class="changelog-text">Implemented baseline macro-economic hero balancing. All core player attributes now expand via an integrated 5% compound multiplier loop upon level-up execution to combat end-game mathematical scale decay.</span>
+            </div>
             <div class="changelog-item">
                 <span class="changelog-date">Jun 09, 2026</span>
                 <span class="changelog-text">Adjusted Military-Industrial Complex drop matrices. Severely throttled legendary equipment optimization drops down to a conservative 0.3% baseline to safeguard economy scaling and progression pacing.</span>
@@ -935,9 +925,13 @@
                 state.xpNeeded = Math.floor(state.xpNeeded * 1.5);
                 state.maxInventory = 15 + (state.level - 1);
                 
+                // Scale all core attributes up by 5% (Guarantees at least +1 value growth)
                 const attrs = ['str', 'dex', 'con', 'int', 'wis', 'cha'];
-                const chosen = attrs[Math.floor(Math.random() * attrs.length)];
-                state.stats[chosen] += Math.floor(Math.random() * 9) + 2;
+                attrs.forEach(attr => {
+                    const baseline = state.stats[attr];
+                    const scaled = Math.round(baseline * 1.05);
+                    state.stats[attr] = Math.max(baseline + 1, scaled);
+                });
 
                 logMessage(`⚡ LEVEL UP! Achieved Level ${state.level}! Core systems optimized.`, "log-level");
 

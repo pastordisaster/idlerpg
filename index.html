@@ -484,11 +484,11 @@
         <div class="changelog-list">
             <div class="changelog-item">
                 <span class="changelog-date">Jun 08, 2026</span>
-                <span class="changelog-text">Expanded accessory architecture. Upgraded gear payload allocations to support dual-ring theory (Ring 1 & Ring 2) and integrated an entirely separate operational operational matrix for Trinket item pools.</span>
+                <span class="changelog-text">Fixed background tab execution. Implemented a Fixed Delta Time catch-up loop evaluating absolute structural intervals ($Date.now()$). This effectively circumvents severe Chromium, Chrome, and Vivaldi timer throttling when tabs are un-focused or pinned.</span>
             </div>
             <div class="changelog-item">
                 <span class="changelog-date">Jun 08, 2026</span>
-                <span class="changelog-text">Expanded structural hero data to support dedicated Accessory infrastructure: implemented dynamic Ring drops and custom merchant inventory loops.</span>
+                <span class="changelog-text">Expanded accessory architecture. Upgraded gear payload allocations to support dual-ring theory (Ring 1 & Ring 2) and integrated an entirely separate operational matrix for Trinket item pools.</span>
             </div>
         </div>
     </div>
@@ -583,7 +583,8 @@
             chapter: 1, chapterProgress: 0, pvpWins: 0, pvpLosses: 0, 
             pvpLossStreak: 0, pvpForcedWinsLeft: 0,
             houseLevel: 1, houseProgress: 0,
-            lifetime: { monstersSlain: 0, goldEarned: 0, townTrips: 0 }
+            lifetime: { monstersSlain: 0, goldEarned: 0, townTrips: 0 },
+            lastTickTime: 0, lag: 0
         };
 
         function getItemLevel(itemStr) {
@@ -639,6 +640,10 @@
                 if (!state.currentTask) rollNewTask();
             }
 
+            // Sync structural timing variables to avoid huge initial math burst on startup
+            state.lastTickTime = Date.now();
+            state.lag = 0;
+
             updateUI();
             tick();
             startMultiplayerSimulation();
@@ -674,23 +679,44 @@
 
         const tickRate = 200; 
         function tick() {
-            if (Math.random() < 0.0003) executePvPEvent();
-            
-            if (state.guildName === "None" && state.level >= 2 && Math.random() < 0.05) {
-                state.guildName = corporateGuildPool[Math.floor(Math.random() * corporateGuildPool.length)];
-                state.guildRankIndex = 0;
-                logMessage(`🛡️ GUILD JOINED: Automatically processed and accepted network invite to [${state.guildName}]!`, "log-level");
-                appendMMOLog("mmo-guild", `✨ <b>Guild Welcome:</b> <b>You (${state.name})</b> have automatically filled an open production roster slot in the guild! Welcome aboard!`, "var(--guild-color)");
-                saveGame();
+            let now = Date.now();
+            if (!state.lastTickTime) state.lastTickTime = now;
+            let elapsed = now - state.lastTickTime;
+            state.lastTickTime = now;
+
+            // Fuel the lag accumulator with real elapsed clock cycles
+            state.lag = (state.lag || 0) + elapsed;
+
+            const msPerTick = 200;
+            // Cap catch-up loops to 5 minutes of calculation (1500 iterations) per screen frame refresh. 
+            // This prevents tab locking if left idle for long durations.
+            const maxCatchUpTimePerFrame = 300000; 
+            let processedTime = 0;
+
+            while (state.lag >= msPerTick && processedTime < maxCatchUpTimePerFrame) {
+                if (Math.random() < 0.0003) executePvPEvent();
+                
+                if (state.guildName === "None" && state.level >= 2 && Math.random() < 0.05) {
+                    state.guildName = corporateGuildPool[Math.floor(Math.random() * corporateGuildPool.length)];
+                    state.guildRankIndex = 0;
+                    logMessage(`🛡️ GUILD JOINED: Automatically processed and accepted network invite to [${state.guildName}]!`, "log-level");
+                    appendMMOLog("mmo-guild", `✨ <b>Guild Welcome:</b> <b>You (${state.name})</b> have automatically filled an open production roster slot in the guild! Welcome aboard!`, "var(--guild-color)");
+                    saveGame();
+                }
+
+                if (state.taskType === "quest") {
+                    state.taskProgress += (msPerTick / state.taskDuration) * 100;
+                    if (state.taskProgress >= 100) completeTask();
+                } else if (state.taskType === "selling") {
+                    state.taskProgress += (msPerTick / 800) * 100; 
+                    if (state.taskProgress >= 100) sellOneItem();
+                }
+
+                state.lag -= msPerTick;
+                processedTime += msPerTick;
             }
 
-            if (state.taskType === "quest") {
-                state.taskProgress += (tickRate / state.taskDuration) * 100;
-                if (state.taskProgress >= 100) completeTask();
-            } else if (state.taskType === "selling") {
-                state.taskProgress += (tickRate / 800) * 100; 
-                if (state.taskProgress >= 100) sellOneItem();
-            }
+            // Only update DOM UI layout once per frame call to preserve resources
             updateUI();
             setTimeout(tick, tickRate);
         }
@@ -1101,6 +1127,9 @@
                     if (!state.equipment.ring2) state.equipment.ring2 = "None";
                     if (!state.equipment.trinket) state.equipment.trinket = "None";
                     
+                    state.lastTickTime = Date.now();
+                    state.lag = 0;
+
                     saveGame(); updateUI();
                     logMessage("Data transmission synced successfully.", "log-level");
                 }

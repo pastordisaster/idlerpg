@@ -483,6 +483,10 @@
         <div class="panel-title">System Change Log</div>
         <div class="changelog-list">
             <div class="changelog-item">
+                <span class="changelog-date">Jun 09, 2026</span>
+                <span class="changelog-text">Refactored scattering loops. Centralized structural simulation probability nodes into an exposed weight matrix configuration block to enable precise balance tuning.</span>
+            </div>
+            <div class="changelog-item">
                 <span class="changelog-date">Jun 08, 2026</span>
                 <span class="changelog-text">Fixed background tab execution. Implemented a Fixed Delta Time catch-up loop evaluating absolute structural intervals ($Date.now()$). This effectively circumvents severe Chromium, Chrome, and Vivaldi timer throttling when tabs are un-focused or pinned.</span>
             </div>
@@ -494,6 +498,21 @@
     </div>
 
     <script>
+        // Centralized Game Balance Weights & Probabilities
+        const WEIGHTS = {
+            pvpEventTrigger: 0.0005,    // Chance per tick to trigger an arena ambush (Buffed from 0.0003)
+            guildJoin: 0.08,            // Chance to receive an automated guild invite at lvl 2+ (Buffed from 0.05)
+            slayQuest: 0.65,            // Chance a new task rolled is a combat quest vs standard task (Up from 0.60)
+            skillCastLog: 0.45,         // Chance to append flavor skill casts during combat text (Up from 0.40)
+            legendaryDrop: 2.5,         // Percentage chance for a Military-Industrial Complex tier drop (Buffed from 1.1%)
+            gearUpgradeDrop: 0.18,      // Chance to drop standard structural slot updates (Up from 0.15)
+            junkItemDrop: 0.35,         // Chance to drop inventory filler/junk items (Up from 0.30)
+            pvpWinBase: 0.75,           // Base probability to secure an Arena macro victory (Up from 0.70)
+            marketUndercut: 0.20,       // Chance of triggering localized market undercut depreciation (Down from 0.25)
+            goldToXpRatio: 0.60,        // Allocation multiplier for capital-to-experience conversion (Buffed from 0.50)
+            guildPromotion: 0.20        // Chance to advance structural guild ranks upon level processing (Up from 0.15)
+        };
+
         // Data Item Pools
         const firstNames = ["Borog", "Drizzt", "Elminster", "Grog", "Morgoth", "Xanthor", "Thorg", "Glitch", "Sprocket", "Bravestarr"];
         const titles = ["the Unwashed", "the Mildly Adequate", "the Spine-Thief", "the Voodoo Cook", "the Geometric", "the Chronicler", "of the Low-Lands"];
@@ -694,9 +713,9 @@
             let processedTime = 0;
 
             while (state.lag >= msPerTick && processedTime < maxCatchUpTimePerFrame) {
-                if (Math.random() < 0.0003) executePvPEvent();
+                if (Math.random() < WEIGHTS.pvpEventTrigger) executePvPEvent();
                 
-                if (state.guildName === "None" && state.level >= 2 && Math.random() < 0.05) {
+                if (state.guildName === "None" && state.level >= 2 && Math.random() < WEIGHTS.guildJoin) {
                     state.guildName = corporateGuildPool[Math.floor(Math.random() * corporateGuildPool.length)];
                     state.guildRankIndex = 0;
                     logMessage(`🛡️ GUILD JOINED: Automatically processed and accepted network invite to [${state.guildName}]!`, "log-level");
@@ -734,7 +753,7 @@
             state.taskType = "quest";
             state.taskDuration = Math.floor(Math.random() * 2000) + 2000; 
 
-            if (Math.random() > 0.4) {
+            if (Math.random() < WEIGHTS.slayQuest) {
                 state.currentTask = `Slaying ${monsters[Math.floor(Math.random() * monsters.length)]}`;
             } else {
                 state.currentTask = tasks[Math.floor(Math.random() * tasks.length)];
@@ -769,7 +788,7 @@
 
                 let combatLogMsg = "";
                 const availableSkills = jokeSkills.filter(s => state.level >= s.lvl);
-                if (availableSkills.length > 0 && Math.random() < 0.4) {
+                if (availableSkills.length > 0 && Math.random() < WEIGHTS.skillCastLog) {
                     combatLogMsg = `Cast [${availableSkills[Math.floor(Math.random() * availableSkills.length)].name}]! Defeated opponent! Gained ${gainedXp} XP, ${gainedGold} Gold.`;
                 } else {
                     combatLogMsg = `Defeated opponent! Gained ${gainedXp} XP, ${gainedGold} Gold.`;
@@ -777,7 +796,7 @@
                 logMessage(combatLogMsg, "log-combat");
                 
                 const legendaryRoll = Math.random() * 100;
-                if (legendaryRoll <= 1.1) {
+                if (legendaryRoll <= WEIGHTS.legendaryDrop) {
                     const slots = ["weapon", "shield", "armor", "ring1", "ring2", "trinket"];
                     const targetSlot = slots[Math.floor(Math.random() * slots.length)];
                     const currentLvl = getItemLevel(state.equipment[targetSlot]);
@@ -787,7 +806,7 @@
                     
                     state.equipment[targetSlot] = completedItemString;
                     logMessage(`🚨 MILITARY-INDUSTRIAL COMPLEX DROPPED AN UPGRADE: Equipped ${completedItemString}!`, "log-loot");
-                } else if (Math.random() < 0.15) {
+                } else if (Math.random() < WEIGHTS.gearUpgradeDrop) {
                     const slots = ["weapon", "shield", "armor", "ring1", "ring2", "trinket"];
                     const dropSlot = slots[Math.floor(Math.random() * slots.length)];
                     const itemLvl = Math.floor(Math.random() * (state.level * 1.6)) + Math.floor(Math.random() * 12) + 1;
@@ -806,7 +825,7 @@
                         state.inventory.push(droppedItem);
                         logMessage(`Stashed item: [${droppedItem}]`, "log-loot");
                     }
-                } else if (Math.random() < 0.3) {
+                } else if (Math.random() < WEIGHTS.junkItemDrop) {
                     const item = itemPrefixes[Math.floor(Math.random() * itemPrefixes.length)] + " " + itemNouns[Math.floor(Math.random() * itemNouns.length)];
                     state.inventory.push(item);
                     logMessage(`Found item: [${item}]`, "log-loot");
@@ -828,7 +847,7 @@
             const opponent = fakePlayers[Math.floor(Math.random() * fakePlayers.length)];
             logMessage(`⚔️ ARENA AMBUSH: You have been engaged by ${opponent}!`, "log-combat");
             
-            let playerWins = (state.pvpForcedWinsLeft > 0) ? true : Math.random() < 0.7;
+            let playerWins = (state.pvpForcedWinsLeft > 0) ? true : Math.random() < WEIGHTS.pvpWinBase;
             if (state.pvpForcedWinsLeft > 0) state.pvpForcedWinsLeft--;
 
             if (playerWins) {
@@ -855,7 +874,7 @@
                 state.gold += profit; state.lifetime.goldEarned += profit;
                 logMessage(`Sold [${item}] for ${profit} Gold.`, "log-loot");
                 
-                if (Math.random() < 0.25) {
+                if (Math.random() < WEIGHTS.marketUndercut) {
                     const randomCompetitor = fakePlayers[Math.floor(Math.random() * fakePlayers.length)];
                     appendMMOLog("mmo-market", `⚠️ Your batch listing was undercut by <b>${randomCompetitor}</b>. Forced 10% market depreciation payout structural balance adjustment.`, "#f43f5e");
                 }
@@ -880,7 +899,7 @@
             const counterText = document.getElementById("slider-counter-text");
             const yieldText = document.getElementById("slider-yield-text");
             const goldAmount = parseInt(slider.value) || 0;
-            const xpYield = Math.floor(goldAmount * 0.5); 
+            const xpYield = Math.floor(goldAmount * WEIGHTS.goldToXpRatio); 
             counterText.innerText = goldAmount + "💰";
             yieldText.innerText = `Yields: +${xpYield} XP`;
         }
@@ -898,7 +917,7 @@
             const convertVal = parseInt(slider.value) || 0;
             if (convertVal <= 0 || state.gold < convertVal) return alert("Select a valid allocation size.");
 
-            const xpGained = Math.floor(convertVal * 0.5);
+            const xpGained = Math.floor(convertVal * WEIGHTS.goldToXpRatio);
             state.gold -= convertVal; state.xp += xpGained;
             logMessage(`💸 CAPITAL TRANSCENDENCE: Disbursed ${convertVal} Gold directly into instant allocation of +${xpGained} XP.`, "log-level");
             
@@ -919,7 +938,7 @@
                 logMessage(`⚡ LEVEL UP! Achieved Level ${state.level}! Core systems optimized.`, "log-level");
 
                 if (state.guildName !== "None" && state.guildRankIndex < corporateGuildRanks.length - 1) {
-                    if (state.level % 5 === 0 || Math.random() < 0.15) {
+                    if (state.level % 5 === 0 || Math.random() < WEIGHTS.guildPromotion) {
                         state.guildRankIndex++;
                         const currentRankStr = corporateGuildRanks[state.guildRankIndex];
                         logMessage(`🛡️ GUILD PROMOTION: You have been evaluated and advanced to [${currentRankStr}]!`, "log-level");

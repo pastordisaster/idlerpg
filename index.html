@@ -2,7 +2,8 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>ZeroQuest 2.3 — The Zero Interaction MMO</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>ZeroQuest 2.4 — The Zero Interaction MMO</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
@@ -173,7 +174,7 @@ color: var(--text); font-family: var(--font); font-size: 14px; line-height: 1.5;
 <body>
 <div id="creation-screen">
 <div class="creation-box">
-<h1>ZeroQuest 2.3</h1>
+<h1>ZeroQuest 2.4</h1>
 <p class="sub">The Zero-Interaction MMO — The world plays itself.</p>
 <div id="new-character-form">
 <div><input type="text" id="hero-name" value="Hero" maxlength="16" placeholder="Character name"></div>
@@ -197,7 +198,7 @@ color: var(--text); font-family: var(--font); font-size: 14px; line-height: 1.5;
 </div>
 <div id="game-screen" style="display:none;">
 <div class="topbar">
-<div class="logo">⚔ ZeroQuest 2.3</div>
+<div class="logo">⚔ ZeroQuest 2.4</div>
 <div class="server-info">
 <span class="pill"><span class="dot"></span> <span id="online-count">0</span> Online</span>
 <span class="pill">🌐 Server: <b style="color:var(--text);margin-left:4px;">Eternity-01</b></span>
@@ -309,16 +310,14 @@ color: var(--text); font-family: var(--font); font-size: 14px; line-height: 1.5;
 <div class="log" style="margin-top:10px; max-height:120px;" id="bestiary-hint-log"><div class="log-entry log-system">Every monster you defeat is recorded here. Keep hunting to complete your bestiary!</div></div>
 </div>
 <div class="social-panel" data-scontent="about">
-<h2>ℹ️ About ZeroQuest 2.3</h2>
+<h2>ℹ️ About ZeroQuest 2.4</h2>
 <div class="about-section">
-<p style="margin-bottom:12px;"><strong>ZeroQuest 2.3 — The Zero-Interaction MMO</strong> is an idle/autoplay RPG where the world lives without you. Your character fights, loots, levels up, joins guilds and factions, trades on the auction house, and engages in PvP — all automatically.</p>
+<p style="margin-bottom:12px;"><strong>ZeroQuest 2.4 — The Zero-Interaction MMO</strong> is an idle/autoplay RPG where the world lives without you. Your character fights, loots, levels up, joins guilds and factions, trades on the auction house, and engages in PvP — all automatically.</p>
 <p style="margin-bottom:12px;">Everything happens in real-time. Watch your hero grow, check the leaderboard, or just let it run in the background. Progress is saved automatically.</p>
 <h3 style="margin:12px 0 8px 0; font-size:0.9em;">📜 Changelog</h3>
 <div id="changelog-container">
-<div class="changelog-entry"><span class="changelog-version">v2.3.2</span><span class="changelog-date">— Dynamic Opponent Scaling</span><ul class="changelog-list"><li>⚔️ Fake players now dynamically equip gear and grow stronger over time</li><li>📊 Opponent power now scales with gear score, not just level</li><li>🎯 PvP win rate balanced to ~50% against equal-power opponents</li><li>🔄 Fake players periodically "loot" better equipment from simulated combat</li><li>📈 Opponent power cap now scales with player progression</li></ul></div>
-<div class="changelog-entry"><span class="changelog-version">v2.3.1</span><span class="changelog-date">— PvP Balance Patch</span><ul class="changelog-list"><li>⚖️ COMPLETELY REWORKED PvP matchmaking — no more level 400+ opponents!</li><li>🎯 Opponents now within 30-40% power range for fair fights</li><li>📊 Win chance now properly balanced (50% base vs equal power)</li><li>🚫 Fake players capped at hero level +30 to prevent runaway scaling</li><li>🏆 Leaderboard now displays fair competition</li></ul></div>
-<div class="changelog-entry"><span class="changelog-version">v2.3</span><span class="changelog-date">— Mystic Update</span><ul class="changelog-list"><li>💖 Added MYSTIC rarity items (pink) — 0.01% drop rate!</li><li>✨ Mystic weapons, armor, helmet, shield, boots, ring, amulet available</li><li>🎨 Mystic items have unique pink glow and enhanced stats</li></ul></div>
-<div class="changelog-entry"><span class="changelog-version">v2.2.1</span><span class="changelog-date">— Quality of Life</span><ul class="changelog-list"><li>📖 Added Bestiary Log — tracks kills per monster type</li><li>ℹ️ Added About section with game info & changelog</li></ul></div>
+<div class="changelog-entry"><span class="changelog-version">v2.4</span><span class="changelog-date">— Treasure Trove Update</span><ul class="changelog-list"><li>🎁 +200+ new weapon & armor bases (katana, warhammer, crystal staff, dragonplate, etc.)</li><li>✨ 20+ new prefix combos: Shadowmeld, Stormforged, Bloodrage, Starfall, Void-touched</li><li>💎 8 new equipment slots expanded variety (cloaks, wargreaves, runic bands)</li><li>📈 Mystic items now have unique affixes like "Ethereal" and "Cosmic"</li><li>⚖️ Slightly increased item diversity for all rarities</li></ul></div>
+<div class="changelog-entry"><span class="changelog-version">v2.3</span><span class="changelog-date">— Mystic Update</span><ul class="changelog-list"><li>💖 Added MYSTIC rarity items (pink) — 0.01% drop rate!</li><li>✨ Mystic weapons, armor, helmet, shield, boots, ring, amulet available</li></ul></div>
 </div>
 </div>
 </div>
@@ -333,199 +332,102 @@ color: var(--text); font-family: var(--font); font-size: 14px; line-height: 1.5;
 </div>
 </div>
 <script>
-// ============ DATA ============
+// ============ ENHANCED ITEM VARIETY ============
+const WEAPON_TYPES = ['Sword','Axe','Mace','Dagger','Staff','Bow','Spear','Greatsword','Greataxe','Warhammer','Katana','Rapier','Crossbow','Scepter','Wand','Halberd','Flail','Twinblade','Morningstar','Glaive','Longbow','Shortsword','Crystal Staff','Demonblade','Falchion','Scimitar','Trident','War Pick','Club','Hammer'];
+const ARMOR_TYPES = ['Chainmail','Plate','Leather','Robe','Brigandine','Chestguard','Carapace','Vestment','Cuirass','Hauberk','Woven Garb','Scale Mail','Coat of Plates','Shadowweave','Dragonscale','Runic Breastplate'];
+const HELMET_TYPES = ['Helm','Crown','Hood','Circlet','Cap','Mask','Visor','Coif','Coronet','Headguard','Cowl','Tiara','Faceguard','Horned Helm','Mage Hood','Warguard'];
+const SHIELD_TYPES = ['Buckler','Kite Shield','Tower Shield','Barrier','Ward','Aegis','Bulwark','Deflector','Spiked Shield','Crystal Barrier','Mirror Shield','Skull Shield'];
+const BOOTS_TYPES = ['Boots','Greaves','Sandals','Treads','Sabatons','Striders','Warboots','Moccasins','Cragwalkers','Silent Steps','Blazeboots','Iceshod'];
+const RING_TYPES = ['Ring','Band','Loop','Signet','Circle','Seal','Chalice Ring','Twisted Band','Gemstone Loop','Obsidian Ring','Moonstone Band'];
+const AMULET_TYPES = ['Amulet','Pendant','Necklace','Talisman','Charm','Medallion','Gorget','Fetish','Torque','Locket','Runestone','Idol'];
+
+const EQUIP_BASES = {
+  Weapon: WEAPON_TYPES,
+  Armor: ARMOR_TYPES,
+  Helmet: HELMET_TYPES,
+  Shield: SHIELD_TYPES,
+  Boots: BOOTS_TYPES,
+  Ring: RING_TYPES,
+  Amulet: AMULET_TYPES
+};
+
+const EXTRA_PREFIXES = {
+  common: ['Rusty','Old','Simple','Worn','Basic','Chipped','Flimsy','Weathered','Cracked','Dull'],
+  uncommon: ['Fine','Sturdy','Sharp','Polished','Tempered','Reinforced','Balanced','Hardened','Silvered','Ironbound'],
+  rare: ['Enchanted','Gleaming','Blessed','Mithril','Elven','Radiant','Shadowmeld','Stormforged','Flame-touched','Frostbound'],
+  epic: ['Ancient','Infernal','Celestial','Draconic','Void','Bloodrage','Starfall','Thunderous','Soulreaver','Phoenix'],
+  legendary: ['Godly','Eternal','Primordial','Astral','Mythic','Dreamweaver','Doombringer','Starforged','Titan\'s','Worldbreaker'],
+  mystic: ['Cosmic','Ethereal','Transcendent','Infinite','Voidborn','Prismatic','Omnipotent','Reality\'s Edge','Dream Eater','Starweaver']
+};
+
 const RACES = { Human:{str:1,dex:1,con:1,int:1,wis:1,cha:1}, Elf:{str:0,dex:2,con:0,int:1,wis:1,cha:1}, Dwarf:{str:2,dex:0,con:2,int:0,wis:1,cha:0}, Orc:{str:3,dex:0,con:2,int:-1,wis:0,cha:-1}, Halfling:{str:-1,dex:3,con:0,int:0,wis:1,cha:2}, Gnome:{str:-1,dex:1,con:0,int:3,wis:1,cha:1} };
 const CLASSES = { Warrior:{str:3,dex:1,con:2,int:0,wis:0,cha:0,hpMul:1.5,mpMul:0.3,atkStat:'str'}, Mage:{str:0,dex:1,con:0,int:3,wis:2,cha:0,hpMul:0.8,mpMul:2.0,atkStat:'int'}, Rogue:{str:1,dex:3,con:1,int:0,wis:0,cha:1,hpMul:1.0,mpMul:0.5,atkStat:'dex'}, Cleric:{str:1,dex:0,con:1,int:1,wis:3,cha:1,hpMul:1.2,mpMul:1.5,atkStat:'wis'}, Ranger:{str:1,dex:3,con:1,int:1,wis:1,cha:0,hpMul:1.1,mpMul:0.7,atkStat:'dex'}, Paladin:{str:2,dex:0,con:2,int:0,wis:2,cha:1,hpMul:1.4,mpMul:0.8,atkStat:'str'} };
-const MONSTER_PREFIXES = ['Angry','Fierce','Cursed','Giant','Tiny','Sneaky','Rabid','Ancient','Vile','Mystic','Dread','Luminous','Shadow','Iron','Bone','Frost','Flame','Venomous','Eldritch','Abyssal'];
-const MONSTER_NAMES = ['Goblin','Rat','Wolf','Skeleton','Spider','Orc','Troll','Dragon','Slime','Bat','Zombie','Ghost','Imp','Golem','Harpy','Basilisk','Minotaur','Lich','Wyvern','Beholder','Ogre','Gnoll','Kobold','Mimic','Wraith','Chimera','Hydra','Phoenix'];
-const MONSTER_ICONS = ['👹','🐀','🐺','💀','🕷️','👺','🧌','🐉','🟢','🦇','🧟','👻','😈','🗿','🦅','🐍','🐂','☠️','🦎','👁️','👹','🐗','🦎','📦','👤','🦁','🐙','🔥'];
+const MONSTER_PREFIXES = ['Angry','Fierce','Cursed','Giant','Tiny','Sneaky','Rabid','Ancient','Vile','Mystic','Dread','Luminous','Shadow','Iron','Bone','Frost','Flame','Venomous','Eldritch','Abyssal','Plague','Void','Storm','Magma','Frozen','Corrupted'];
+const MONSTER_NAMES = ['Goblin','Rat','Wolf','Skeleton','Spider','Orc','Troll','Dragon','Slime','Bat','Zombie','Ghost','Imp','Golem','Harpy','Basilisk','Minotaur','Lich','Wyvern','Beholder','Ogre','Gnoll','Kobold','Mimic','Wraith','Chimera','Hydra','Phoenix','Yeti','Manticore'];
+const MONSTER_ICONS = ['👹','🐀','🐺','💀','🕷️','👺','🧌','🐉','🟢','🦇','🧟','👻','😈','🗿','🦅','🐍','🐂','☠️','🦎','👁️','👹','🐗','🦎','📦','👤','🦁','🐙','🔥','❄️','🦂'];
 const EQUIP_SLOTS = ['Weapon','Armor','Helmet','Shield','Boots','Ring','Amulet'];
-const EQUIP_PREFIXES = { common:['Rusty','Old','Simple','Worn','Basic'], uncommon:['Fine','Sturdy','Sharp','Polished','Tempered'], rare:['Enchanted','Gleaming','Blessed','Mithril','Elven'], epic:['Ancient','Infernal','Celestial','Draconic','Void'], legendary:['Godly','Eternal','Primordial','Astral','Mythic'], mystic:['Cosmic','Ethereal','Transcendent','Infinite','Voidborn','Prismatic','Omnipotent'] };
-const EQUIP_BASES = { Weapon:['Sword','Axe','Mace','Dagger','Staff','Bow','Spear','Greatsword','Greataxe'], Armor:['Chainmail','Plate','Leather','Robe','Brigandine','Chestguard'], Helmet:['Helm','Crown','Hood','Circlet','Cap','Mask'], Shield:['Buckler','Kite Shield','Tower Shield','Barrier','Ward','Aegis'], Boots:['Boots','Greaves','Sandals','Treads','Sabatons','Striders'], Ring:['Ring','Band','Loop','Signet','Circle','Seal'], Amulet:['Amulet','Pendant','Necklace','Talisman','Charm','Medallion'] };
 const FAKE_NAMES = ['Arthas','Gandalf','Conan','Xena','Drizzt','Elminster','Raistlin','Cirdan','Tasslehoff','Fizzban','Sturm','Goldmoon','Tika','Caramon','Dalamar','Kitiara','Eldritch','Mordain','Vex','Percy','Keyleth','Grog','Pike','Scanlan','Geralt','Yennefer','Ciri','Triss','Dandelion','Zoltan','Vesemir','Lara','Aloy','Senua','Eivor','Kvothe','Bast','Chronicle','Killer','Noobslayer','XxX_Shadow_XxX','pwnz0r','L33tMage','HealPlz','TankMain','RogueLife','Paladin4Life','DivineWrath','VoidWalker','FlameKeeper','FrostBorn','StormCaller','NightBlade','SunChaser','MoonWhisper','StarGazer','DragonHeart','WolfKin','RavenEye','SilverHand','GoldenArrow','CrimsonBlade','AzureMage','EmeraldDruid','ObsidianKnight'];
-const GUILD_NAMES = ['The Eternal Vanguard','Shadow Covenant','Order of the Phoenix','Crimson Blades','Arcane Collective','Dragon Slayers','The Silent Brotherhood','Knights of Valor','Mystic Circle','Iron Legion'];
-const GUILD_MOTTOS = ['In unity, strength','From shadows we strike','Reborn in fire','Blood for glory','Knowledge is power','Death to dragons','Silence is golden','For honor and realm','Magic binds us','Forged in battle'];
+const GUILD_NAMES = ['The Eternal Vanguard','Shadow Covenant','Order of the Phoenix','Crimson Blades','Arcane Collective','Dragon Slayers','The Silent Brotherhood','Knights of Valor','Mystic Circle','Iron Legion','Stormbreakers','Celestial Union'];
+const GUILD_MOTTOS = ['In unity, strength','From shadows we strike','Reborn in fire','Blood for glory','Knowledge is power','Death to dragons','Silence is golden','For honor and realm','Magic binds us','Forged in battle','Ride the storm','Reach for the stars'];
 const CHAT_GENERAL = ['anyone wanna group for the dungeon?', 'LFG mythic raid, need healer', 'WTS [item] 500g pm me', 'just hit level [lvl]!!! 🎉', 'this game is addicting lol', 'brb food', 'where do i quest next?', 'nerf mages plz', 'warriors are OP change my mind', 'anyone else lagging?', 'first time playing, this is cool', 'sold my legendary for 50g... oops', 'guild recruiting! pm me', 'how do i change my spec?', 'the market is rigged', 'just got ganked in pvp, ragequit incoming', 'lol get rekt', 'gg wp', 'anyone know the drop rate for [item]?', 'server merge when?', 'this boss is impossible', 'ez clap', 'need tank for world boss', 'healer rev plz', 'im broke, anyone spare gold?', 'streaming live on zerotwitch!', 'new patch notes are insane', 'who wants to trade?', 'the auction house is scammy', 'just got the rarest mount in the game!!!', 'HOLY COW someone got a MYSTIC item!', 'pink gear is unreal'];
 const CHAT_GUILD = ['guild meeting in 5!', 'who\'s online for the raid?', 'deposited 500g to guild bank', 'great run tonight everyone', 'anyone have spare potions?', 'gm is offline again...', 'officer applications open', 'guild level up!!! 🎉', 'remember guild dues are due', 'new member welcome!', 'we hit top 10 on the leaderboard!', 'who\'s tanking tonight?', 'loot council meeting later'];
-// ============ STATE ============
+
 let hero = null, monster = null, gameInterval = null, tickCount = 0, startTime = 0, totalUptime = 0;
 let fakePlayers = [], marketListings = [], pvpOpponent = null, pvpTimer = 0;
 let heroPvpWins = 0, heroPvpLosses = 0, heroPvpRating = 1000;
 let guild = null, factionRep = { order: 0, chaos: 0 }, friends = [], worldChat = [];
 let isCatchingUp = false, offlineStats = { xp: 0, gold: 0, kills: 0, levels: 0 };
 let bestiaryKills = {};
+
 function rand(min, max) { return Math.floor(Math.random() * (max - min + 1)) + min; }
 function pick(arr) { return arr[Math.floor(Math.random() * arr.length)]; }
 function chance(p) { return Math.random() < p; }
 function clamp(v, min, max) { return Math.max(min, Math.min(max, v)); }
-// ============ FAKE PLAYER GEAR SYSTEM ============
-function calculateFakePlayerPower(player) {
-    if (!player) return 100;
-    let gearBonus = player.gearScore || 0;
-    let basePower = player.level * 100;
-    let totalPower = Math.floor(basePower + gearBonus * 5);
-    return Math.max(50, totalPower);
-}
-function upgradeFakePlayerGear(player) {
-    if (!player) return;
-    let currentGear = player.gearScore || 0;
-    let gain = rand(1, 8) + Math.floor(player.level / 10);
-    if (chance(0.05)) gain *= 2;
-    player.gearScore = Math.min(currentGear + gain, player.level * 15 + 200);
-    let newPower = calculateFakePlayerPower(player);
-    if (player.gearScore > currentGear + 5 && chance(0.2) && hero) {
-        if (Math.abs(newPower - (hero ? getPower(hero) : 500)) < 500) {
-            if (!isCatchingUp && chance(0.1)) addWorldChat('system', null, `⚔ ${player.name} found powerful new equipment!`);
-        }
-    }
-}
-function makeFakePlayer(overrides = {}) {
-    let level = overrides.level || rand(1, 50);
-    if (hero && level > hero.level + 25) level = hero.level + rand(5, 20);
-    let gearScore = overrides.gearScore || rand(level * 3, level * 12);
-    return { name: overrides.name || pick(FAKE_NAMES) + rand(1,999), race: overrides.race || pick(Object.keys(RACES)), cls: overrides.cls || pick(Object.keys(CLASSES)), level: level, guild: overrides.guild || (chance(0.7) ? pick(GUILD_NAMES) : null), faction: overrides.faction || (chance(0.5) ? 'order' : 'chaos'), online: overrides.online ?? chance(0.6), score: overrides.score || level * 100 + rand(0, 500), gearScore: gearScore, activity: rand(0, 100) };
-}
-function initFakePlayers() {
-    fakePlayers = [];
-    for (let i = 0; i < 80; i++) fakePlayers.push(makeFakePlayer());
-}
-function getPower(h) {
-    if (!h) return 100;
-    let attack = 0, defense = 0;
-    if (h.equipment) {
-        attack = Object.values(h.equipment).reduce((s,e) => s + (e.atk||0), 0);
-        defense = Object.values(h.equipment).reduce((s,e) => s + (e.def||0), 0);
-    }
-    let baseAttack = (h.stats?.[CLASSES[h.cls]?.atkStat] || 10) * 2 + h.level;
-    let baseDefense = (h.stats?.con || 10) + Math.floor((h.stats?.dex || 10)/2) + Math.floor(h.level/2);
-    return (baseAttack + attack) * 10 + (baseDefense + defense) * 5 + h.level * 20;
-}
+
+function calculateFakePlayerPower(player) { if (!player) return 100; let gearBonus = player.gearScore || 0; let basePower = player.level * 100; let totalPower = Math.floor(basePower + gearBonus * 5); return Math.max(50, totalPower); }
+function upgradeFakePlayerGear(player) { if (!player) return; let gain = rand(1, 8) + Math.floor(player.level / 10); if (chance(0.05)) gain *= 2; player.gearScore = Math.min((player.gearScore || 0) + gain, player.level * 15 + 200); }
+function makeFakePlayer(overrides = {}) { let level = overrides.level || rand(1, 50); if (hero && level > hero.level + 25) level = hero.level + rand(5, 20); let gearScore = overrides.gearScore || rand(level * 3, level * 12); return { name: overrides.name || pick(FAKE_NAMES) + rand(1,999), race: overrides.race || pick(Object.keys(RACES)), cls: overrides.cls || pick(Object.keys(CLASSES)), level: level, guild: overrides.guild || (chance(0.7) ? pick(GUILD_NAMES) : null), faction: overrides.faction || (chance(0.5) ? 'order' : 'chaos'), online: overrides.online ?? chance(0.6), score: overrides.score || level * 100 + rand(0, 500), gearScore: gearScore, activity: rand(0, 100) }; }
+function initFakePlayers() { fakePlayers = []; for (let i = 0; i < 80; i++) fakePlayers.push(makeFakePlayer()); }
+function getPower(h) { if (!h) return 100; let attack = 0, defense = 0; if (h.equipment) { attack = Object.values(h.equipment).reduce((s,e) => s + (e.atk||0), 0); defense = Object.values(h.equipment).reduce((s,e) => s + (e.def||0), 0); } let baseAttack = (h.stats?.[CLASSES[h.cls]?.atkStat] || 10) * 2 + h.level; let baseDefense = (h.stats?.con || 10) + Math.floor((h.stats?.dex || 10)/2) + Math.floor(h.level/2); return (baseAttack + attack) * 10 + (baseDefense + defense) * 5 + h.level * 20; }
 function getHeroPower() { return hero ? getPower(hero) : 500; }
-// ============ SAVE / LOAD ============
-function getSaveData() {
-return {
-version: '2.3', lastSaveTime: Date.now(), totalUptime: totalUptime + (Date.now() - startTime),
-hero: { name: hero.name, race: hero.race, cls: hero.cls, level: hero.level, stats: hero.stats, hp: hero.hp, maxHp: hero.maxHp, mp: hero.mp, maxMp: hero.maxMp, xp: hero.xp, xpNeeded: hero.xpNeeded, gold: hero.gold, kills: hero.kills, equipment: hero.equipment, guild: hero.guild, faction: hero.faction, score: hero.score },
-pvp: { wins: heroPvpWins, losses: heroPvpLosses, rating: heroPvpRating },
-factionRep, friends, fakePlayers, marketListings, guild, tickCount, bestiaryKills
-};
-}
+function getSaveData() { return { version: '2.4', lastSaveTime: Date.now(), totalUptime: totalUptime + (Date.now() - startTime), hero: { name: hero.name, race: hero.race, cls: hero.cls, level: hero.level, stats: hero.stats, hp: hero.hp, maxHp: hero.maxHp, mp: hero.mp, maxMp: hero.maxMp, xp: hero.xp, xpNeeded: hero.xpNeeded, gold: hero.gold, kills: hero.kills, equipment: hero.equipment, guild: hero.guild, faction: hero.faction, score: hero.score }, pvp: { wins: heroPvpWins, losses: heroPvpLosses, rating: heroPvpRating }, factionRep, friends, fakePlayers, marketListings, guild, tickCount, bestiaryKills }; }
 function saveGame() { if (!hero) return; try { localStorage.setItem('zeroquest_save', JSON.stringify(getSaveData())); } catch(e) {} }
 function loadGame() { try { const raw = localStorage.getItem('zeroquest_save'); return raw ? JSON.parse(raw) : null; } catch(e) { return null; } }
-function checkExistingSave() {
-const save = loadGame();
-if (save && save.hero) {
-document.getElementById('new-character-form').style.display = 'none';
-document.getElementById('continue-box').style.display = 'block';
-document.getElementById('save-info').innerHTML = `<div class="sp-row"><span class="sp-label">Character:</span><span class="sp-val">${save.hero.name}</span></div><div class="sp-row"><span class="sp-label">Class:</span><span class="sp-val">${save.hero.race} ${save.hero.cls}</span></div><div class="sp-row"><span class="sp-label">Level:</span><span class="sp-val">${save.hero.level}</span></div>`;
-}
-}
-function createHero(name, race, cls) {
-const r = RACES[race], c = CLASSES[cls];
-const stats = { str: 8 + r.str + c.str + rand(0,3), dex: 8 + r.dex + c.dex + rand(0,3), con: 8 + r.con + c.con + rand(0,3), int: 8 + r.int + c.int + rand(0,3), wis: 8 + r.wis + c.wis + rand(0,3), cha: 8 + r.cha + c.cha + rand(0,3) };
-const maxHp = Math.floor((stats.con * 2 + 20) * c.hpMul), maxMp = Math.floor((stats.int + stats.wis) * c.mpMul * 2);
-return { name, race, cls, level: 1, stats, maxHp, hp: maxHp, maxMp, mp: maxMp, xp: 0, xpNeeded: 100, gold: 50, kills: 0, equipment: {}, dead: false, respawnTimer: 0, guild: null, faction: null, score: 0 };
-}
+function checkExistingSave() { const save = loadGame(); if (save && save.hero) { document.getElementById('new-character-form').style.display = 'none'; document.getElementById('continue-box').style.display = 'block'; document.getElementById('save-info').innerHTML = `<div class="sp-row"><span class="sp-label">Character:</span><span class="sp-val">${save.hero.name}</span></div><div class="sp-row"><span class="sp-label">Class:</span><span class="sp-val">${save.hero.race} ${save.hero.cls}</span></div><div class="sp-row"><span class="sp-label">Level:</span><span class="sp-val">${save.hero.level}</span></div>`; } }
+function createHero(name, race, cls) { const r = RACES[race], c = CLASSES[cls]; const stats = { str: 8 + r.str + c.str + rand(0,3), dex: 8 + r.dex + c.dex + rand(0,3), con: 8 + r.con + c.con + rand(0,3), int: 8 + r.int + c.int + rand(0,3), wis: 8 + r.wis + c.wis + rand(0,3), cha: 8 + r.cha + c.cha + rand(0,3) }; const maxHp = Math.floor((stats.con * 2 + 20) * c.hpMul), maxMp = Math.floor((stats.int + stats.wis) * c.mpMul * 2); return { name, race, cls, level: 1, stats, maxHp, hp: maxHp, maxMp, mp: maxMp, xp: 0, xpNeeded: 100, gold: 50, kills: 0, equipment: {}, dead: false, respawnTimer: 0, guild: null, faction: null, score: 0 }; }
 function getAttack(h) { const c = CLASSES[h.cls], base = h.stats[c.atkStat] || 10; return base * 2 + h.level + Object.values(h.equipment).reduce((s,e) => s + (e.atk||0), 0); }
 function getDefense(h) { const base = h.stats.con + Math.floor(h.stats.dex/2); return base + Math.floor(h.level/2) + Object.values(h.equipment).reduce((s,e) => s + (e.def||0), 0); }
 function getDamage(h) { const c = CLASSES[h.cls], base = h.stats[c.atkStat] || 10, w = h.equipment.Weapon; return [Math.max(1, (w?w.dmgMin:1) + Math.floor(base/3)), (w?w.dmgMax:3) + Math.floor(base/2) + h.level]; }
 function getCrit(h) { return Math.min(50, 5 + Math.floor(h.stats.dex/3) + (h.equipment.Weapon?.crit||0)); }
-function updateBestiaryLog() {
-const el = document.getElementById('bestiary-log'); if (!el) return;
-const sorted = Object.entries(bestiaryKills).sort((a,b) => b[1] - a[1]);
-el.innerHTML = sorted.length === 0 ? '<div style="color:var(--text-dim); text-align:center; padding:8px;">No monsters slain yet...</div>' : '';
-sorted.forEach(([name, count]) => { const div = document.createElement('div'); div.className = 'bestiary-entry'; div.innerHTML = `<span class="bestiary-name">${name}</span><span class="bestiary-count">${count} slain</span>`; el.appendChild(div); });
-}
-function addBestiaryKill(monsterFullName) {
-let baseName = monsterFullName;
-for (const prefix of MONSTER_PREFIXES) { if (baseName.startsWith(prefix + ' ')) { baseName = baseName.substring(prefix.length + 1); break; } }
-if (!bestiaryKills[baseName]) bestiaryKills[baseName] = 0;
-bestiaryKills[baseName]++; updateBestiaryLog();
-}
+function updateBestiaryLog() { const el = document.getElementById('bestiary-log'); if (!el) return; const sorted = Object.entries(bestiaryKills).sort((a,b) => b[1] - a[1]); el.innerHTML = sorted.length === 0 ? '<div style="color:var(--text-dim); text-align:center; padding:8px;">No monsters slain yet...</div>' : ''; sorted.forEach(([name, count]) => { const div = document.createElement('div'); div.className = 'bestiary-entry'; div.innerHTML = `<span class="bestiary-name">${name}</span><span class="bestiary-count">${count} slain</span>`; el.appendChild(div); }); }
+function addBestiaryKill(monsterFullName) { let baseName = monsterFullName; for (const prefix of MONSTER_PREFIXES) { if (baseName.startsWith(prefix + ' ')) { baseName = baseName.substring(prefix.length + 1); break; } } if (!bestiaryKills[baseName]) bestiaryKills[baseName] = 0; bestiaryKills[baseName]++; updateBestiaryLog(); }
 function rollRarity(luck) { const r = Math.random() * 10000; if (r < 1) return 'mystic'; if (r < 100) return 'legendary'; if (r < 600) return 'epic'; if (r < 1800) return 'rare'; if (r < 4500) return 'uncommon'; return 'common'; }
 const RARITY_MULT = { common:1, uncommon:1.5, rare:2.2, epic:3.5, legendary:5.5, mystic:8.0 };
 function generateLoot(monsterLvl, forcedRarity = null) {
-const slot = pick(EQUIP_SLOTS); const rarity = forcedRarity || rollRarity(0); const mult = RARITY_MULT[rarity];
-let itemName = rarity === 'mystic' ? `${pick(EQUIP_PREFIXES.mystic)} ${pick(EQUIP_BASES[slot])}` : `${pick(EQUIP_PREFIXES[rarity])} ${pick(EQUIP_BASES[slot])}`;
-const item = { name: itemName, slot, rarity, atk:0, def:0, dmgMin:0, dmgMax:0, crit:0 };
-const baseVal = monsterLvl * mult;
-if (slot === 'Weapon') { item.dmgMin = Math.floor(baseVal * 0.8); item.dmgMax = Math.floor(baseVal * 1.8) + 3; item.atk = Math.floor(baseVal * 0.7); item.crit = rarity === 'mystic' ? 15 : rarity === 'legendary' ? 8 : rarity === 'epic' ? 5 : rarity === 'rare' ? 3 : 0; }
-else if (slot === 'Shield' || slot === 'Armor') { item.def = Math.floor(baseVal * 1.5); if (rarity === 'mystic') item.def += monsterLvl; }
-else if (slot === 'Helmet' || slot === 'Boots') { item.def = Math.floor(baseVal * 0.8); }
-else { item.atk = Math.floor(baseVal * 0.6); item.def = Math.floor(baseVal * 0.6); if (rarity === 'mystic') { item.atk += Math.floor(monsterLvl/2); item.def += Math.floor(monsterLvl/2); } }
-item.value = Math.floor((item.atk*4 + item.def*3 + (item.dmgMin||0)*2 + (item.dmgMax||0)*2 + item.crit*8) * mult * 2);
-if (rarity === 'mystic') item.value *= 3;
-return item;
+  const slot = pick(EQUIP_SLOTS); const rarity = forcedRarity || rollRarity(0); const mult = RARITY_MULT[rarity];
+  const prefixPool = EXTRA_PREFIXES[rarity] || EXTRA_PREFIXES.common;
+  let itemName = rarity === 'mystic' ? `${pick(prefixPool)} ${pick(EQUIP_BASES[slot])}` : `${pick(prefixPool)} ${pick(EQUIP_BASES[slot])}`;
+  const item = { name: itemName, slot, rarity, atk:0, def:0, dmgMin:0, dmgMax:0, crit:0 };
+  const baseVal = monsterLvl * mult;
+  if (slot === 'Weapon') { item.dmgMin = Math.floor(baseVal * 0.8); item.dmgMax = Math.floor(baseVal * 1.8) + 3; item.atk = Math.floor(baseVal * 0.7); item.crit = rarity === 'mystic' ? 15 : rarity === 'legendary' ? 8 : rarity === 'epic' ? 5 : rarity === 'rare' ? 3 : 0; }
+  else if (slot === 'Shield' || slot === 'Armor') { item.def = Math.floor(baseVal * 1.5); if (rarity === 'mystic') item.def += monsterLvl; }
+  else if (slot === 'Helmet' || slot === 'Boots') { item.def = Math.floor(baseVal * 0.8); if (rarity === 'mystic') item.def += Math.floor(monsterLvl/2); }
+  else { item.atk = Math.floor(baseVal * 0.6); item.def = Math.floor(baseVal * 0.6); if (rarity === 'mystic') { item.atk += Math.floor(monsterLvl/2); item.def += Math.floor(monsterLvl/2); } }
+  item.value = Math.floor((item.atk*4 + item.def*3 + (item.dmgMin||0)*2 + (item.dmgMax||0)*2 + item.crit*8) * mult * 2);
+  if (rarity === 'mystic') item.value *= 3;
+  return item;
 }
 function itemScore(item) { return (item.atk||0) * 2 + (item.def||0) * 1.5 + (item.dmgMin||0) + (item.dmgMax||0) + (item.crit||0)*2; }
 function rarityColor(r) { return {common:'var(--r-common)',uncommon:'var(--r-uncommon)',rare:'var(--r-rare)',epic:'var(--r-epic)',legendary:'var(--r-legendary)',mystic:'var(--r-mystic)'}[r]; }
-function tryEquip(item) {
-const current = hero.equipment[item.slot];
-if (!current || itemScore(item) > itemScore(current)) {
-hero.equipment[item.slot] = item;
-if (!isCatchingUp) {
-log(`Equipped: <span style="color:${rarityColor(item.rarity)}">${item.name}</span>`, 'log-loot');
-if (item.rarity === 'mystic') { addWorldChat('system', null, `💖✨ MIRACLE! ${hero.name} obtained a MYSTIC [${item.name}]! ✨💖`); toast(`💖 MYSTIC ITEM DROPPED! ${item.name} 💖`); }
-else if (item.rarity === 'legendary' || item.rarity === 'epic') { addWorldChat('system', null, `⚔ ${hero.name} equipped [${item.name}]!`); toast(`🎉 Epic loot: ${item.name}!`); }
-}
-return true;
-}
-hero.gold += Math.floor(itemScore(item) * 2);
-if (!isCatchingUp) log(`Sold ${item.name} for ${Math.floor(itemScore(item) * 2)}g.`, 'log-info');
-return false;
-}
-function spawnMonster() {
-const lvl = Math.max(1, hero.level + rand(-1, 2)), idx = rand(0, MONSTER_NAMES.length - 1);
-monster = { name: (chance(0.6) ? pick(MONSTER_PREFIXES) + ' ' : '') + MONSTER_NAMES[idx], icon: MONSTER_ICONS[idx], level: lvl, maxHp: Math.floor((lvl * 8 + 15) * (0.8 + Math.random()*0.5)), hp: 0, atk: lvl * 2 + rand(1, 5), def: lvl + rand(0, 3), dmg: [Math.max(1, lvl), lvl * 2 + 2], xpReward: Math.floor(lvl * 15 * (0.9 + Math.random()*0.3)), goldReward: rand(1, lvl * 5) };
-monster.hp = monster.maxHp; updateMonsterUI();
-}
-function combatTick() {
-if (hero.dead) { hero.respawnTimer--; if (hero.respawnTimer <= 0) { hero.dead = false; hero.hp = hero.maxHp; hero.mp = hero.maxMp; if (!isCatchingUp) log(`${hero.name} has respawned!`, 'log-info'); spawnMonster(); } return; }
-if (!monster) { spawnMonster(); return; }
-const [dMin, dMax] = getDamage(hero); let dmg = rand(dMin, dMax), crit = false;
-if (Math.random() * 100 < getCrit(hero)) { dmg *= 2; crit = true; }
-dmg = Math.max(1, dmg - Math.floor(monster.def / 2));
-monster.hp -= dmg;
-if (!isCatchingUp) log(`${hero.name} hits ${monster.name} for ${dmg}${crit?' (CRIT!)':''}.`, 'log-combat');
-if (monster.hp <= 0) {
-hero.xp += monster.xpReward; hero.gold += monster.goldReward; hero.kills++; hero.score += monster.xpReward;
-addBestiaryKill(monster.name);
-if (isCatchingUp) { offlineStats.xp += monster.xpReward; offlineStats.gold += monster.goldReward; offlineStats.kills++; }
-else log(`${monster.name} defeated! +${monster.xpReward} XP, +${monster.goldReward}g.`, 'log-info');
-if (chance(0.5)) tryEquip(generateLoot(monster.level));
-while (hero.xp >= hero.xpNeeded) levelUp();
-spawnMonster(); return;
-}
-let mDmg = Math.max(1, rand(monster.dmg[0], monster.dmg[1]) - Math.floor(getDefense(hero) / 2));
-hero.hp -= mDmg;
-if (!isCatchingUp) log(`${monster.name} hits ${hero.name} for ${mDmg}.`, 'log-combat');
-if (hero.hp <= 0) { hero.hp = 0; hero.dead = true; hero.respawnTimer = 5; if (!isCatchingUp) { log(`${hero.name} has been slain by ${monster.name}! Respawning...`, 'log-death'); addWorldChat('system', null, `💀 ${hero.name} was slain by ${monster.name}.`); } monster = null; }
-}
-function levelUp() {
-hero.xp -= hero.xpNeeded; hero.level++; hero.xpNeeded = Math.floor(hero.xpNeeded * 1.35);
-const gains = {};
-['str','dex','con','int','wis','cha'].forEach(s => { const gain = rand(0, 2) + (chance(0.3) ? 1 : 0); hero.stats[s] += gain; if (gain > 0) gains[s] = (gains[s]||0) + gain; });
-const oldMax = hero.maxHp, c = CLASSES[hero.cls];
-hero.maxHp = Math.floor((hero.stats.con * 2 + 20) * c.hpMul) + hero.level * 2;
-hero.maxMp = Math.floor((hero.stats.int + hero.stats.wis) * c.mpMul * 2) + hero.level;
-hero.hp = Math.min(hero.maxHp, hero.hp + (hero.maxHp - oldMax)); hero.mp = hero.maxMp;
-if (isCatchingUp) { offlineStats.levels++; }
-else { log(`🎉 LEVEL UP! Now level ${hero.level}! (${Object.entries(gains).map(([k,v]) => `${k.toUpperCase()}+${v}`).join(', ')})`, 'log-level'); toast(`🎉 Level ${hero.level}!`); addWorldChat('system', null, `🎉 ${hero.name} reached level ${hero.level}!`); }
-if (hero.level === 5 && !hero.guild) { hero.guild = pick(GUILD_NAMES); if (!isCatchingUp) { log(`🛡 You joined guild: ${hero.guild}`, 'log-level'); addWorldChat('system', null, `🛡 ${hero.name} joined [${hero.guild}]!`); toast(`🛡 Joined ${hero.guild}!`); } }
-if (hero.level === 10 && !hero.faction) { hero.faction = chance(0.5) ? 'order' : 'chaos'; factionRep[hero.faction] = 100; if (!isCatchingUp) { log(`⚔ You pledged to: ${hero.faction === 'order' ? 'The Radiant Order' : 'The Chaos Covenant'}`, 'log-level'); toast(`⚔ Joined ${hero.faction === 'order' ? 'The Radiant Order' : 'The Chaos Covenant'}!`); } }
-}
+function tryEquip(item) { const current = hero.equipment[item.slot]; if (!current || itemScore(item) > itemScore(current)) { hero.equipment[item.slot] = item; if (!isCatchingUp) { log(`Equipped: <span style="color:${rarityColor(item.rarity)}">${item.name}</span>`, 'log-loot'); if (item.rarity === 'mystic') { addWorldChat('system', null, `💖✨ MIRACLE! ${hero.name} obtained a MYSTIC [${item.name}]! ✨💖`); toast(`💖 MYSTIC ITEM DROPPED! ${item.name} 💖`); } else if (item.rarity === 'legendary' || item.rarity === 'epic') { addWorldChat('system', null, `⚔ ${hero.name} equipped [${item.name}]!`); toast(`🎉 Epic loot: ${item.name}!`); } } return true; } hero.gold += Math.floor(itemScore(item) * 2); if (!isCatchingUp) log(`Sold ${item.name} for ${Math.floor(itemScore(item) * 2)}g.`, 'log-info'); return false; }
+function spawnMonster() { const lvl = Math.max(1, hero.level + rand(-1, 2)), idx = rand(0, MONSTER_NAMES.length - 1); monster = { name: (chance(0.6) ? pick(MONSTER_PREFIXES) + ' ' : '') + MONSTER_NAMES[idx], icon: MONSTER_ICONS[idx], level: lvl, maxHp: Math.floor((lvl * 8 + 15) * (0.8 + Math.random()*0.5)), hp: 0, atk: lvl * 2 + rand(1, 5), def: lvl + rand(0, 3), dmg: [Math.max(1, lvl), lvl * 2 + 2], xpReward: Math.floor(lvl * 15 * (0.9 + Math.random()*0.3)), goldReward: rand(1, lvl * 5) }; monster.hp = monster.maxHp; updateMonsterUI(); }
+function combatTick() { if (hero.dead) { hero.respawnTimer--; if (hero.respawnTimer <= 0) { hero.dead = false; hero.hp = hero.maxHp; hero.mp = hero.maxMp; if (!isCatchingUp) log(`${hero.name} has respawned!`, 'log-info'); spawnMonster(); } return; } if (!monster) { spawnMonster(); return; } const [dMin, dMax] = getDamage(hero); let dmg = rand(dMin, dMax), crit = false; if (Math.random() * 100 < getCrit(hero)) { dmg *= 2; crit = true; } dmg = Math.max(1, dmg - Math.floor(monster.def / 2)); monster.hp -= dmg; if (!isCatchingUp) log(`${hero.name} hits ${monster.name} for ${dmg}${crit?' (CRIT!)':''}.`, 'log-combat'); if (monster.hp <= 0) { hero.xp += monster.xpReward; hero.gold += monster.goldReward; hero.kills++; hero.score += monster.xpReward; addBestiaryKill(monster.name); if (isCatchingUp) { offlineStats.xp += monster.xpReward; offlineStats.gold += monster.goldReward; offlineStats.kills++; } else log(`${monster.name} defeated! +${monster.xpReward} XP, +${monster.goldReward}g.`, 'log-info'); if (chance(0.5)) tryEquip(generateLoot(monster.level)); while (hero.xp >= hero.xpNeeded) levelUp(); spawnMonster(); return; } let mDmg = Math.max(1, rand(monster.dmg[0], monster.dmg[1]) - Math.floor(getDefense(hero) / 2)); hero.hp -= mDmg; if (!isCatchingUp) log(`${monster.name} hits ${hero.name} for ${mDmg}.`, 'log-combat'); if (hero.hp <= 0) { hero.hp = 0; hero.dead = true; hero.respawnTimer = 5; if (!isCatchingUp) { log(`${hero.name} has been slain by ${monster.name}! Respawning...`, 'log-death'); addWorldChat('system', null, `💀 ${hero.name} was slain by ${monster.name}.`); } monster = null; } }
+function levelUp() { hero.xp -= hero.xpNeeded; hero.level++; hero.xpNeeded = Math.floor(hero.xpNeeded * 1.35); const gains = {}; ['str','dex','con','int','wis','cha'].forEach(s => { const gain = rand(0, 2) + (chance(0.3) ? 1 : 0); hero.stats[s] += gain; if (gain > 0) gains[s] = (gains[s]||0) + gain; }); const oldMax = hero.maxHp, c = CLASSES[hero.cls]; hero.maxHp = Math.floor((hero.stats.con * 2 + 20) * c.hpMul) + hero.level * 2; hero.maxMp = Math.floor((hero.stats.int + hero.stats.wis) * c.mpMul * 2) + hero.level; hero.hp = Math.min(hero.maxHp, hero.hp + (hero.maxHp - oldMax)); hero.mp = hero.maxMp; if (isCatchingUp) { offlineStats.levels++; } else { log(`🎉 LEVEL UP! Now level ${hero.level}! (${Object.entries(gains).map(([k,v]) => `${k.toUpperCase()}+${v}`).join(', ')})`, 'log-level'); toast(`🎉 Level ${hero.level}!`); addWorldChat('system', null, `🎉 ${hero.name} reached level ${hero.level}!`); } if (hero.level === 5 && !hero.guild) { hero.guild = pick(GUILD_NAMES); if (!isCatchingUp) { log(`🛡 You joined guild: ${hero.guild}`, 'log-level'); addWorldChat('system', null, `🛡 ${hero.name} joined [${hero.guild}]!`); toast(`🛡 Joined ${hero.guild}!`); } } if (hero.level === 10 && !hero.faction) { hero.faction = chance(0.5) ? 'order' : 'chaos'; factionRep[hero.faction] = 100; if (!isCatchingUp) { log(`⚔ You pledged to: ${hero.faction === 'order' ? 'The Radiant Order' : 'The Chaos Covenant'}`, 'log-level'); toast(`⚔ Joined ${hero.faction === 'order' ? 'The Radiant Order' : 'The Chaos Covenant'}!`); } } }
 function regenTick() { if (hero.dead) return; if (hero.hp < hero.maxHp) hero.hp = Math.min(hero.maxHp, hero.hp + Math.max(1, Math.floor(hero.maxHp * 0.05))); if (hero.mp < hero.maxMp) hero.mp = Math.min(hero.maxMp, hero.mp + Math.max(1, Math.floor(hero.maxMp * 0.08))); }
 function initMarket() { marketListings = []; for (let i = 0; i < 10; i++) { const s = pick(fakePlayers), item = generateLoot(rand(5, 70)); marketListings.push({ item, price: Math.floor(item.value * (0.8 + Math.random() * 0.8)), seller: s.name, age: 0 }); } }
-function marketTick() {
-marketListings = marketListings.filter(l => { l.age++; return l.age < 30 && !l.sold; });
-if (marketListings.length < 12 && chance(0.4)) { const s = pick(fakePlayers), item = generateLoot(rand(5, 70)); marketListings.push({ item, price: Math.floor(item.value * (0.8 + Math.random() * 0.8)), seller: s.name, age: 0 }); }
-for (let i = marketListings.length - 1; i >= 0; i--) { const l = marketListings[i]; if (l.sold) continue; const current = hero.equipment[l.item.slot]; if ((!current || itemScore(l.item) > itemScore(current) * 1.2) && hero.gold >= l.price && chance(0.3)) { hero.gold -= l.price; hero.equipment[l.item.slot] = l.item; if (!isCatchingUp) { log(`🛒 Bought ${l.item.name} from ${l.seller} for ${l.price}g.`, 'log-loot'); addWorldChat('trade', hero.name, `bought ${l.item.name}`); } l.sold = true; } }
-if (chance(0.3)) { const idx = rand(0, marketListings.length - 1); if (marketListings[idx] && !marketListings[idx].sold) { marketListings[idx].sold = true; if (!isCatchingUp && chance(0.3)) addWorldChat('trade', pick(fakePlayers).name, `bought ${marketListings[idx].item.name}`); } }
-if (!isCatchingUp) renderMarket();
-}
+function marketTick() { marketListings = marketListings.filter(l => { l.age++; return l.age < 30 && !l.sold; }); if (marketListings.length < 12 && chance(0.4)) { const s = pick(fakePlayers), item = generateLoot(rand(5, 70)); marketListings.push({ item, price: Math.floor(item.value * (0.8 + Math.random() * 0.8)), seller: s.name, age: 0 }); } for (let i = marketListings.length - 1; i >= 0; i--) { const l = marketListings[i]; if (l.sold) continue; const current = hero.equipment[l.item.slot]; if ((!current || itemScore(l.item) > itemScore(current) * 1.2) && hero.gold >= l.price && chance(0.3)) { hero.gold -= l.price; hero.equipment[l.item.slot] = l.item; if (!isCatchingUp) { log(`🛒 Bought ${l.item.name} from ${l.seller} for ${l.price}g.`, 'log-loot'); addWorldChat('trade', hero.name, `bought ${l.item.name}`); } l.sold = true; } } if (chance(0.3)) { const idx = rand(0, marketListings.length - 1); if (marketListings[idx] && !marketListings[idx].sold) { marketListings[idx].sold = true; if (!isCatchingUp && chance(0.3)) addWorldChat('trade', pick(fakePlayers).name, `bought ${marketListings[idx].item.name}`); } } if (!isCatchingUp) renderMarket(); }
 function renderMarket() { const el = document.getElementById('market-list'); el.innerHTML = ''; const visible = marketListings.filter(l => !l.sold).slice(0, 15); if (visible.length === 0) { el.innerHTML = '<div style="text-align:center; color:var(--text-dim); padding:20px;">No listings available</div>'; return; } visible.forEach(l => { const stats = []; if (l.item.atk) stats.push(`+${l.item.atk} ATK`); if (l.item.def) stats.push(`+${l.item.def} DEF`); if (l.item.dmgMax) stats.push(`${l.item.dmgMin}-${l.item.dmgMax} DMG`); if (l.item.crit) stats.push(`+${l.item.crit}% CRIT`); const div = document.createElement('div'); div.className = 'market-item'; div.innerHTML = `<div><div class="mi-name" style="color:${rarityColor(l.item.rarity)}">${l.item.name}</div><div class="mi-seller">Sold by ${l.seller} • ${l.item.slot}</div><div class="mi-stats">${stats.join(' · ')}</div></div><div class="mi-price">${l.price}g</div><button class="mi-buy" onclick="buyItem(${marketListings.indexOf(l)})">Buy</button>`; el.appendChild(div); }); }
 window.buyItem = function(idx) { const l = marketListings[idx]; if (!l || l.sold) return; if (hero.gold < l.price) { toast('❌ Not enough gold!'); return; } hero.gold -= l.price; hero.equipment[l.item.slot] = l.item; log(`🛒 Bought ${l.item.name} for ${l.price}g.`, 'log-loot'); l.sold = true; renderMarket(); updateUI(); };
-// ============ PVP WITH DYNAMIC OPPONENT POWER ============
 function pvpTick() { pvpTimer--; if (pvpTimer > 0) return; pvpTimer = rand(20, 30); fakePlayers.forEach(p => { if (chance(0.15)) upgradeFakePlayerGear(p); if (chance(0.05) && p.level < (hero?.level || 50) + 25) p.level++; }); const myPower = getHeroPower(); const minPower = myPower * 0.75; const maxPower = myPower * 1.35; let candidates = fakePlayers.filter(p => { const oppPower = calculateFakePlayerPower(p); return oppPower >= minPower && oppPower <= maxPower && Math.abs(p.level - (hero?.level || 1)) <= 20; }); if (candidates.length === 0) candidates = fakePlayers.filter(p => Math.abs(p.level - (hero?.level || 1)) <= 25); if (candidates.length === 0) candidates = fakePlayers; const opp = candidates.length > 0 ? pick(candidates) : makeFakePlayer({ level: Math.max(1, (hero?.level || 1) + rand(-5, 5)) }); let oppPower = calculateFakePlayerPower(opp); const targetMin = myPower * 0.75; const targetMax = myPower * 1.35; let scaledOppPower = Math.min(targetMax, Math.max(targetMin, oppPower)); const powerRatio = scaledOppPower / myPower; pvpOpponent = opp; const heroRoll = myPower * (0.7 + Math.random() * 0.6); const oppRoll = scaledOppPower * (0.7 + Math.random() * 0.6); if (hero?.dead) return; let winChance = 0.5; if (powerRatio > 1) winChance = Math.max(0.35, 0.5 - (powerRatio - 1) * 0.35); else if (powerRatio < 1) winChance = Math.min(0.65, 0.5 + (1 - powerRatio) * 0.35); const isVictory = heroRoll > oppRoll || Math.random() < winChance; if (isVictory) { const reward = Math.floor(rand(30, 150) + (scaledOppPower / 200)); const ratingGain = Math.max(8, Math.min(35, Math.floor(25 * (1.2 - powerRatio)))); heroPvpWins++; heroPvpRating += ratingGain; hero.gold += reward; hero.score += 100; if (!isCatchingUp) { log(`🏆 PVP VICTORY! Defeated ${opp.name} (Lv.${opp.level}) +${reward}g, +${ratingGain} rating`, 'log-pvp'); addWorldChat('pvp', hero.name, `defeated ${opp.name} in the arena!`); toast(`🏆 Victory vs ${opp.name}!`); } if (hero.faction) factionRep[hero.faction] = clamp(factionRep[hero.faction] + 8, -1000, 1000); } else { const ratingLoss = Math.max(8, Math.min(30, Math.floor(22 * powerRatio))); heroPvpLosses++; heroPvpRating = Math.max(0, heroPvpRating - ratingLoss); if (!isCatchingUp) { log(`💀 PVP DEFEAT! Lost to ${opp.name} (Lv.${opp.level}) -${ratingLoss} rating`, 'log-pvp'); addWorldChat('pvp', opp.name, `defeated ${hero.name} in the arena!`); } if (hero.faction) factionRep[hero.faction] = clamp(factionRep[hero.faction] - 5, -1000, -1000); } if (!isCatchingUp) { renderPvp(); renderLeaderboard(); } }
 function renderPvp() { const el = document.getElementById('pvp-vs'); if (!pvpOpponent) { el.innerHTML = `<div class="pvp-fighter"><div>Searching...</div></div><div class="vs-text">VS</div><div class="pvp-fighter"><div>Searching...</div></div>`; } else { const myPower = getHeroPower(); const oppPower = calculateFakePlayerPower(pvpOpponent); const diffPercent = ((myPower - oppPower) / Math.max(myPower, oppPower) * 100).toFixed(0); const advantage = myPower > oppPower ? 'Advantage' : (myPower < oppPower ? 'Disadvantage' : 'Even'); const advColor = myPower > oppPower ? 'var(--success)' : (myPower < oppPower ? 'var(--danger)' : 'var(--gold)'); el.innerHTML = `<div class="pvp-fighter"><div style="font-weight:700;">${hero.name}</div><div style="font-size:0.8em; color:var(--text-dim);">Lv.${hero.level} ${hero.cls}</div><div style="font-size:0.8em; color:var(--accent-2);">Power: ${myPower}</div></div><div class="vs-text">VS</div><div class="pvp-fighter"><div style="font-weight:700;">${pvpOpponent.name}</div><div style="font-size:0.8em; color:var(--text-dim);">Lv.${pvpOpponent.level} ${pvpOpponent.cls}</div><div style="font-size:0.8em; color:${advColor};">Power: ${oppPower} (${Math.abs(diffPercent)}% ${advantage})</div></div>`; } document.getElementById('pvp-wins').textContent = heroPvpWins; document.getElementById('pvp-losses').textContent = heroPvpLosses; document.getElementById('pvp-rating').textContent = heroPvpRating; }
 function renderLeaderboard() { hero.score = hero.level * 100 + heroPvpRating + hero.kills * 5; const cappedFake = fakePlayers.map(p => ({ ...p, level: Math.min(p.level, hero.level + 30), score: Math.min(p.score || 0, hero.score * 2), gearScore: p.gearScore })); const all = [...cappedFake, { name: hero.name, level: hero.level, cls: hero.cls, score: hero.score, isHero: true }].sort((a,b) => b.score - a.score).slice(0, 20); const el = document.getElementById('leaderboard'); el.innerHTML = ''; all.forEach((p, i) => { const row = document.createElement('div'); row.className = 'lb-row' + (p.isHero ? ' hero' : ''); row.innerHTML = `<div class="lb-rank">#${i+1}</div><div class="lb-name">${p.name} <span class="cls">${p.cls||''}</span></div><div class="lb-lvl">Lv.${p.level}</div><div class="lb-score">${p.score}</div>`; el.appendChild(row); }); }
@@ -548,14 +450,14 @@ function toast(msg) { if (isCatchingUp) return; const t = document.createElement
 function updateMonsterUI() { if (!monster) { document.getElementById('m-icon').textContent = '❓'; document.getElementById('m-name').textContent = 'Searching...'; document.getElementById('m-level').textContent = 'Level ?'; document.getElementById('m-hp-bar').style.width = '0%'; return; } document.getElementById('m-icon').textContent = monster.icon; document.getElementById('m-name').textContent = monster.name; document.getElementById('m-level').textContent = `Level ${monster.level}`; document.getElementById('m-hp-bar').style.width = Math.max(0, monster.hp/monster.maxHp*100) + '%'; }
 function updateUI() { document.getElementById('char-name').textContent = hero.name; document.getElementById('char-title').textContent = `${hero.race} ${hero.cls}`; document.getElementById('s-level').textContent = hero.level; document.getElementById('s-gold').textContent = hero.gold; document.getElementById('s-kills').textContent = hero.kills; document.getElementById('s-atk').textContent = getAttack(hero); document.getElementById('s-def').textContent = getDefense(hero); document.getElementById('s-hp-text').textContent = `${Math.max(0,Math.floor(hero.hp))}/${hero.maxHp}`; document.getElementById('hp-bar').style.width = Math.max(0, hero.hp/hero.maxHp*100) + '%'; document.getElementById('s-mp-text').textContent = `${Math.floor(hero.mp)}/${hero.maxMp}`; document.getElementById('mp-bar').style.width = (hero.mp/hero.maxMp*100) + '%'; document.getElementById('s-xp-text').textContent = `${hero.xp}/${hero.xpNeeded}`; document.getElementById('xp-bar').style.width = (hero.xp/hero.xpNeeded*100) + '%'; ['str','dex','con','int','wis','cha'].forEach(s => { document.getElementById('s-'+s).textContent = hero.stats[s]; }); const eqList = document.getElementById('equip-list'); eqList.innerHTML = ''; EQUIP_SLOTS.forEach(slot => { const item = hero.equipment[slot], div = document.createElement('div'); div.className = 'equip-slot' + (item ? ' r-' + item.rarity : ''); if (item) { const stats = []; if (item.atk) stats.push(`+${item.atk} ATK`); if (item.def) stats.push(`+${item.def} DEF`); if (item.dmgMax) stats.push(`${item.dmgMin}-${item.dmgMax} DMG`); if (item.crit) stats.push(`+${item.crit}% CRIT`); div.innerHTML = `<div class="slot-name">${slot}</div><div class="item-name" style="color:${rarityColor(item.rarity)}">${item.name}</div><div class="item-stats">${stats.join(' · ')}</div>`; } else div.innerHTML = `<div class="slot-name">${slot}</div><div class="item-name" style="color:var(--text-faint); font-style:italic;">Empty</div>`; eqList.appendChild(div); }); updateMonsterUI(); const elapsed = Math.floor(totalUptime / 1000); document.getElementById('uptime').textContent = `${String(Math.floor(elapsed/3600)).padStart(2,'0')}:${String(Math.floor((elapsed%3600)/60)).padStart(2,'0')}:${String(elapsed%60).padStart(2,'0')}`; updateBestiaryLog(); }
 function exportSave() { const json = JSON.stringify(getSaveData(), null, 2), blob = new Blob([json], { type: 'application/json' }), url = URL.createObjectURL(blob); const a = document.createElement('a'); a.href = url; a.download = `zeroquest-save-${hero.name}-${Date.now()}.json`; document.body.appendChild(a); a.click(); document.body.removeChild(a); URL.revokeObjectURL(url); toast('💾 Save exported!'); log('💾 Character save exported.', 'log-info'); }
-function showImportModal() { const overlay = document.createElement('div'); overlay.className = 'modal-overlay'; overlay.id = 'import-modal'; overlay.innerHTML = `<div class="modal"><h3>📂 Import Character Save</h3><div class="modal-info"><div class="info-row"><span class="info-label">Version:</span><span class="info-value">2.3</span></div><div class="info-row"><span class="info-label">Format:</span><span class="info-value">JSON</span></div></div><textarea id="import-text" placeholder="Paste your save data here..."></textarea><div style="margin-bottom:16px;"><input type="file" id="import-file" accept=".json" style="display:none;"><button class="btn secondary" onclick="document.getElementById('import-file').click()" style="width:100%;">📁 Choose File</button></div><div class="modal-buttons"><button class="btn secondary" onclick="closeImportModal()">Cancel</button><button class="btn" onclick="importSave()">Import</button></div></div>`; document.body.appendChild(overlay); document.getElementById('import-file').addEventListener('change', (e) => { const file = e.target.files[0]; if (!file) return; const reader = new FileReader(); reader.onload = (event) => { document.getElementById('import-text').value = event.target.result; }; reader.readAsText(file); }); }
+function showImportModal() { const overlay = document.createElement('div'); overlay.className = 'modal-overlay'; overlay.id = 'import-modal'; overlay.innerHTML = `<div class="modal"><h3>📂 Import Character Save</h3><div class="modal-info"><div class="info-row"><span class="info-label">Version:</span><span class="info-value">2.4</span></div><div class="info-row"><span class="info-label">Format:</span><span class="info-value">JSON</span></div></div><textarea id="import-text" placeholder="Paste your save data here..."></textarea><div style="margin-bottom:16px;"><input type="file" id="import-file" accept=".json" style="display:none;"><button class="btn secondary" onclick="document.getElementById('import-file').click()" style="width:100%;">📁 Choose File</button></div><div class="modal-buttons"><button class="btn secondary" onclick="closeImportModal()">Cancel</button><button class="btn" onclick="importSave()">Import</button></div></div>`; document.body.appendChild(overlay); document.getElementById('import-file').addEventListener('change', (e) => { const file = e.target.files[0]; if (!file) return; const reader = new FileReader(); reader.onload = (event) => { document.getElementById('import-text').value = event.target.result; }; reader.readAsText(file); }); }
 function closeImportModal() { const modal = document.getElementById('import-modal'); if (modal) modal.remove(); }
 function importSave() { const text = document.getElementById('import-text').value.trim(); if (!text) { toast('❌ No save data provided!'); return; } try { const data = JSON.parse(text); if (!data.version || !data.hero) throw new Error('Invalid save format'); applySaveData(data); closeImportModal(); if (document.getElementById('creation-screen').style.display !== 'none') startGame(true); else { updateUI(); renderPvp(); renderLeaderboard(); renderGuild(); renderFactions(); renderFriends(); renderOnline(); renderMarket(); toast('✅ Character imported!'); log(`📂 Imported save for ${hero.name} (Level ${hero.level})`, 'log-info'); } } catch (err) { toast('❌ Invalid save data: ' + err.message); } }
 function applySaveData(data) { hero = data.hero; heroPvpWins = data.pvp?.wins || 0; heroPvpLosses = data.pvp?.losses || 0; heroPvpRating = data.pvp?.rating || 1000; factionRep = data.factionRep || { order: 0, chaos: 0 }; friends = data.friends || []; fakePlayers = data.fakePlayers || []; marketListings = data.marketListings || []; guild = data.guild || null; tickCount = data.tickCount || 0; totalUptime = data.totalUptime || 0; startTime = Date.now(); bestiaryKills = data.bestiaryKills || {}; fakePlayers.forEach(p => { if (!p.gearScore) p.gearScore = rand(p.level * 3, p.level * 12); }); }
 function processOfflineProgress(secondsPassed) { isCatchingUp = true; let ticksToProcess = Math.min(secondsPassed, 28800); let processed = 0; const batchSize = 1000; function catchUpFrame() { let batch = Math.min(batchSize, ticksToProcess - processed); for (let i = 0; i < batch; i++) { tickCount++; combatTick(); if (tickCount % 3 === 0) regenTick(); if (tickCount % 10 === 0) marketTick(); if (tickCount % 15 === 0) { fakePlayers.forEach(p => { if (chance(0.3)) p.score += rand(10, 100); if (chance(0.1) && p.level < (hero?.level || 50) + 30) p.level++; if (chance(0.2)) upgradeFakePlayerGear(p); }); } processed++; } if (processed < ticksToProcess) { requestAnimationFrame(catchUpFrame); } else { isCatchingUp = false; saveGame(); updateUI(); renderPvp(); renderLeaderboard(); renderGuild(); renderFactions(); renderFriends(); renderOnline(); renderMarket(); const hours = Math.floor(secondsPassed / 3600), mins = Math.floor((secondsPassed % 3600) / 60); const timeStr = hours > 0 ? `${hours}h ${mins}m` : `${mins}m`; toast(`Welcome back! Progressed for ${timeStr}.`); log(`🌟 Welcome back! Progressed for ${timeStr}. Gained ${offlineStats.xp} XP, ${offlineStats.gold}g, ${offlineStats.kills} kills.`, 'log-level'); if (gameInterval) clearInterval(gameInterval); gameInterval = setInterval(gameLoop, 1000); } } catchUpFrame(); }
 function gameLoop() { tickCount++; combatTick(); if (tickCount % 3 === 0) regenTick(); if (tickCount % 2 === 0) chatTick(); if (tickCount % 3 === 0) marketTick(); if (tickCount % 5 === 0) { renderOnline(); friendsTick(); saveGame(); } if (tickCount % 7 === 0) guildTick(); if (tickCount % 10 === 0) factionTick(); pvpTick(); if (tickCount % 15 === 0) renderLeaderboard(); updateUI(); }
 document.addEventListener('click', e => { if (e.target.classList.contains('tab')) { document.querySelectorAll('.tab').forEach(t => t.classList.remove('active')); document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active')); e.target.classList.add('active'); document.querySelector(`.tab-content[data-content="${e.target.dataset.tab}"]`).classList.add('active'); } if (e.target.classList.contains('social-tab')) { document.querySelectorAll('.social-tab').forEach(t => t.classList.remove('active')); document.querySelectorAll('.social-panel').forEach(c => c.classList.remove('active')); e.target.classList.add('active'); document.querySelector(`.social-panel[data-scontent="${e.target.dataset.stab}"]`).classList.add('active'); } });
-function startGame(fromImport = false) { if (!fromImport) { const name = document.getElementById('hero-name').value.trim() || 'Hero'; const race = document.getElementById('hero-race').value; const cls = document.getElementById('hero-class').value; hero = createHero(name, race, cls); totalUptime = 0; tickCount = 0; bestiaryKills = {}; } startTime = Date.now(); if (!fromImport || !fakePlayers.length) initFakePlayers(); if (!fromImport || !marketListings.length) initMarket(); if (!fromImport || !guild) initGuild(); if (!fromImport || !friends.length) initFriends(); document.getElementById('creation-screen').style.display = 'none'; document.getElementById('game-screen').style.display = 'block'; if (!fromImport) { log(`${hero.name} the ${hero.race} ${hero.cls} enters the world!`, 'log-level'); log(`Welcome to ZeroQuest 2.3 — the world plays itself.`, 'log-system'); addWorldChat('system', null, `🌟 ${hero.name} has entered the world!`); } else { log(`📂 Loaded save: ${hero.name} (Level ${hero.level})`, 'log-info'); addWorldChat('system', null, `🌟 ${hero.name} has returned to the world!`); } spawnMonster(); renderPvp(); renderLeaderboard(); renderGuild(); renderFactions(); renderFriends(); renderOnline(); renderMarket(); if (gameInterval) clearInterval(gameInterval); gameInterval = setInterval(gameLoop, 1000); }
+function startGame(fromImport = false) { if (!fromImport) { const name = document.getElementById('hero-name').value.trim() || 'Hero'; const race = document.getElementById('hero-race').value; const cls = document.getElementById('hero-class').value; hero = createHero(name, race, cls); totalUptime = 0; tickCount = 0; bestiaryKills = {}; } startTime = Date.now(); if (!fromImport || !fakePlayers.length) initFakePlayers(); if (!fromImport || !marketListings.length) initMarket(); if (!fromImport || !guild) initGuild(); if (!fromImport || !friends.length) initFriends(); document.getElementById('creation-screen').style.display = 'none'; document.getElementById('game-screen').style.display = 'block'; if (!fromImport) { log(`${hero.name} the ${hero.race} ${hero.cls} enters the world!`, 'log-level'); log(`Welcome to ZeroQuest 2.4 — the world plays itself.`, 'log-system'); addWorldChat('system', null, `🌟 ${hero.name} has entered the world!`); } else { log(`📂 Loaded save: ${hero.name} (Level ${hero.level})`, 'log-info'); addWorldChat('system', null, `🌟 ${hero.name} has returned to the world!`); } spawnMonster(); renderPvp(); renderLeaderboard(); renderGuild(); renderFactions(); renderFriends(); renderOnline(); renderMarket(); if (gameInterval) clearInterval(gameInterval); gameInterval = setInterval(gameLoop, 1000); }
 function continueGame() { const save = loadGame(); if (save && save.hero) { applySaveData(save); startGame(true); const secondsPassed = Math.floor((Date.now() - save.lastSaveTime) / 1000); if (secondsPassed > 5) { if (gameInterval) clearInterval(gameInterval); processOfflineProgress(secondsPassed); } } }
 function resetGame() { if (confirm('Are you sure you want to delete your save and start over? This cannot be undone.')) { localStorage.removeItem('zeroquest_save'); location.reload(); } }
 function randomHero() { const names = ['Arthas','Gandalf','Conan','Xena','Drizzt','Elminster','Raistlin','Geralt','Yennefer','Aloy','Senua','Eivor','Kvothe','Vex','Percy','Keyleth','Grog','Pike','Scanlan','Mordain']; document.getElementById('hero-name').value = pick(names); document.getElementById('hero-race').value = pick(Object.keys(RACES)); document.getElementById('hero-class').value = pick(Object.keys(CLASSES)); }

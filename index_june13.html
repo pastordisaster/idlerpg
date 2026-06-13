@@ -1,0 +1,927 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>ZeroQuest 2.3 — The Zero Interaction MMO</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root {
+--bg-0: #0a0a14; --bg-1: #12121f; --bg-2: #1a1a2e; --bg-3: #242442;
+--border: rgba(255,255,255,0.08); --border-strong: rgba(255,255,255,0.15);
+--text: #e4e4e7; --text-dim: #9ca3af; --text-faint: #6b7280;
+--accent: #8b5cf6; --accent-2: #06b6d4; --accent-3: #ec4899;
+--success: #10b981; --danger: #ef4444; --warning: #f59e0b; --gold: #fbbf24;
+--r-common: #9ca3af; --r-uncommon: #34d399; --r-rare: #60a5fa; --r-epic: #c084fc; --r-legendary: #fb923c; --r-mystic: #f472b6;
+--font: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+--mono: 'JetBrains Mono', 'Fira Code', Consolas, monospace;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { height: 100%; }
+body {
+background: var(--bg-0);
+background-image: radial-gradient(circle at 15% 20%, rgba(139,92,246,0.15), transparent 40%), radial-gradient(circle at 85% 80%, rgba(6,182,212,0.12), transparent 40%), radial-gradient(circle at 50% 50%, rgba(236,72,153,0.05), transparent 60%);
+color: var(--text); font-family: var(--font); font-size: 14px; line-height: 1.5; overflow: hidden; min-height: 100vh;
+}
+.topbar { display: flex; align-items: center; justify-content: space-between; padding: 10px 20px; background: rgba(18,18,31,0.7); backdrop-filter: blur(20px); border-bottom: 1px solid var(--border); position: sticky; top: 0; z-index: 100; }
+.logo { font-weight: 800; font-size: 1.3em; background: linear-gradient(135deg, var(--accent), var(--accent-2), var(--accent-3)); -webkit-background-clip: text; background-clip: text; color: transparent; letter-spacing: -0.5px; }
+.server-info { display: flex; gap: 20px; font-size: 0.85em; color: var(--text-dim); }
+.server-info .pill { display: inline-flex; align-items: center; gap: 6px; padding: 4px 10px; background: var(--bg-2); border: 1px solid var(--border); border-radius: 999px; }
+.dot { width: 8px; height: 8px; border-radius: 50%; background: var(--success); box-shadow: 0 0 8px var(--success); animation: pulse 2s infinite; }
+@keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: 0.5; } }
+.app { display: grid; grid-template-columns: 300px 1fr 320px; gap: 12px; padding: 12px; height: calc(100vh - 52px); }
+.panel { background: rgba(26,26,46,0.6); backdrop-filter: blur(12px); border: 1px solid var(--border); border-radius: 14px; padding: 14px; overflow: hidden; display: flex; flex-direction: column; }
+.panel h2 { font-size: 0.75em; font-weight: 700; text-transform: uppercase; letter-spacing: 1.5px; color: var(--text-dim); margin-bottom: 10px; display: flex; align-items: center; gap: 8px; }
+.panel h2::before { content: ''; width: 3px; height: 14px; background: linear-gradient(180deg, var(--accent), var(--accent-2)); border-radius: 2px; }
+.char-header { text-align: center; padding: 12px; background: linear-gradient(135deg, rgba(139,92,246,0.15), rgba(6,182,212,0.1)); border-radius: 10px; margin-bottom: 12px; border: 1px solid var(--border); }
+.char-name { font-size: 1.3em; font-weight: 700; margin-bottom: 2px; }
+.char-title { font-size: 0.8em; color: var(--text-dim); }
+.char-level { display: inline-block; margin-top: 6px; padding: 2px 10px; background: var(--bg-3); border-radius: 999px; font-size: 0.75em; font-weight: 600; color: var(--gold); border: 1px solid rgba(251,191,36,0.3); }
+.save-buttons { display: flex; gap: 6px; margin-bottom: 12px; }
+.save-btn { flex: 1; padding: 8px; background: var(--bg-1); border: 1px solid var(--border); border-radius: 8px; color: var(--text); font-family: inherit; font-size: 0.8em; font-weight: 600; cursor: pointer; transition: all 0.2s; display: flex; align-items: center; justify-content: center; gap: 4px; }
+.save-btn:hover { background: var(--bg-2); border-color: var(--accent); transform: translateY(-1px); }
+.save-btn.export:hover { border-color: var(--success); color: var(--success); }
+.save-btn.import:hover { border-color: var(--accent-2); color: var(--accent-2); }
+.save-btn.reset:hover { border-color: var(--danger); color: var(--danger); }
+.stat-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; margin-bottom: 12px; }
+.stat-box { background: var(--bg-1); border: 1px solid var(--border); border-radius: 8px; padding: 6px 10px; display: flex; justify-content: space-between; font-size: 0.85em; }
+.stat-box .label { color: var(--text-dim); }
+.stat-box .val { font-weight: 600; font-family: var(--mono); }
+.bar-wrap { margin-bottom: 10px; }
+.bar-label { display: flex; justify-content: space-between; font-size: 0.75em; margin-bottom: 3px; color: var(--text-dim); font-weight: 500; }
+.bar-label .val { color: var(--text); font-family: var(--mono); }
+.bar { height: 8px; background: var(--bg-1); border-radius: 999px; overflow: hidden; border: 1px solid var(--border); }
+.bar > div { height: 100%; border-radius: 999px; transition: width 0.4s ease; }
+.bar-hp > div { background: linear-gradient(90deg, #dc2626, #f87171); }
+.bar-mp > div { background: linear-gradient(90deg, #2563eb, #60a5fa); }
+.bar-xp > div { background: linear-gradient(90deg, #059669, #34d399); }
+.bar-mon > div { background: linear-gradient(90deg, #d97706, #fbbf24); }
+.attr-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 4px; margin-top: 8px; }
+.attr { background: var(--bg-1); border: 1px solid var(--border); border-radius: 6px; padding: 4px; text-align: center; font-size: 0.75em; }
+.attr .k { color: var(--text-faint); font-size: 0.85em; }
+.attr .v { font-weight: 700; font-family: var(--mono); color: var(--accent-2); }
+.equip-list { display: flex; flex-direction: column; gap: 4px; overflow-y: auto; flex: 1; }
+.equip-slot { background: var(--bg-1); border: 1px solid var(--border); border-left: 3px solid var(--text-faint); border-radius: 6px; padding: 6px 8px; font-size: 0.8em; }
+.equip-slot .slot-name { color: var(--text-faint); font-size: 0.75em; text-transform: uppercase; letter-spacing: 0.5px; }
+.equip-slot .item-name { font-weight: 600; }
+.equip-slot .item-stats { font-size: 0.85em; color: var(--text-dim); font-family: var(--mono); }
+.equip-slot.r-common { border-left-color: var(--r-common); }
+.equip-slot.r-uncommon { border-left-color: var(--r-uncommon); }
+.equip-slot.r-rare { border-left-color: var(--r-rare); }
+.equip-slot.r-epic { border-left-color: var(--r-epic); }
+.equip-slot.r-legendary { border-left-color: var(--r-legendary); box-shadow: 0 0 10px rgba(251,146,60,0.2); }
+.equip-slot.r-mystic { border-left-color: var(--r-mystic); box-shadow: 0 0 14px rgba(244,114,182,0.4); background: linear-gradient(135deg, rgba(244,114,182,0.1), rgba(236,72,153,0.05)); }
+.tabs { display: flex; gap: 4px; margin-bottom: 10px; background: var(--bg-1); padding: 4px; border-radius: 10px; border: 1px solid var(--border); }
+.tab { flex: 1; padding: 8px; text-align: center; font-size: 0.85em; font-weight: 600; color: var(--text-dim); cursor: pointer; border-radius: 7px; transition: all 0.2s; user-select: none; }
+.tab:hover { color: var(--text); }
+.tab.active { background: linear-gradient(135deg, var(--accent), var(--accent-2)); color: white; box-shadow: 0 2px 8px rgba(139,92,246,0.3); }
+.tab-content { display: none; flex: 1; overflow: hidden; flex-direction: column; }
+.tab-content.active { display: flex; }
+.monster-card { background: linear-gradient(135deg, rgba(217,119,6,0.1), rgba(239,68,68,0.05)); border: 1px solid var(--border); border-radius: 10px; padding: 14px; text-align: center; margin-bottom: 10px; }
+.monster-icon { font-size: 3em; margin-bottom: 4px; filter: drop-shadow(0 0 10px rgba(251,146,60,0.4)); }
+.monster-name { font-size: 1.1em; font-weight: 700; color: var(--warning); }
+.monster-level { font-size: 0.8em; color: var(--text-dim); }
+.log { flex: 1; overflow-y: auto; background: var(--bg-1); border: 1px solid var(--border); border-radius: 10px; padding: 10px; font-size: 0.85em; font-family: var(--mono); }
+.log-entry { padding: 2px 0; border-bottom: 1px dashed rgba(255,255,255,0.03); animation: fadeIn 0.3s; }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(-4px); } to { opacity: 1; transform: translateY(0); } }
+.log-time { color: var(--text-faint); margin-right: 6px; font-size: 0.85em; }
+.log-combat { color: #fca5a5; } .log-loot { color: var(--gold); } .log-level { color: var(--success); font-weight: 700; } .log-info { color: var(--accent-2); } .log-death { color: var(--danger); font-weight: 700; } .log-pvp { color: var(--accent-3); } .log-system { color: var(--text-dim); font-style: italic; }
+.market-list { flex: 1; overflow-y: auto; display: flex; flex-direction: column; gap: 6px; }
+.market-item { background: var(--bg-1); border: 1px solid var(--border); border-radius: 8px; padding: 10px; display: grid; grid-template-columns: 1fr auto auto; gap: 10px; align-items: center; font-size: 0.85em; transition: all 0.2s; }
+.market-item:hover { border-color: var(--border-strong); background: var(--bg-2); }
+.market-item .mi-name { font-weight: 600; } .market-item .mi-seller { font-size: 0.8em; color: var(--text-dim); } .market-item .mi-stats { font-family: var(--mono); font-size: 0.8em; color: var(--text-dim); margin-top: 2px; } .market-item .mi-price { font-weight: 700; color: var(--gold); font-family: var(--mono); }
+.market-item .mi-buy { padding: 4px 12px; background: var(--accent); color: white; border: none; border-radius: 6px; font-weight: 600; cursor: pointer; font-family: inherit; font-size: 0.85em; }
+.market-item .mi-buy:hover { background: #7c3aed; }
+.pvp-arena { background: linear-gradient(135deg, rgba(236,72,153,0.1), rgba(139,92,246,0.05)); border: 1px solid var(--border); border-radius: 10px; padding: 16px; margin-bottom: 10px; text-align: center; }
+.pvp-vs { display: grid; grid-template-columns: 1fr auto 1fr; gap: 10px; align-items: center; margin: 10px 0; }
+.pvp-fighter { background: var(--bg-1); border: 1px solid var(--border); border-radius: 8px; padding: 10px; }
+.pvp-fighter.winner { border-color: var(--success); box-shadow: 0 0 12px rgba(16,185,129,0.3); } .pvp-fighter.loser { opacity: 0.5; }
+.vs-text { font-size: 1.5em; font-weight: 800; color: var(--accent-3); }
+.pvp-record { display: flex; justify-content: center; gap: 20px; font-size: 0.9em; margin-top: 8px; }
+.pvp-record .win { color: var(--success); font-weight: 700; } .pvp-record .loss { color: var(--danger); font-weight: 700; }
+.leaderboard { flex: 1; overflow-y: auto; background: var(--bg-1); border: 1px solid var(--border); border-radius: 10px; padding: 6px; }
+.lb-row { display: grid; grid-template-columns: 30px 1fr auto auto; gap: 10px; padding: 6px 8px; border-radius: 6px; font-size: 0.85em; align-items: center; }
+.lb-row:nth-child(odd) { background: rgba(255,255,255,0.02); } .lb-row.hero { background: rgba(139,92,246,0.15); border: 1px solid rgba(139,92,246,0.3); }
+.lb-rank { font-weight: 700; font-family: var(--mono); color: var(--text-dim); text-align: center; }
+.lb-row:nth-child(1) .lb-rank { color: var(--gold); } .lb-row:nth-child(2) .lb-rank { color: #d1d5db; } .lb-row:nth-child(3) .lb-rank { color: #d97706; }
+.lb-name { font-weight: 600; } .lb-name .cls { color: var(--text-dim); font-weight: 400; font-size: 0.85em; } .lb-lvl { font-family: var(--mono); color: var(--accent-2); font-weight: 600; } .lb-score { font-family: var(--mono); color: var(--gold); font-weight: 600; }
+.social-tabs { display: flex; gap: 4px; margin-bottom: 8px; }
+.social-tab { flex: 1; padding: 6px; text-align: center; background: var(--bg-1); border: 1px solid var(--border); border-radius: 6px; font-size: 0.8em; font-weight: 600; cursor: pointer; color: var(--text-dim); }
+.social-tab.active { background: var(--bg-3); color: var(--text); border-color: var(--accent); }
+.social-panel { display: none; flex: 1; overflow: hidden; flex-direction: column; } .social-panel.active { display: flex; }
+.guild-header { background: linear-gradient(135deg, rgba(139,92,246,0.15), rgba(6,182,212,0.1)); border: 1px solid var(--border); border-radius: 10px; padding: 12px; margin-bottom: 10px; }
+.guild-name { font-size: 1.1em; font-weight: 700; color: var(--accent); } .guild-motto { font-size: 0.8em; color: var(--text-dim); font-style: italic; }
+.guild-stats { display: flex; gap: 12px; margin-top: 8px; font-size: 0.8em; } .guild-stats .gs { color: var(--text-dim); } .guild-stats .gs b { color: var(--text); font-family: var(--mono); }
+.faction-card { background: var(--bg-1); border: 1px solid var(--border); border-radius: 10px; padding: 12px; margin-bottom: 8px; }
+.faction-card.order { border-left: 3px solid #60a5fa; } .faction-card.chaos { border-left: 3px solid #f87171; }
+.faction-name { font-weight: 700; font-size: 1em; } .faction-card.order .faction-name { color: #60a5fa; } .faction-card.chaos .faction-name { color: #f87171; }
+.faction-desc { font-size: 0.8em; color: var(--text-dim); margin: 4px 0; }
+.faction-rep { display: flex; justify-content: space-between; font-size: 0.8em; margin-top: 6px; color: var(--text-dim); } .faction-rep .val { font-weight: 700; font-family: var(--mono); }
+.member-list { flex: 1; overflow-y: auto; display: flex; flex-direction: column; gap: 3px; }
+.member { display: grid; grid-template-columns: 8px 1fr auto; gap: 8px; padding: 6px 8px; background: var(--bg-1); border-radius: 6px; font-size: 0.85em; align-items: center; }
+.member .status { width: 8px; height: 8px; border-radius: 50%; background: var(--text-faint); }
+.member.online .status { background: var(--success); box-shadow: 0 0 6px var(--success); }
+.member .m-name { font-weight: 500; } .member .m-rank { color: var(--text-faint); font-size: 0.8em; } .member .m-lvl { font-family: var(--mono); color: var(--accent-2); font-size: 0.85em; }
+.chat { flex: 1; overflow-y: auto; background: var(--bg-1); border: 1px solid var(--border); border-radius: 10px; padding: 8px; font-size: 0.82em; margin-bottom: 10px; }
+.chat-msg { padding: 3px 0; animation: fadeIn 0.3s; line-height: 1.4; }
+.chat-name { font-weight: 700; } .chat-sys { color: var(--text-faint); font-style: italic; } .chat-trade .chat-name { color: var(--gold); } .chat-guild .chat-name { color: var(--accent); } .chat-pvp .chat-name { color: var(--accent-3); } .chat-say .chat-name { color: var(--accent-2); }
+.online-list { flex: 1; overflow-y: auto; display: flex; flex-direction: column; gap: 3px; }
+.online-player { display: grid; grid-template-columns: 8px 1fr auto; gap: 8px; padding: 5px 8px; background: var(--bg-1); border-radius: 6px; font-size: 0.82em; align-items: center; }
+.online-player .status { width: 8px; height: 8px; border-radius: 50%; background: var(--success); box-shadow: 0 0 6px var(--success); }
+.online-player .op-name { font-weight: 500; } .online-player .op-info { font-family: var(--mono); color: var(--text-dim); font-size: 0.85em; }
+::-webkit-scrollbar { width: 6px; height: 6px; } ::-webkit-scrollbar-track { background: transparent; } ::-webkit-scrollbar-thumb { background: var(--bg-3); border-radius: 3px; } ::-webkit-scrollbar-thumb:hover { background: var(--accent); }
+#creation-screen { position: fixed; inset: 0; display: flex; align-items: center; justify-content: center; background: var(--bg-0); z-index: 1000; }
+.creation-box { background: rgba(26,26,46,0.9); backdrop-filter: blur(20px); border: 1px solid var(--border-strong); border-radius: 20px; padding: 40px; max-width: 500px; width: 90%; text-align: center; }
+.creation-box h1 { font-size: 2.5em; font-weight: 800; background: linear-gradient(135deg, var(--accent), var(--accent-2), var(--accent-3)); -webkit-background-clip: text; background-clip: text; color: transparent; margin-bottom: 8px; }
+.creation-box .sub { color: var(--text-dim); margin-bottom: 24px; }
+.creation-box input, .creation-box select { background: var(--bg-1); color: var(--text); border: 1px solid var(--border-strong); padding: 10px 14px; margin: 5px; border-radius: 8px; font-family: inherit; font-size: 0.95em; width: 180px; }
+.creation-box input:focus, .creation-box select:focus { outline: none; border-color: var(--accent); }
+.btn { background: linear-gradient(135deg, var(--accent), var(--accent-2)); color: white; border: none; padding: 12px 24px; margin: 8px 5px; border-radius: 10px; font-family: inherit; font-weight: 700; font-size: 0.95em; cursor: pointer; transition: all 0.2s; box-shadow: 0 4px 12px rgba(139,92,246,0.3); }
+.btn:hover { transform: translateY(-2px); box-shadow: 0 6px 16px rgba(139,92,246,0.5); }
+.btn.secondary { background: var(--bg-2); border: 1px solid var(--border-strong); box-shadow: none; }
+.btn.danger { background: var(--bg-2); border: 1px solid var(--danger); color: var(--danger); box-shadow: none; }
+.btn.danger:hover { background: rgba(239,68,68,0.1); }
+.toast { position: fixed; top: 70px; left: 50%; transform: translateX(-50%); background: rgba(26,26,46,0.95); backdrop-filter: blur(20px); border: 1px solid var(--accent); border-radius: 10px; padding: 12px 24px; font-weight: 600; z-index: 1000; animation: toastIn 0.3s, toastOut 0.3s 2.7s forwards; box-shadow: 0 8px 24px rgba(139,92,246,0.3); }
+@keyframes toastIn { from { opacity: 0; transform: translate(-50%, -20px); } to { opacity: 1; transform: translate(-50%, 0); } }
+@keyframes toastOut { to { opacity: 0; transform: translate(-50%, -20px); } }
+.modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.7); backdrop-filter: blur(8px); display: flex; align-items: center; justify-content: center; z-index: 2000; animation: fadeIn 0.2s; }
+.modal { background: rgba(26,26,46,0.95); backdrop-filter: blur(20px); border: 1px solid var(--border-strong); border-radius: 16px; padding: 30px; max-width: 500px; width: 90%; box-shadow: 0 20px 60px rgba(0,0,0,0.5); }
+.modal h3 { font-size: 1.3em; margin-bottom: 16px; background: linear-gradient(135deg, var(--accent), var(--accent-2)); -webkit-background-clip: text; background-clip: text; color: transparent; }
+.modal textarea { width: 100%; min-height: 200px; background: var(--bg-1); border: 1px solid var(--border); border-radius: 8px; padding: 12px; color: var(--text); font-family: var(--mono); font-size: 0.85em; resize: vertical; margin-bottom: 16px; }
+.modal textarea:focus { outline: none; border-color: var(--accent); }
+.modal-buttons { display: flex; gap: 8px; justify-content: flex-end; }
+.modal-info { background: var(--bg-1); border: 1px solid var(--border); border-radius: 8px; padding: 12px; margin-bottom: 16px; font-size: 0.9em; }
+.modal-info .info-row { display: flex; justify-content: space-between; padding: 4px 0; }
+.modal-info .info-label { color: var(--text-dim); } .modal-info .info-value { font-weight: 600; font-family: var(--mono); }
+.save-preview { background: var(--bg-1); border: 1px solid var(--border); border-radius: 8px; padding: 12px; margin: 15px 0; text-align: left; }
+.save-preview .sp-row { display: flex; justify-content: space-between; padding: 3px 0; font-size: 0.9em; }
+.save-preview .sp-label { color: var(--text-dim); } .save-preview .sp-val { font-weight: 600; font-family: var(--mono); color: var(--accent-2); }
+.bestiary-log { flex: 1; overflow-y: auto; background: var(--bg-1); border: 1px solid var(--border); border-radius: 10px; padding: 10px; max-height: 180px; margin-top: 8px; }
+.bestiary-entry { display: flex; justify-content: space-between; padding: 4px 6px; border-bottom: 1px dashed rgba(255,255,255,0.05); font-size: 0.8em; }
+.bestiary-name { font-weight: 600; color: var(--warning); }
+.bestiary-count { font-family: var(--mono); color: var(--gold); font-weight: 700; }
+.about-section { background: var(--bg-1); border: 1px solid var(--border); border-radius: 10px; padding: 12px; overflow-y: auto; flex: 1; font-size: 0.8em; }
+.changelog-entry { padding: 6px 0; border-bottom: 1px dashed rgba(255,255,255,0.05); }
+.changelog-version { font-weight: 800; color: var(--accent-2); }
+.changelog-date { color: var(--text-faint); font-size: 0.75em; margin-left: 8px; }
+.changelog-list { padding-left: 20px; margin-top: 4px; color: var(--text-dim); list-style-type: none; }
+.changelog-list li { margin: 2px 0; position: relative; }
+.changelog-list li::before { content: '▹'; position: absolute; left: -16px; color: var(--accent); }
+</style>
+</head>
+<body>
+<div id="creation-screen">
+<div class="creation-box">
+<h1>ZeroQuest 2.3</h1>
+<p class="sub">The Zero-Interaction MMO — The world plays itself.</p>
+<div id="new-character-form">
+<div><input type="text" id="hero-name" value="Hero" maxlength="16" placeholder="Character name"></div>
+<div style="margin-top:10px;">
+<select id="hero-race"><option>Human</option><option>Elf</option><option>Dwarf</option><option>Orc</option><option>Halfling</option><option>Gnome</option></select>
+<select id="hero-class"><option>Warrior</option><option>Mage</option><option>Rogue</option><option>Cleric</option><option>Ranger</option><option>Paladin</option></select>
+</div>
+<div style="margin-top:20px;">
+<button class="btn" onclick="startGame(false)">⚔️ New Adventure</button>
+<button class="btn secondary" onclick="randomHero()">🎲 Random Hero</button>
+<button class="btn secondary" onclick="showImportModal()">📂 Import Save</button>
+</div>
+</div>
+<div id="continue-box" style="display:none; margin-top:20px; padding-top:20px; border-top:1px solid var(--border);">
+<p style="color:var(--text-dim); margin-bottom:10px;">Existing save found:</p>
+<div id="save-info" class="save-preview"></div>
+<button class="btn" onclick="continueGame()">▶️ Continue Adventure</button>
+<button class="btn danger" onclick="resetGame()">🗑️ New Character</button>
+</div>
+</div>
+</div>
+<div id="game-screen" style="display:none;">
+<div class="topbar">
+<div class="logo">⚔ ZeroQuest 2.3</div>
+<div class="server-info">
+<span class="pill"><span class="dot"></span> <span id="online-count">0</span> Online</span>
+<span class="pill">🌐 Server: <b style="color:var(--text);margin-left:4px;">Eternity-01</b></span>
+<span class="pill">⚔ <span id="faction-war-status">War Ongoing</span></span>
+<span class="pill">⏱ <span id="uptime">00:00:00</span></span>
+</div>
+</div>
+<div class="app">
+<div class="panel" style="overflow-y:auto;">
+<div class="char-header">
+<div class="char-name" id="char-name">Hero</div>
+<div class="char-title" id="char-title">Human Warrior</div>
+<div class="char-level">Level <span id="s-level">1</span></div>
+</div>
+<div class="save-buttons">
+<button class="save-btn export" onclick="exportSave()">💾 Export</button>
+<button class="save-btn import" onclick="showImportModal()">📂 Import</button>
+<button class="save-btn reset" onclick="resetGame()">🗑️ Reset</button>
+</div>
+<div class="stat-grid">
+<div class="stat-box"><span class="label">💰 Gold</span><span class="val" id="s-gold">0</span></div>
+<div class="stat-box"><span class="label">💀 Kills</span><span class="val" id="s-kills">0</span></div>
+<div class="stat-box"><span class="label">⚔ Attack</span><span class="val" id="s-atk">0</span></div>
+<div class="stat-box"><span class="label">🛡 Defense</span><span class="val" id="s-def">0</span></div>
+</div>
+<div style="background:var(--bg-1); border:1px solid var(--border); border-radius:8px; padding:8px; margin-bottom:12px;">
+  <div style="font-size:0.8em; color:var(--text-dim); margin-bottom:6px; display:flex; justify-content:space-between; align-items:center;">
+    <span>⚡ Gold to XP Training</span>
+    <span style="color:var(--gold); font-family:var(--mono);">1g = 3 XP</span>
+  </div>
+  <div style="display:flex; gap:4px;">
+    <button class="save-btn" onclick="convertGoldToXp(100)" style="flex:1; font-size:0.75em; padding:6px;">100g</button>
+    <button class="save-btn" onclick="convertGoldToXp(500)" style="flex:1; font-size:0.75em; padding:6px;">500g</button>
+    <button class="save-btn" onclick="convertGoldToXp('all')" style="flex:1; font-size:0.75em; padding:6px;">All</button>
+  </div>
+</div>
+<div class="bar-wrap"><div class="bar-label"><span>❤ HP</span><span class="val" id="s-hp-text">0/0</span></div><div class="bar bar-hp"><div id="hp-bar" style="width:100%"></div></div></div>
+<div class="bar-wrap"><div class="bar-label"><span>✦ MP</span><span class="val" id="s-mp-text">0/0</span></div><div class="bar bar-mp"><div id="mp-bar" style="width:100%"></div></div></div>
+<div class="bar-wrap"><div class="bar-label"><span>★ XP</span><span class="val" id="s-xp-text">0/0</span></div><div class="bar bar-xp"><div id="xp-bar" style="width:0%"></div></div></div>
+<h2>Attributes</h2>
+<div class="attr-grid">
+<div class="attr"><div class="k">STR</div><div class="v" id="s-str">10</div></div>
+<div class="attr"><div class="k">DEX</div><div class="v" id="s-dex">10</div></div>
+<div class="attr"><div class="k">CON</div><div class="v" id="s-con">10</div></div>
+<div class="attr"><div class="k">INT</div><div class="v" id="s-int">10</div></div>
+<div class="attr"><div class="k">WIS</div><div class="v" id="s-wis">10</div></div>
+<div class="attr"><div class="k">CHA</div><div class="v" id="s-cha">10</div></div>
+</div>
+<h2 style="margin-top:12px;">Equipment</h2>
+<div class="equip-list" id="equip-list"></div>
+</div>
+<div class="panel">
+<div class="tabs">
+<div class="tab active" data-tab="adventure">⚔ Adventure</div>
+<div class="tab" data-tab="market">🏪 Market</div>
+<div class="tab" data-tab="pvp">🏆 PvP</div>
+<div class="tab" data-tab="social">👥 Social</div>
+</div>
+<div class="tab-content active" data-content="adventure">
+<div class="monster-card">
+<div class="monster-icon" id="m-icon">❓</div>
+<div class="monster-name" id="m-name">Searching...</div>
+<div class="monster-level" id="m-level">Level ?</div>
+<div class="bar-wrap" style="margin-top:8px; margin-bottom:0;"><div class="bar bar-mon"><div id="m-hp-bar" style="width:100%"></div></div></div>
+</div>
+<div class="log" id="log"></div>
+</div>
+<div class="tab-content" data-content="market">
+<h2>Auction House — Live Listings</h2>
+<div class="market-list" id="market-list"></div>
+</div>
+<div class="tab-content" data-content="pvp">
+<h2>Arena — Ranked PvP</h2>
+<div class="pvp-arena">
+<div style="color:var(--text-dim); font-size:0.85em;">Current Match</div>
+<div class="pvp-vs" id="pvp-vs"><div class="pvp-fighter"><div>—</div></div><div class="vs-text">VS</div><div class="pvp-fighter"><div>—</div></div></div>
+<div class="pvp-record"><span>Wins: <span class="win" id="pvp-wins">0</span></span><span>Losses: <span class="loss" id="pvp-losses">0</span></span><span>Rating: <span id="pvp-rating" style="color:var(--gold); font-weight:700;">1000</span></span></div>
+</div>
+<h2 style="margin-top:10px;">Leaderboard — Top Players</h2>
+<div class="leaderboard" id="leaderboard"></div>
+</div>
+<div class="tab-content" data-content="social">
+<div class="social-tabs">
+<div class="social-tab active" data-stab="guild">🛡 Guild</div>
+<div class="social-tab" data-stab="faction">⚔ Factions</div>
+<div class="social-tab" data-stab="friends">👥 Friends</div>
+<div class="social-tab" data-stab="bestiary">📖 Bestiary</div>
+<div class="social-tab" data-stab="about">ℹ️ About</div>
+</div>
+<div class="social-panel active" data-scontent="guild">
+<div class="guild-header">
+<div class="guild-name" id="guild-name">Loading...</div>
+<div class="guild-motto" id="guild-motto"></div>
+<div class="guild-stats"><div class="gs">Level <b id="guild-level">1</b></div><div class="gs">Members <b id="guild-members">0</b></div><div class="gs">Treasury <b id="guild-treasury">0</b>g</div></div>
+</div>
+<h2>Guild Members</h2>
+<div class="member-list" id="guild-members-list"></div>
+</div>
+<div class="social-panel" data-scontent="faction">
+<div class="faction-card order"><div class="faction-name">🛡 The Radiant Order</div><div class="faction-desc">Defenders of light, law, and the realm. Led by Highlord Valorian.</div><div class="faction-rep"><span>Your Reputation:</span><span class="val" id="rep-order">Neutral</span></div><div class="bar" style="margin-top:4px;"><div id="rep-order-bar" style="width:50%; background:linear-gradient(90deg,#60a5fa,#93c5fd);"></div></div></div>
+<div class="faction-card chaos"><div class="faction-name">🔥 The Chaos Covenant</div><div class="faction-desc">Seekers of freedom, power, and the old ways. Led by Warlord Malachar.</div><div class="faction-rep"><span>Your Reputation:</span><span class="val" id="rep-chaos">Neutral</span></div><div class="bar" style="margin-top:4px;"><div id="rep-chaos-bar" style="width:50%; background:linear-gradient(90deg,#f87171,#fca5a5);"></div></div></div>
+<h2 style="margin-top:10px;">Faction War Log</h2>
+<div class="log" id="faction-log" style="flex:1;"></div>
+</div>
+<div class="social-panel" data-scontent="friends"><h2>Friends List</h2><div class="member-list" id="friends-list"></div></div>
+<div class="social-panel" data-scontent="bestiary">
+<h2>📖 Bestiary — Creatures Slain</h2>
+<div class="bestiary-log" id="bestiary-log"></div>
+<div class="log" style="margin-top:10px; max-height:120px;" id="bestiary-hint-log"><div class="log-entry log-system">Every monster you defeat is recorded here. Keep hunting to complete your bestiary!</div></div>
+</div>
+<div class="social-panel" data-scontent="about">
+<h2>ℹ️ About ZeroQuest 2.3</h2>
+<div class="about-section">
+<p style="margin-bottom:12px;"><strong>ZeroQuest 2.3 — The Zero-Interaction MMO</strong> is an idle/autoplay RPG where the world lives without you. Your character fights, loots, levels up, joins guilds and factions, trades on the auction house, and engages in PvP — all automatically.</p>
+<p style="margin-bottom:12px;">Everything happens in real-time. Watch your hero grow, check the leaderboard, or just let it run in the background. Progress is saved automatically.</p>
+<h3 style="margin:12px 0 8px 0; font-size:0.9em;">📜 Changelog</h3>
+<div id="changelog-container">
+<div class="changelog-entry"><span class="changelog-version">v2.3</span><span class="changelog-date">— Latest</span><ul class="changelog-list"><li>💖 Added MYSTIC rarity items (pink) — 0.01% drop rate!</li><li>✨ Mystic weapons, armor, helmet, shield, boots, ring, amulet available</li><li>🎨 Mystic items have unique pink glow and enhanced stats</li><li>📈 Mystic gear has 8x stat multiplier</li></ul></div>
+<div class="changelog-entry"><span class="changelog-version">v2.2.1</span><span class="changelog-date">— June 12, 2026</span><ul class="changelog-list"><li>📖 Added Bestiary Log — tracks kills per monster type</li><li>ℹ️ Added About section with game info & changelog</li><li>🎨 Moved Bestiary to Social panel for better organization</li></ul></div>
+<div class="changelog-entry"><span class="changelog-version">v2.2.0</span><span class="changelog-date">— Initial Release</span><ul class="changelog-list"><li>⚔ Automatic combat & monster spawning</li><li>🏪 Player-driven auction house with NPC trading</li><li>🏆 Ranked PvP arena with leaderboards</li><li>🛡 Dynamic guild system</li><li>⚔ Faction reputation & war events</li><li>👥 Friends list & world chat</li><li>💾 Full save/export/import system</li><li>⚡ Gold to XP conversion (training)</li><li>✨ Epic & Legendary loot drops</li></ul></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="panel">
+<h2>🌐 World Chat</h2>
+<div class="chat" id="world-chat"></div>
+<h2>👥 Players Nearby</h2>
+<div class="online-list" id="online-list"></div>
+</div>
+</div>
+</div>
+<script>
+// ============ DATA ============
+const RACES = { Human:{str:1,dex:1,con:1,int:1,wis:1,cha:1}, Elf:{str:0,dex:2,con:0,int:1,wis:1,cha:1}, Dwarf:{str:2,dex:0,con:2,int:0,wis:1,cha:0}, Orc:{str:3,dex:0,con:2,int:-1,wis:0,cha:-1}, Halfling:{str:-1,dex:3,con:0,int:0,wis:1,cha:2}, Gnome:{str:-1,dex:1,con:0,int:3,wis:1,cha:1} };
+const CLASSES = { Warrior:{str:3,dex:1,con:2,int:0,wis:0,cha:0,hpMul:1.5,mpMul:0.3,atkStat:'str'}, Mage:{str:0,dex:1,con:0,int:3,wis:2,cha:0,hpMul:0.8,mpMul:2.0,atkStat:'int'}, Rogue:{str:1,dex:3,con:1,int:0,wis:0,cha:1,hpMul:1.0,mpMul:0.5,atkStat:'dex'}, Cleric:{str:1,dex:0,con:1,int:1,wis:3,cha:1,hpMul:1.2,mpMul:1.5,atkStat:'wis'}, Ranger:{str:1,dex:3,con:1,int:1,wis:1,cha:0,hpMul:1.1,mpMul:0.7,atkStat:'dex'}, Paladin:{str:2,dex:0,con:2,int:0,wis:2,cha:1,hpMul:1.4,mpMul:0.8,atkStat:'str'} };
+const MONSTER_PREFIXES = ['Angry','Fierce','Cursed','Giant','Tiny','Sneaky','Rabid','Ancient','Vile','Mystic','Dread','Luminous','Shadow','Iron','Bone','Frost','Flame','Venomous','Eldritch','Abyssal'];
+const MONSTER_NAMES = ['Goblin','Rat','Wolf','Skeleton','Spider','Orc','Troll','Dragon','Slime','Bat','Zombie','Ghost','Imp','Golem','Harpy','Basilisk','Minotaur','Lich','Wyvern','Beholder','Ogre','Gnoll','Kobold','Mimic','Wraith','Chimera','Hydra','Phoenix'];
+const MONSTER_ICONS = ['👹','🐀','🐺','💀','🕷️','👺','🧌','🐉','🟢','🦇','🧟','👻','😈','🗿','🦅','🐍','🐂','☠️','🦎','👁️','👹','🐗','🦎','📦','👤','🦁','🐙','🔥'];
+const EQUIP_SLOTS = ['Weapon','Armor','Helmet','Shield','Boots','Ring','Amulet'];
+const EQUIP_PREFIXES = { common:['Rusty','Old','Simple','Worn','Basic'], uncommon:['Fine','Sturdy','Sharp','Polished','Tempered'], rare:['Enchanted','Gleaming','Blessed','Mithril','Elven'], epic:['Ancient','Infernal','Celestial','Draconic','Void'], legendary:['Godly','Eternal','Primordial','Astral','Mythic'], mystic:['Cosmic','Ethereal','Transcendent','Infinite','Voidborn','Prismatic','Omnipotent'] };
+const EQUIP_BASES = { Weapon:['Sword','Axe','Mace','Dagger','Staff','Bow','Spear','Greatsword','Greataxe'], Armor:['Chainmail','Plate','Leather','Robe','Brigandine','Chestguard'], Helmet:['Helm','Crown','Hood','Circlet','Cap','Mask'], Shield:['Buckler','Kite Shield','Tower Shield','Barrier','Ward','Aegis'], Boots:['Boots','Greaves','Sandals','Treads','Sabatons','Striders'], Ring:['Ring','Band','Loop','Signet','Circle','Seal'], Amulet:['Amulet','Pendant','Necklace','Talisman','Charm','Medallion'] };
+const FAKE_NAMES = ['Arthas','Gandalf','Conan','Xena','Drizzt','Elminster','Raistlin','Cirdan','Tasslehoff','Fizzban','Sturm','Goldmoon','Tika','Caramon','Dalamar','Kitiara','Eldritch','Mordain','Vex','Percy','Keyleth','Grog','Pike','Scanlan','Geralt','Yennefer','Ciri','Triss','Dandelion','Zoltan','Vesemir','Lara','Aloy','Senua','Eivor','Kvothe','Bast','Chronicle','Killer','Noobslayer','XxX_Shadow_XxX','pwnz0r','L33tMage','HealPlz','TankMain','RogueLife','Paladin4Life','DivineWrath','VoidWalker','FlameKeeper','FrostBorn','StormCaller','NightBlade','SunChaser','MoonWhisper','StarGazer','DragonHeart','WolfKin','RavenEye','SilverHand','GoldenArrow','CrimsonBlade','AzureMage','EmeraldDruid','ObsidianKnight'];
+const GUILD_NAMES = ['The Eternal Vanguard','Shadow Covenant','Order of the Phoenix','Crimson Blades','Arcane Collective','Dragon Slayers','The Silent Brotherhood','Knights of Valor','Mystic Circle','Iron Legion'];
+const GUILD_MOTTOS = ['In unity, strength','From shadows we strike','Reborn in fire','Blood for glory','Knowledge is power','Death to dragons','Silence is golden','For honor and realm','Magic binds us','Forged in battle'];
+const CHAT_GENERAL = ['anyone wanna group for the dungeon?', 'LFG mythic raid, need healer', 'WTS [item] 500g pm me', 'just hit level [lvl]!!! 🎉', 'this game is addicting lol', 'brb food', 'where do i quest next?', 'nerf mages plz', 'warriors are OP change my mind', 'anyone else lagging?', 'first time playing, this is cool', 'sold my legendary for 50g... oops', 'guild recruiting! pm me', 'how do i change my spec?', 'the market is rigged', 'just got ganked in pvp, ragequit incoming', 'lol get rekt', 'gg wp', 'anyone know the drop rate for [item]?', 'server merge when?', 'this boss is impossible', 'ez clap', 'need tank for world boss', 'healer rev plz', 'im broke, anyone spare gold?', 'streaming live on zerotwitch!', 'new patch notes are insane', 'who wants to trade?', 'the auction house is scammy', 'just got the rarest mount in the game!!!', 'HOLY COW someone got a MYSTIC item!', 'pink gear is unreal', '0.01% drop rate is brutal', 'MYSTIC WEAPON DROP?! no way'];
+const CHAT_GUILD = ['guild meeting in 5!', 'who\'s online for the raid?', 'deposited 500g to guild bank', 'great run tonight everyone', 'anyone have spare potions?', 'gm is offline again...', 'officer applications open', 'guild level up!!! 🎉', 'remember guild dues are due', 'new member welcome!', 'we hit top 10 on the leaderboard!', 'who\'s tanking tonight?', 'loot council meeting later'];
+// ============ STATE ============
+let hero = null, monster = null, gameInterval = null, tickCount = 0, startTime = 0, totalUptime = 0;
+let fakePlayers = [], marketListings = [], pvpOpponent = null, pvpTimer = 0;
+let heroPvpWins = 0, heroPvpLosses = 0, heroPvpRating = 1000;
+let guild = null, factionRep = { order: 0, chaos: 0 }, friends = [], worldChat = [];
+let isCatchingUp = false, offlineStats = { xp: 0, gold: 0, kills: 0, levels: 0 };
+let bestiaryKills = {};
+function rand(min, max) { return Math.floor(Math.random() * (max - min + 1)) + min; }
+function pick(arr) { return arr[Math.floor(Math.random() * arr.length)]; }
+function chance(p) { return Math.random() < p; }
+function clamp(v, min, max) { return Math.max(min, Math.min(max, v)); }
+// ============ SAVE / LOAD SYSTEM ============
+function getSaveData() {
+return {
+version: '2.3', lastSaveTime: Date.now(), totalUptime: totalUptime + (Date.now() - startTime),
+hero: { name: hero.name, race: hero.race, cls: hero.cls, level: hero.level, stats: hero.stats, hp: hero.hp, maxHp: hero.maxHp, mp: hero.mp, maxMp: hero.maxMp, xp: hero.xp, xpNeeded: hero.xpNeeded, gold: hero.gold, kills: hero.kills, equipment: hero.equipment, guild: hero.guild, faction: hero.faction, score: hero.score },
+pvp: { wins: heroPvpWins, losses: heroPvpLosses, rating: heroPvpRating },
+factionRep, friends, fakePlayers, marketListings, guild, tickCount, bestiaryKills
+};
+}
+function saveGame() {
+if (!hero) return;
+try { localStorage.setItem('zeroquest_save', JSON.stringify(getSaveData())); } catch (e) { console.warn('Save failed:', e); }
+}
+function loadGame() {
+try { const raw = localStorage.getItem('zeroquest_save'); return raw ? JSON.parse(raw) : null; } catch (e) { return null; }
+}
+function checkExistingSave() {
+const save = loadGame();
+if (save && save.hero) {
+document.getElementById('new-character-form').style.display = 'none';
+document.getElementById('continue-box').style.display = 'block';
+document.getElementById('save-info').innerHTML = `
+<div class="sp-row"><span class="sp-label">Character:</span><span class="sp-val">${save.hero.name}</span></div>
+<div class="sp-row"><span class="sp-label">Class:</span><span class="sp-val">${save.hero.race} ${save.hero.cls}</span></div>
+<div class="sp-row"><span class="sp-label">Level:</span><span class="sp-val">${save.hero.level}</span></div>
+<div class="sp-row"><span class="sp-label">Last Saved:</span><span class="sp-val">${new Date(save.lastSaveTime).toLocaleString()}</span></div>`;
+}
+}
+// ============ FAKE PLAYERS ============
+function makeFakePlayer(overrides = {}) {
+const races = Object.keys(RACES), classes = Object.keys(CLASSES);
+return { name: overrides.name || pick(FAKE_NAMES) + rand(1,999), race: overrides.race || pick(races), cls: overrides.cls || pick(classes), level: overrides.level || rand(1, 80), guild: overrides.guild || (chance(0.7) ? pick(GUILD_NAMES) : null), faction: overrides.faction || (chance(0.5) ? 'order' : 'chaos'), online: overrides.online ?? chance(0.6), score: overrides.score || (overrides.level || rand(1, 80)) * 100 + rand(0, 500), activity: rand(0, 100) };
+}
+function initFakePlayers() {
+fakePlayers = [];
+for (let i = 0; i < 80; i++) fakePlayers.push(makeFakePlayer());
+for (let i = 0; i < 10; i++) fakePlayers.push(makeFakePlayer({ level: rand(60, 100), score: rand(8000, 15000) }));
+}
+// ============ CHARACTER ============
+function createHero(name, race, cls) {
+const r = RACES[race], c = CLASSES[cls];
+const stats = { str: 8 + r.str + c.str + rand(0,3), dex: 8 + r.dex + c.dex + rand(0,3), con: 8 + r.con + c.con + rand(0,3), int: 8 + r.int + c.int + rand(0,3), wis: 8 + r.wis + c.wis + rand(0,3), cha: 8 + r.cha + c.cha + rand(0,3) };
+const maxHp = Math.floor((stats.con * 2 + 20) * c.hpMul), maxMp = Math.floor((stats.int + stats.wis) * c.mpMul * 2);
+return { name, race, cls, level: 1, stats, maxHp, hp: maxHp, maxMp, mp: maxMp, xp: 0, xpNeeded: 100, gold: 50, kills: 0, equipment: {}, dead: false, respawnTimer: 0, guild: null, faction: null, score: 0 };
+}
+function getAttack(h) { const c = CLASSES[h.cls], base = h.stats[c.atkStat] || 10; return base * 2 + h.level + Object.values(h.equipment).reduce((s,e) => s + (e.atk||0), 0); }
+function getDefense(h) { const base = h.stats.con + Math.floor(h.stats.dex/2); return base + Math.floor(h.level/2) + Object.values(h.equipment).reduce((s,e) => s + (e.def||0), 0); }
+function getDamage(h) { const c = CLASSES[h.cls], base = h.stats[c.atkStat] || 10, w = h.equipment.Weapon; return [Math.max(1, (w?w.dmgMin:1) + Math.floor(base/3)), (w?w.dmgMax:3) + Math.floor(base/2) + h.level]; }
+function getCrit(h) { return Math.min(50, 5 + Math.floor(h.stats.dex/3) + (h.equipment.Weapon?.crit||0)); }
+function getPower(h) { return getAttack(h) * 10 + getDefense(h) * 5 + h.level * 20 + (h.equipment.Weapon?.dmgMax || 0) * 10; }
+// ============ BESTIARY RENDERING ============
+function updateBestiaryLog() {
+const el = document.getElementById('bestiary-log');
+if (!el) return;
+const sorted = Object.entries(bestiaryKills).sort((a,b) => b[1] - a[1]);
+el.innerHTML = sorted.length === 0 ? '<div style="color:var(--text-dim); text-align:center; padding:8px;">No monsters slain yet...</div>' : '';
+sorted.forEach(([name, count]) => {
+const div = document.createElement('div'); div.className = 'bestiary-entry';
+div.innerHTML = `<span class="bestiary-name">${name}</span><span class="bestiary-count">${count} slain</span>`;
+el.appendChild(div);
+});
+}
+function addBestiaryKill(monsterFullName) {
+let baseName = monsterFullName;
+for (const prefix of MONSTER_PREFIXES) {
+if (baseName.startsWith(prefix + ' ')) {
+baseName = baseName.substring(prefix.length + 1);
+break;
+}
+}
+if (!bestiaryKills[baseName]) bestiaryKills[baseName] = 0;
+bestiaryKills[baseName]++;
+updateBestiaryLog();
+}
+// ============ MYSTIC RARITY (0.01% drop rate) ============
+function rollRarity(luck) {
+const r = Math.random() * 10000; // 0-10000 range for 0.01% precision
+if (r < 1) return 'mystic';      // 0.01% chance
+if (r < 100) return 'legendary';  // ~0.99% chance
+if (r < 600) return 'epic';       // 5% chance
+if (r < 1800) return 'rare';      // 12% chance
+if (r < 4500) return 'uncommon';  // 27% chance
+return 'common';                  // ~55% chance
+}
+const RARITY_MULT = { common:1, uncommon:1.5, rare:2.2, epic:3.5, legendary:5.5, mystic:8.0 };
+function generateLoot(monsterLvl, forcedRarity = null) {
+const slot = pick(EQUIP_SLOTS);
+const rarity = forcedRarity || rollRarity(0);
+const mult = RARITY_MULT[rarity];
+let itemName;
+if (rarity === 'mystic') {
+itemName = `${pick(EQUIP_PREFIXES.mystic)} ${pick(EQUIP_BASES[slot])}`;
+} else {
+itemName = `${pick(EQUIP_PREFIXES[rarity])} ${pick(EQUIP_BASES[slot])}`;
+}
+const item = { name: itemName, slot, rarity, atk:0, def:0, dmgMin:0, dmgMax:0, crit:0 };
+const baseVal = monsterLvl * mult;
+if (slot === 'Weapon') { item.dmgMin = Math.floor(baseVal * 0.8); item.dmgMax = Math.floor(baseVal * 1.8) + 3; item.atk = Math.floor(baseVal * 0.7); item.crit = rarity === 'mystic' ? 15 : rarity === 'legendary' ? 8 : rarity === 'epic' ? 5 : rarity === 'rare' ? 3 : 0; }
+else if (slot === 'Shield' || slot === 'Armor') { item.def = Math.floor(baseVal * 1.5); if (rarity === 'mystic') item.def += monsterLvl; }
+else if (slot === 'Helmet' || slot === 'Boots') { item.def = Math.floor(baseVal * 0.8); }
+else { item.atk = Math.floor(baseVal * 0.6); item.def = Math.floor(baseVal * 0.6); if (rarity === 'mystic') { item.atk += Math.floor(monsterLvl/2); item.def += Math.floor(monsterLvl/2); } }
+item.value = Math.floor((item.atk*4 + item.def*3 + (item.dmgMin||0)*2 + (item.dmgMax||0)*2 + item.crit*8) * mult * 2);
+if (rarity === 'mystic') item.value *= 3;
+return item;
+}
+function itemScore(item) { return (item.atk||0) * 2 + (item.def||0) * 1.5 + (item.dmgMin||0) + (item.dmgMax||0) + (item.crit||0)*2; }
+function rarityColor(r) { return {common:'var(--r-common)',uncommon:'var(--r-uncommon)',rare:'var(--r-rare)',epic:'var(--r-epic)',legendary:'var(--r-legendary)',mystic:'var(--r-mystic)'}[r]; }
+function tryEquip(item) {
+const current = hero.equipment[item.slot];
+if (!current || itemScore(item) > itemScore(current)) {
+hero.equipment[item.slot] = item;
+if (!isCatchingUp) {
+log(`Equipped: <span style="color:${rarityColor(item.rarity)}">${item.name}</span>`, 'log-loot');
+if (item.rarity === 'mystic') { 
+addWorldChat('system', null, `💖✨ MIRACLE! ${hero.name} has obtained a MYSTIC [${item.name}]! ✨💖`); 
+toast(`💖 MYSTIC ITEM DROPPED! ${item.name} 💖`);
+addWorldChat('system', null, `🌟 ${hero.name} is the first to wield a MYSTIC artifact!`);
+}
+else if (item.rarity === 'legendary' || item.rarity === 'epic') { addWorldChat('system', null, `⚔ ${hero.name} just equipped [${item.name}]!`); toast(`🎉 Epic loot: ${item.name}!`); }
+}
+return true;
+}
+hero.gold += Math.floor(itemScore(item) * 2);
+if (!isCatchingUp) log(`Sold ${item.name} for ${Math.floor(itemScore(item) * 2)}g.`, 'log-info');
+return false;
+}
+// ============ MONSTER ============
+function spawnMonster() {
+const lvl = Math.max(1, hero.level + rand(-1, 2)), idx = rand(0, MONSTER_NAMES.length - 1);
+monster = { name: (chance(0.6) ? pick(MONSTER_PREFIXES) + ' ' : '') + MONSTER_NAMES[idx], icon: MONSTER_ICONS[idx], level: lvl, maxHp: Math.floor((lvl * 8 + 15) * (0.8 + Math.random()*0.5)), hp: 0, atk: lvl * 2 + rand(1, 5), def: lvl + rand(0, 3), dmg: [Math.max(1, lvl), lvl * 2 + 2], xpReward: Math.floor(lvl * 15 * (0.9 + Math.random()*0.3)), goldReward: rand(1, lvl * 5) };
+monster.hp = monster.maxHp;
+updateMonsterUI();
+}
+// ============ COMBAT ============
+function combatTick() {
+if (hero.dead) {
+hero.respawnTimer--;
+if (hero.respawnTimer <= 0) { hero.dead = false; hero.hp = hero.maxHp; hero.mp = hero.maxMp; if (!isCatchingUp) log(`${hero.name} has respawned!`, 'log-info'); spawnMonster(); }
+return;
+}
+if (!monster) { spawnMonster(); return; }
+const [dMin, dMax] = getDamage(hero);
+let dmg = rand(dMin, dMax), crit = false;
+if (Math.random() * 100 < getCrit(hero)) { dmg *= 2; crit = true; }
+dmg = Math.max(1, dmg - Math.floor(monster.def / 2));
+monster.hp -= dmg;
+if (!isCatchingUp) log(`${hero.name} hits ${monster.name} for ${dmg}${crit?' (CRIT!)':''}.`, 'log-combat');
+if (monster.hp <= 0) {
+hero.xp += monster.xpReward; hero.gold += monster.goldReward; hero.kills++; hero.score += monster.xpReward;
+addBestiaryKill(monster.name);
+if (isCatchingUp) { offlineStats.xp += monster.xpReward; offlineStats.gold += monster.goldReward; offlineStats.kills++; }
+else log(`${monster.name} defeated! +${monster.xpReward} XP, +${monster.goldReward}g.`, 'log-info');
+if (chance(0.5)) tryEquip(generateLoot(monster.level));
+while (hero.xp >= hero.xpNeeded) levelUp();
+spawnMonster();
+return;
+}
+let mDmg = Math.max(1, rand(monster.dmg[0], monster.dmg[1]) - Math.floor(getDefense(hero) / 2));
+hero.hp -= mDmg;
+if (!isCatchingUp) log(`${monster.name} hits ${hero.name} for ${mDmg}.`, 'log-combat');
+if (hero.hp <= 0) {
+hero.hp = 0; hero.dead = true; hero.respawnTimer = 5;
+if (!isCatchingUp) { log(`${hero.name} has been slain by ${monster.name}! Respawning in 5s...`, 'log-death'); addWorldChat('system', null, `💀 ${hero.name} was slain by ${monster.name}.`); }
+monster = null;
+}
+}
+function levelUp() {
+hero.xp -= hero.xpNeeded; hero.level++; hero.xpNeeded = Math.floor(hero.xpNeeded * 1.35);
+const gains = {};
+['str','dex','con','int','wis','cha'].forEach(s => { const gain = rand(0, 2) + (chance(0.3) ? 1 : 0); hero.stats[s] += gain; if (gain > 0) gains[s] = (gains[s]||0) + gain; });
+const oldMax = hero.maxHp, c = CLASSES[hero.cls];
+hero.maxHp = Math.floor((hero.stats.con * 2 + 20) * c.hpMul) + hero.level * 2;
+hero.maxMp = Math.floor((hero.stats.int + hero.stats.wis) * c.mpMul * 2) + hero.level;
+hero.hp = Math.min(hero.maxHp, hero.hp + (hero.maxHp - oldMax)); hero.mp = hero.maxMp;
+if (isCatchingUp) { offlineStats.levels++; }
+else {
+log(`🎉 LEVEL UP! Now level ${hero.level}! (${Object.entries(gains).map(([k,v]) => `${k.toUpperCase()}+${v}`).join(', ')})`, 'log-level');
+toast(`🎉 Level ${hero.level}!`);
+addWorldChat('system', null, `🎉 ${hero.name} reached level ${hero.level}!`);
+}
+if (hero.level === 5 && !hero.guild) {
+hero.guild = pick(GUILD_NAMES);
+if (!isCatchingUp) { log(`🛡 You joined guild: ${hero.guild}`, 'log-level'); addWorldChat('system', null, `🛡 ${hero.name} joined [${hero.guild}]!`); toast(`🛡 Joined ${hero.guild}!`); }
+}
+if (hero.level === 10 && !hero.faction) {
+hero.faction = chance(0.5) ? 'order' : 'chaos'; factionRep[hero.faction] = 100;
+if (!isCatchingUp) { log(`⚔ You pledged to: ${hero.faction === 'order' ? 'The Radiant Order' : 'The Chaos Covenant'}`, 'log-level'); toast(`⚔ Joined ${hero.faction === 'order' ? 'The Radiant Order' : 'The Chaos Covenant'}!`); }
+}
+}
+function regenTick() {
+if (hero.dead) return;
+if (hero.hp < hero.maxHp) hero.hp = Math.min(hero.maxHp, hero.hp + Math.max(1, Math.floor(hero.maxHp * 0.05)));
+if (hero.mp < hero.maxMp) hero.mp = Math.min(hero.maxMp, hero.mp + Math.max(1, Math.floor(hero.maxMp * 0.08)));
+}
+// ============ MARKET ============
+function initMarket() {
+marketListings = [];
+for (let i = 0; i < 10; i++) { const s = pick(fakePlayers), item = generateLoot(rand(5, 70)); marketListings.push({ item, price: Math.floor(item.value * (0.8 + Math.random() * 0.8)), seller: s.name, age: 0 }); }
+}
+function marketTick() {
+marketListings = marketListings.filter(l => { l.age++; return l.age < 30 && !l.sold; });
+if (marketListings.length < 12 && chance(0.4)) { const s = pick(fakePlayers), item = generateLoot(rand(5, 70)); marketListings.push({ item, price: Math.floor(item.value * (0.8 + Math.random() * 0.8)), seller: s.name, age: 0 }); }
+for (let i = marketListings.length - 1; i >= 0; i--) {
+const l = marketListings[i]; if (l.sold) continue;
+const current = hero.equipment[l.item.slot];
+if ((!current || itemScore(l.item) > itemScore(current) * 1.2) && hero.gold >= l.price && chance(0.3)) {
+hero.gold -= l.price; hero.equipment[l.item.slot] = l.item;
+if (!isCatchingUp) { log(`🛒 Bought <span style="color:${rarityColor(l.item.rarity)}">${l.item.name}</span> from ${l.seller} for ${l.price}g.`, 'log-loot'); addWorldChat('trade', hero.name, `bought ${l.item.name}`); }
+l.sold = true;
+}
+}
+if (chance(0.3)) { const idx = rand(0, marketListings.length - 1); if (marketListings[idx] && !marketListings[idx].sold) { marketListings[idx].sold = true; if (!isCatchingUp && chance(0.3)) addWorldChat('trade', pick(fakePlayers).name, `bought ${marketListings[idx].item.name}`); } }
+if (!isCatchingUp) renderMarket();
+}
+function renderMarket() {
+const el = document.getElementById('market-list'); el.innerHTML = '';
+const visible = marketListings.filter(l => !l.sold).slice(0, 15);
+if (visible.length === 0) { el.innerHTML = '<div style="text-align:center; color:var(--text-dim); padding:20px;">No listings available</div>'; return; }
+visible.forEach(l => {
+const stats = []; if (l.item.atk) stats.push(`+${l.item.atk} ATK`); if (l.item.def) stats.push(`+${l.item.def} DEF`); if (l.item.dmgMax) stats.push(`${l.item.dmgMin}-${l.item.dmgMax} DMG`); if (l.item.crit) stats.push(`+${l.item.crit}% CRIT`);
+const div = document.createElement('div'); div.className = 'market-item';
+div.innerHTML = `<div><div class="mi-name" style="color:${rarityColor(l.item.rarity)}">${l.item.name}</div><div class="mi-seller">Sold by ${l.seller} • ${l.item.slot}</div><div class="mi-stats">${stats.join(' · ')}</div></div><div class="mi-price">${l.price}g</div><button class="mi-buy" onclick="buyItem(${marketListings.indexOf(l)})">Buy</button>`;
+el.appendChild(div);
+});
+}
+window.buyItem = function(idx) {
+const l = marketListings[idx]; if (!l || l.sold) return;
+if (hero.gold < l.price) { toast('❌ Not enough gold!'); return; }
+hero.gold -= l.price; hero.equipment[l.item.slot] = l.item;
+log(`🛒 Bought <span style="color:${rarityColor(l.item.rarity)}">${l.item.name}</span> for ${l.price}g.`, 'log-loot');
+l.sold = true; renderMarket(); updateUI();
+};
+// ============ PVP ============
+function pvpTick() {
+pvpTimer--; if (pvpTimer > 0) return; pvpTimer = rand(15, 25);
+const candidates = fakePlayers.filter(p => Math.abs(p.level - hero.level) <= 5);
+const opp = candidates.length > 0 ? pick(candidates) : pick(fakePlayers);
+pvpOpponent = opp;
+const heroRoll = getPower(hero) * (0.8 + Math.random() * 0.4), oppRoll = (opp.level * 100 + rand(0, 300)) * (0.8 + Math.random() * 0.4);
+if (hero.dead) return;
+if (heroRoll > oppRoll) {
+heroPvpWins++; heroPvpRating += rand(10, 25); const reward = rand(20, 100) + opp.level * 5;
+hero.gold += reward; hero.score += 200;
+if (!isCatchingUp) { log(`🏆 PVP VICTORY! Defeated ${opp.name} (+${reward}g, +rating)`, 'log-pvp'); addWorldChat('pvp', hero.name, `defeated ${opp.name} in the arena!`); toast(`🏆 Victory vs ${opp.name}!`); }
+if (hero.faction) factionRep[hero.faction] = clamp(factionRep[hero.faction] + 10, -1000, 1000);
+} else {
+heroPvpLosses++; heroPvpRating = Math.max(0, heroPvpRating - rand(10, 20));
+if (!isCatchingUp) { log(`💀 PVP DEFEAT! Lost to ${opp.name}.`, 'log-pvp'); addWorldChat('pvp', opp.name, `defeated ${hero.name} in the arena!`); }
+if (hero.faction) factionRep[hero.faction] = clamp(factionRep[hero.faction] - 5, -1000, 1000);
+}
+if (!isCatchingUp) { renderPvp(); renderLeaderboard(); }
+}
+function renderPvp() {
+const el = document.getElementById('pvp-vs');
+if (!pvpOpponent) el.innerHTML = `<div class="pvp-fighter"><div>Searching...</div></div><div class="vs-text">VS</div><div class="pvp-fighter"><div>Searching...</div></div>`;
+else el.innerHTML = `<div class="pvp-fighter"><div style="font-weight:700;">${hero.name}</div><div style="font-size:0.8em; color:var(--text-dim);">Lv.${hero.level} ${hero.cls}</div><div style="font-size:0.8em; color:var(--accent-2);">Power: ${getPower(hero)}</div></div><div class="vs-text">VS</div><div class="pvp-fighter"><div style="font-weight:700;">${pvpOpponent.name}</div><div style="font-size:0.8em; color:var(--text-dim);">Lv.${pvpOpponent.level} ${pvpOpponent.cls}</div><div style="font-size:0.8em; color:var(--accent-2);">Power: ${pvpOpponent.level * 100}</div></div>`;
+document.getElementById('pvp-wins').textContent = heroPvpWins;
+document.getElementById('pvp-losses').textContent = heroPvpLosses;
+document.getElementById('pvp-rating').textContent = heroPvpRating;
+}
+function renderLeaderboard() {
+hero.score = hero.level * 100 + heroPvpRating + hero.kills * 5;
+const all = [...fakePlayers, { name: hero.name, level: hero.level, cls: hero.cls, score: hero.score, isHero: true }].sort((a,b) => b.score - a.score).slice(0, 20);
+const el = document.getElementById('leaderboard'); el.innerHTML = '';
+all.forEach((p, i) => { const row = document.createElement('div'); row.className = 'lb-row' + (p.isHero ? ' hero' : ''); row.innerHTML = `<div class="lb-rank">#${i+1}</div><div class="lb-name">${p.name} <span class="cls">${p.cls||''}</span></div><div class="lb-lvl">Lv.${p.level}</div><div class="lb-score">${p.score}</div>`; el.appendChild(row); });
+}
+// ============ GUILD & FACTIONS & FRIENDS ============
+function initGuild() {
+guild = { name: pick(GUILD_NAMES), motto: pick(GUILD_MOTTOS), level: rand(3, 15), treasury: rand(1000, 50000), members: [] };
+const ranks = ['Guild Master','Officer','Officer','Veteran','Veteran','Veteran','Member','Member','Member','Member','Member','Member','Recruit','Recruit'];
+for (let i = 0; i < rand(12, 25); i++) { const p = pick(fakePlayers); guild.members.push({ name: p.name, level: p.level, cls: p.cls, rank: ranks[Math.min(i, ranks.length-1)], online: p.online }); }
+}
+function guildTick() {
+if (!hero.guild) return;
+if (chance(0.15) && !isCatchingUp) addWorldChat('guild', pick(guild.members).name, pick(CHAT_GUILD));
+if (chance(0.3)) guild.treasury += rand(10, 200); if (chance(0.1)) guild.treasury -= rand(50, 300); guild.treasury = Math.max(0, guild.treasury);
+guild.members.forEach(m => { if (chance(0.1)) m.online = !m.online; });
+if (!isCatchingUp) renderGuild();
+}
+function renderGuild() {
+if (!hero.guild) { document.getElementById('guild-name').textContent = 'No Guild'; document.getElementById('guild-motto').textContent = 'Reach level 5 to join a guild'; document.getElementById('guild-members-list').innerHTML = ''; return; }
+document.getElementById('guild-name').textContent = '🛡 ' + guild.name; document.getElementById('guild-motto').textContent = '"' + guild.motto + '"';
+document.getElementById('guild-level').textContent = guild.level; document.getElementById('guild-members').textContent = guild.members.length; document.getElementById('guild-treasury').textContent = guild.treasury;
+const el = document.getElementById('guild-members-list'); el.innerHTML = '';
+[{ name: hero.name + ' (you)', level: hero.level, cls: hero.cls, rank: 'Member', online: true }, ...guild.members].sort((a,b) => b.level - a.level).forEach(m => {
+const div = document.createElement('div'); div.className = 'member' + (m.online ? ' online' : '');
+div.innerHTML = `<div class="status"></div><div><div class="m-name">${m.name}</div><div class="m-rank">${m.rank} · ${m.cls}</div></div><div class="m-lvl">Lv.${m.level}</div>`;
+el.appendChild(div);
+});
+}
+function factionTick() {
+if (!hero.faction) return;
+if (chance(0.1)) {
+const attacker = hero.faction, defender = attacker === 'order' ? 'chaos' : 'order';
+const aName = attacker === 'order' ? 'The Radiant Order' : 'The Chaos Covenant', dName = defender === 'order' ? 'The Radiant Order' : 'The Chaos Covenant';
+const outcome = chance(0.5) ? 'victory' : 'defeat', loc = pick(['Ashen Fields','Crystal Spire','Shadow Vale','Dragon\'s Reach','Sunken Temple','Iron Citadel','Whispering Woods']);
+if (!isCatchingUp) addFactionLog(outcome === 'victory' ? `⚔ ${aName} won the battle at ${loc}!` : `⚔ ${aName} was repelled at ${loc} by ${dName}.`);
+if (outcome === 'victory') { factionRep[attacker] = clamp(factionRep[attacker] + rand(5, 20), -1000, 1000); factionRep[defender] = clamp(factionRep[defender] - rand(5, 15), -1000, 1000); }
+else { factionRep[attacker] = clamp(factionRep[attacker] - rand(5, 15), -1000, 1000); factionRep[defender] = clamp(factionRep[defender] + rand(5, 20), -1000, 1000); }
+}
+if (!isCatchingUp) renderFactions();
+}
+function addFactionLog(msg) {
+const el = document.getElementById('faction-log'), div = document.createElement('div');
+div.className = 'log-entry log-system'; div.innerHTML = `<span class="log-time">[${new Date().toLocaleTimeString([], {hour:'2-digit',minute:'2-digit'})}]</span> ${msg}`;
+el.appendChild(div); el.scrollTop = el.scrollHeight; while (el.children.length > 50) el.removeChild(el.firstChild);
+}
+function repLabel(v) { if (v >= 800) return 'Exalted'; if (v >= 500) return 'Revered'; if (v >= 200) return 'Honored'; if (v >= 0) return 'Friendly'; if (v >= -200) return 'Neutral'; if (v >= -500) return 'Unfriendly'; if (v >= -800) return 'Hostile'; return 'Hated'; }
+function renderFactions() {
+const o = factionRep.order, c = factionRep.chaos;
+document.getElementById('rep-order').textContent = hero.faction === 'order' ? repLabel(o) + ' (' + o + ')' : (hero.faction ? 'N/A' : 'Not pledged');
+document.getElementById('rep-chaos').textContent = hero.faction === 'chaos' ? repLabel(c) + ' (' + c + ')' : (hero.faction ? 'N/A' : 'Not pledged');
+document.getElementById('rep-order-bar').style.width = ((o + 1000) / 2000 * 100) + '%';
+document.getElementById('rep-chaos-bar').style.width = ((c + 1000) / 2000 * 100) + '%';
+document.getElementById('faction-war-status').textContent = o > c ? 'Order Leading' : c > o ? 'Chaos Leading' : 'Even Match';
+}
+function initFriends() {
+friends = [];
+for (let i = 0; i < 6; i++) friends.push({ name: pick(FAKE_NAMES) + rand(1,99), level: rand(1, 60), cls: pick(Object.keys(CLASSES)), online: chance(0.5), status: pick(['Idle','In Combat','In Dungeon','AFK','Trading','']) });
+}
+function friendsTick() {
+friends.forEach(f => { if (chance(0.1)) f.online = !f.online; if (f.online && chance(0.2)) f.status = pick(['Idle','In Combat','In Dungeon','AFK','Trading','']); });
+if (!isCatchingUp) renderFriends();
+}
+function renderFriends() {
+const el = document.getElementById('friends-list'); el.innerHTML = '';
+[...friends].sort((a,b) => (b.online?1:0) - (a.online?1:0)).forEach(f => {
+const div = document.createElement('div'); div.className = 'member' + (f.online ? ' online' : '');
+div.innerHTML = `<div class="status"></div><div><div class="m-name">${f.name}</div><div class="m-rank">${f.cls}${f.status?' · '+f.status:''}</div></div><div class="m-lvl">Lv.${f.level}</div>`;
+el.appendChild(div);
+});
+}
+// ============ WORLD CHAT ============
+function addWorldChat(type, name, msg) {
+if (isCatchingUp) return;
+worldChat.push({ type, name, msg, time: Date.now() });
+if (worldChat.length > 100) worldChat.shift();
+renderWorldChat();
+}
+function chatTick() {
+if (isCatchingUp) return;
+if (chance(0.6)) {
+const p = pick(fakePlayers.filter(p => p.online)); if (!p) return;
+const type = chance(0.7) ? 'say' : chance(0.5) ? 'trade' : 'guild';
+let msg = type === 'say' ? pick(CHAT_GENERAL).replace('[lvl]', rand(5, 80)).replace('[item]', pick(EQUIP_BASES.Weapon)) : type === 'trade' ? `WTS ${generateLoot(rand(10, 60)).name} ${rand(50, 5000)}g` : pick(CHAT_GUILD);
+addWorldChat(type, p.name, msg);
+}
+if (chance(0.3)) {
+const p = pick(fakePlayers.filter(p => p.online));
+if (p) { const events = [() => { p.level++; addWorldChat('system', null, `🎉 ${p.name} reached level ${p.level}!`); }, () => { addWorldChat('system', null, `⚔ ${p.name} defeated a ${pick(MONSTER_PREFIXES)} ${pick(MONSTER_NAMES)}!`); }, () => { addWorldChat('system', null, `💀 ${p.name} was slain by a ${pick(MONSTER_NAMES)}.`); }, () => { addWorldChat('system', null, `✨ ${p.name} found [${generateLoot(rand(20, 70), 'epic').name}]!`); }]; pick(events)(); }
+}
+}
+function renderWorldChat() {
+const el = document.getElementById('world-chat'); el.innerHTML = '';
+worldChat.slice(-50).forEach(c => {
+const div = document.createElement('div'); div.className = 'chat-msg chat-' + c.type;
+const t = new Date(c.time).toLocaleTimeString([], {hour:'2-digit',minute:'2-digit',second:'2-digit'});
+if (c.type === 'system') div.innerHTML = `<span class="chat-sys">[${t}] ${c.msg}</span>`;
+else { const tag = {say:'[Say]',trade:'[Trade]',guild:'[Guild]',pvp:'[PvP]'}[c.type] || '[Say]'; div.innerHTML = `<span style="color:var(--text-faint); font-size:0.85em;">[${t}]</span> <span style="color:var(--text-faint);">${tag}</span> <span class="chat-name">${c.name}:</span> ${c.msg}`; }
+el.appendChild(div);
+});
+el.scrollTop = el.scrollHeight;
+}
+function renderOnline() {
+const online = fakePlayers.filter(p => p.online).slice(0, 20);
+document.getElementById('online-count').textContent = online.length + rand(50, 200);
+const el = document.getElementById('online-list'); el.innerHTML = '';
+online.forEach(p => { const div = document.createElement('div'); div.className = 'online-player'; div.innerHTML = `<div class="status"></div><div class="op-name">${p.name}</div><div class="op-info">Lv.${p.level} ${p.cls}</div>`; el.appendChild(div); });
+}
+// ============ UI ============
+function log(msg, cls='log-info') {
+if (isCatchingUp) return;
+const el = document.getElementById('log'), div = document.createElement('div');
+div.className = 'log-entry ' + cls; div.innerHTML = `<span class="log-time">[${new Date().toLocaleTimeString([], {hour:'2-digit',minute:'2-digit',second:'2-digit'})}]</span> ${msg}`;
+el.appendChild(div); el.scrollTop = el.scrollHeight; while (el.children.length > 200) el.removeChild(el.firstChild);
+}
+function toast(msg) {
+if (isCatchingUp) return;
+const t = document.createElement('div'); t.className = 'toast'; t.textContent = msg; document.body.appendChild(t); setTimeout(() => t.remove(), 3000);
+}
+function updateMonsterUI() {
+if (!monster) { document.getElementById('m-icon').textContent = '❓'; document.getElementById('m-name').textContent = 'Searching...'; document.getElementById('m-level').textContent = 'Level ?'; document.getElementById('m-hp-bar').style.width = '0%'; return; }
+document.getElementById('m-icon').textContent = monster.icon; document.getElementById('m-name').textContent = monster.name; document.getElementById('m-level').textContent = `Level ${monster.level}`; document.getElementById('m-hp-bar').style.width = Math.max(0, monster.hp/monster.maxHp*100) + '%';
+}
+function updateUI() {
+document.getElementById('char-name').textContent = hero.name; document.getElementById('char-title').textContent = `${hero.race} ${hero.cls}`; document.getElementById('s-level').textContent = hero.level;
+document.getElementById('s-gold').textContent = hero.gold; document.getElementById('s-kills').textContent = hero.kills; document.getElementById('s-atk').textContent = getAttack(hero); document.getElementById('s-def').textContent = getDefense(hero);
+document.getElementById('s-hp-text').textContent = `${Math.max(0,Math.floor(hero.hp))}/${hero.maxHp}`; document.getElementById('hp-bar').style.width = Math.max(0, hero.hp/hero.maxHp*100) + '%';
+document.getElementById('s-mp-text').textContent = `${Math.floor(hero.mp)}/${hero.maxMp}`; document.getElementById('mp-bar').style.width = (hero.mp/hero.maxMp*100) + '%';
+document.getElementById('s-xp-text').textContent = `${hero.xp}/${hero.xpNeeded}`; document.getElementById('xp-bar').style.width = (hero.xp/hero.xpNeeded*100) + '%';
+['str','dex','con','int','wis','cha'].forEach(s => { document.getElementById('s-'+s).textContent = hero.stats[s]; });
+const eqList = document.getElementById('equip-list'); eqList.innerHTML = '';
+EQUIP_SLOTS.forEach(slot => {
+const item = hero.equipment[slot], div = document.createElement('div'); div.className = 'equip-slot' + (item ? ' r-' + item.rarity : '');
+if (item) { const stats = []; if (item.atk) stats.push(`+${item.atk} ATK`); if (item.def) stats.push(`+${item.def} DEF`); if (item.dmgMax) stats.push(`${item.dmgMin}-${item.dmgMax} DMG`); if (item.crit) stats.push(`+${item.crit}% CRIT`);
+div.innerHTML = `<div class="slot-name">${slot}</div><div class="item-name" style="color:${rarityColor(item.rarity)}">${item.name}</div><div class="item-stats">${stats.join(' · ')}</div>`;
+} else div.innerHTML = `<div class="slot-name">${slot}</div><div class="item-name" style="color:var(--text-faint); font-style:italic;">Empty</div>`;
+eqList.appendChild(div);
+});
+updateMonsterUI();
+const elapsed = Math.floor(totalUptime / 1000);
+document.getElementById('uptime').textContent = `${String(Math.floor(elapsed/3600)).padStart(2,'0')}:${String(Math.floor((elapsed%3600)/60)).padStart(2,'0')}:${String(elapsed%60).padStart(2,'0')}`;
+updateBestiaryLog();
+}
+// ============ EXPORT/IMPORT ============
+function exportSave() {
+const json = JSON.stringify(getSaveData(), null, 2), blob = new Blob([json], { type: 'application/json' }), url = URL.createObjectURL(blob);
+const a = document.createElement('a'); a.href = url; a.download = `zeroquest-save-${hero.name}-${Date.now()}.json`; document.body.appendChild(a); a.click(); document.body.removeChild(a); URL.revokeObjectURL(url);
+toast('💾 Save exported successfully!'); log('💾 Character save exported.', 'log-info');
+}
+function showImportModal() {
+const overlay = document.createElement('div'); overlay.className = 'modal-overlay'; overlay.id = 'import-modal';
+overlay.innerHTML = `<div class="modal"><h3>📂 Import Character Save</h3><div class="modal-info"><div class="info-row"><span class="info-label">Version:</span><span class="info-value">2.3</span></div><div class="info-row"><span class="info-label">Format:</span><span class="info-value">JSON</span></div></div><textarea id="import-text" placeholder="Paste your save data here or use file upload below..."></textarea><div style="margin-bottom:16px;"><input type="file" id="import-file" accept=".json" style="display:none;"><button class="btn secondary" onclick="document.getElementById('import-file').click()" style="width:100%;">📁 Choose File</button></div><div class="modal-buttons"><button class="btn secondary" onclick="closeImportModal()">Cancel</button><button class="btn" onclick="importSave()">Import</button></div></div>`;
+document.body.appendChild(overlay);
+document.getElementById('import-file').addEventListener('change', (e) => { const file = e.target.files[0]; if (!file) return; const reader = new FileReader(); reader.onload = (event) => { document.getElementById('import-text').value = event.target.result; }; reader.readAsText(file); });
+}
+function closeImportModal() { const modal = document.getElementById('import-modal'); if (modal) modal.remove(); }
+function importSave() {
+const text = document.getElementById('import-text').value.trim(); if (!text) { toast('❌ No save data provided!'); return; }
+try {
+const data = JSON.parse(text); if (!data.version || !data.hero) throw new Error('Invalid save format');
+applySaveData(data); closeImportModal();
+if (document.getElementById('creation-screen').style.display !== 'none') startGame(true);
+else { updateUI(); renderPvp(); renderLeaderboard(); renderGuild(); renderFactions(); renderFriends(); renderOnline(); renderMarket(); toast('✅ Character imported successfully!'); log(`📂 Imported save for ${hero.name} (Level ${hero.level})`, 'log-info'); }
+} catch (err) { toast('❌ Invalid save data: ' + err.message); console.error('Import error:', err); }
+}
+function applySaveData(data) {
+hero = data.hero; heroPvpWins = data.pvp?.wins || 0; heroPvpLosses = data.pvp?.losses || 0; heroPvpRating = data.pvp?.rating || 1000;
+factionRep = data.factionRep || { order: 0, chaos: 0 }; friends = data.friends || [];
+fakePlayers = data.fakePlayers || []; marketListings = data.marketListings || []; guild = data.guild || null;
+tickCount = data.tickCount || 0; totalUptime = data.totalUptime || 0; startTime = Date.now();
+bestiaryKills = data.bestiaryKills || {};
+}
+// ============ OFFLINE CATCH-UP ============
+function processOfflineProgress(secondsPassed) {
+isCatchingUp = true;
+let ticksToProcess = Math.min(secondsPassed, 28800);
+let processed = 0;
+const batchSize = 1000;
+function catchUpFrame() {
+let batch = Math.min(batchSize, ticksToProcess - processed);
+for (let i = 0; i < batch; i++) {
+tickCount++;
+combatTick();
+if (tickCount % 3 === 0) regenTick();
+if (tickCount % 10 === 0) marketTick();
+if (tickCount % 15 === 0) { fakePlayers.forEach(p => { if (chance(0.3)) p.score += rand(10, 100); if (chance(0.1)) p.level++; }); }
+processed++;
+}
+if (processed < ticksToProcess) {
+requestAnimationFrame(catchUpFrame);
+} else {
+isCatchingUp = false;
+saveGame();
+updateUI(); renderPvp(); renderLeaderboard(); renderGuild(); renderFactions(); renderFriends(); renderOnline(); renderMarket();
+const hours = Math.floor(secondsPassed / 3600), mins = Math.floor((secondsPassed % 3600) / 60);
+const timeStr = hours > 0 ? `${hours}h ${mins}m` : `${mins}m`;
+toast(`Welcome back! Progressed for ${timeStr} while away.`);
+log(`🌟 Welcome back! You progressed for ${timeStr} while away. Gained ${offlineStats.xp} XP, ${offlineStats.gold}g, ${offlineStats.kills} kills, and ${offlineStats.levels} levels.`, 'log-level');
+if (gameInterval) clearInterval(gameInterval);
+gameInterval = setInterval(gameLoop, 1000);
+}
+}
+catchUpFrame();
+}
+// ============ GAME LOOP ============
+function gameLoop() {
+tickCount++;
+combatTick();
+if (tickCount % 3 === 0) regenTick();
+if (tickCount % 2 === 0) chatTick();
+if (tickCount % 3 === 0) marketTick();
+if (tickCount % 5 === 0) { renderOnline(); friendsTick(); saveGame(); }
+if (tickCount % 7 === 0) guildTick();
+if (tickCount % 10 === 0) factionTick();
+pvpTick();
+if (tickCount % 15 === 0) renderLeaderboard();
+updateUI();
+}
+// ============ TABS ============
+document.addEventListener('click', e => {
+if (e.target.classList.contains('tab')) {
+document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+e.target.classList.add('active');
+document.querySelector(`.tab-content[data-content="${e.target.dataset.tab}"]`).classList.add('active');
+}
+if (e.target.classList.contains('social-tab')) {
+document.querySelectorAll('.social-tab').forEach(t => t.classList.remove('active'));
+document.querySelectorAll('.social-panel').forEach(c => c.classList.remove('active'));
+e.target.classList.add('active');
+document.querySelector(`.social-panel[data-scontent="${e.target.dataset.stab}"]`).classList.add('active');
+}
+});
+// ============ START / RESET ============
+function startGame(fromImport = false) {
+if (!fromImport) {
+const name = document.getElementById('hero-name').value.trim() || 'Hero';
+const race = document.getElementById('hero-race').value;
+const cls = document.getElementById('hero-class').value;
+hero = createHero(name, race, cls);
+totalUptime = 0; tickCount = 0;
+bestiaryKills = {};
+}
+startTime = Date.now();
+if (!fromImport || !fakePlayers.length) initFakePlayers();
+if (!fromImport || !marketListings.length) initMarket();
+if (!fromImport || !guild) initGuild();
+if (!fromImport || !friends.length) initFriends();
+document.getElementById('creation-screen').style.display = 'none';
+document.getElementById('game-screen').style.display = 'block';
+if (!fromImport) {
+log(`${hero.name} the ${hero.race} ${hero.cls} enters the world!`, 'log-level');
+log(`Welcome to ZeroQuest 2.3 — the world plays itself.`, 'log-system');
+addWorldChat('system', null, `🌟 ${hero.name} has entered the world!`);
+} else {
+log(`📂 Loaded save: ${hero.name} (Level ${hero.level})`, 'log-info');
+addWorldChat('system', null, `🌟 ${hero.name} has returned to the world!`);
+}
+spawnMonster();
+renderPvp(); renderLeaderboard(); renderGuild(); renderFactions(); renderFriends(); renderOnline(); renderMarket();
+if (gameInterval) clearInterval(gameInterval);
+gameInterval = setInterval(gameLoop, 1000);
+}
+function continueGame() {
+const save = loadGame();
+if (save && save.hero) {
+applySaveData(save);
+startGame(true);
+const secondsPassed = Math.floor((Date.now() - save.lastSaveTime) / 1000);
+if (secondsPassed > 5) {
+if (gameInterval) clearInterval(gameInterval);
+processOfflineProgress(secondsPassed);
+}
+}
+}
+function resetGame() {
+if (confirm('Are you sure you want to delete your save and start over? This cannot be undone.')) {
+localStorage.removeItem('zeroquest_save');
+location.reload();
+}
+}
+function randomHero() {
+const names = ['Arthas','Gandalf','Conan','Xena','Drizzt','Elminster','Raistlin','Geralt','Yennefer','Aloy','Senua','Eivor','Kvothe','Vex','Percy','Keyleth','Grog','Pike','Scanlan','Mordain'];
+document.getElementById('hero-name').value = pick(names);
+document.getElementById('hero-race').value = pick(Object.keys(RACES));
+document.getElementById('hero-class').value = pick(Object.keys(CLASSES));
+}
+function convertGoldToXp(amount) {
+  if (!hero) return;
+  if (amount === 'all') amount = hero.gold;
+  if (amount <= 0) { toast('❌ Not enough gold!'); return; }
+  if (hero.gold < amount) { toast(`❌ You only have ${hero.gold}g!`); return; }
+  const xpGained = amount * 3;
+  hero.gold -= amount;
+  hero.xp += xpGained;
+  log(`⚡ Converted ${amount}g into ${xpGained} XP!`, 'log-info');
+  toast(`⚡ Gained ${xpGained} XP!`);
+  while (hero.xp >= hero.xpNeeded) levelUp();
+  updateUI();
+  saveGame();
+}
+window.addEventListener('beforeunload', saveGame);
+window.addEventListener('visibilitychange', () => { if (document.visibilityState === 'hidden') saveGame(); });
+checkExistingSave();
+</script>
+</body>
+</html>

@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>ZeroQuest 2.3 — The Zero Interaction MMO</title>
+<title>ZeroQuest 2.2 — The Zero Interaction MMO</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
@@ -13,7 +13,7 @@
 --text: #e4e4e7; --text-dim: #9ca3af; --text-faint: #6b7280;
 --accent: #8b5cf6; --accent-2: #06b6d4; --accent-3: #ec4899;
 --success: #10b981; --danger: #ef4444; --warning: #f59e0b; --gold: #fbbf24;
---r-common: #9ca3af; --r-uncommon: #34d399; --r-rare: #60a5fa; --r-epic: #c084fc; --r-legendary: #fb923c; --r-mystic: #f472b6;
+--r-common: #9ca3af; --r-uncommon: #34d399; --r-rare: #60a5fa; --r-epic: #c084fc; --r-legendary: #fb923c;
 --font: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
 --mono: 'JetBrains Mono', 'Fira Code', Consolas, monospace;
 }
@@ -71,7 +71,6 @@ color: var(--text); font-family: var(--font); font-size: 14px; line-height: 1.5;
 .equip-slot.r-rare { border-left-color: var(--r-rare); }
 .equip-slot.r-epic { border-left-color: var(--r-epic); }
 .equip-slot.r-legendary { border-left-color: var(--r-legendary); box-shadow: 0 0 10px rgba(251,146,60,0.2); }
-.equip-slot.r-mystic { border-left-color: var(--r-mystic); box-shadow: 0 0 14px rgba(244,114,182,0.4); background: linear-gradient(135deg, rgba(244,114,182,0.1), rgba(236,72,153,0.05)); }
 .tabs { display: flex; gap: 4px; margin-bottom: 10px; background: var(--bg-1); padding: 4px; border-radius: 10px; border: 1px solid var(--border); }
 .tab { flex: 1; padding: 8px; text-align: center; font-size: 0.85em; font-weight: 600; color: var(--text-dim); cursor: pointer; border-radius: 7px; transition: all 0.2s; user-select: none; }
 .tab:hover { color: var(--text); }
@@ -157,23 +156,12 @@ color: var(--text); font-family: var(--font); font-size: 14px; line-height: 1.5;
 .save-preview { background: var(--bg-1); border: 1px solid var(--border); border-radius: 8px; padding: 12px; margin: 15px 0; text-align: left; }
 .save-preview .sp-row { display: flex; justify-content: space-between; padding: 3px 0; font-size: 0.9em; }
 .save-preview .sp-label { color: var(--text-dim); } .save-preview .sp-val { font-weight: 600; font-family: var(--mono); color: var(--accent-2); }
-.bestiary-log { flex: 1; overflow-y: auto; background: var(--bg-1); border: 1px solid var(--border); border-radius: 10px; padding: 10px; max-height: 180px; margin-top: 8px; }
-.bestiary-entry { display: flex; justify-content: space-between; padding: 4px 6px; border-bottom: 1px dashed rgba(255,255,255,0.05); font-size: 0.8em; }
-.bestiary-name { font-weight: 600; color: var(--warning); }
-.bestiary-count { font-family: var(--mono); color: var(--gold); font-weight: 700; }
-.about-section { background: var(--bg-1); border: 1px solid var(--border); border-radius: 10px; padding: 12px; overflow-y: auto; flex: 1; font-size: 0.8em; }
-.changelog-entry { padding: 6px 0; border-bottom: 1px dashed rgba(255,255,255,0.05); }
-.changelog-version { font-weight: 800; color: var(--accent-2); }
-.changelog-date { color: var(--text-faint); font-size: 0.75em; margin-left: 8px; }
-.changelog-list { padding-left: 20px; margin-top: 4px; color: var(--text-dim); list-style-type: none; }
-.changelog-list li { margin: 2px 0; position: relative; }
-.changelog-list li::before { content: '▹'; position: absolute; left: -16px; color: var(--accent); }
 </style>
 </head>
 <body>
 <div id="creation-screen">
 <div class="creation-box">
-<h1>ZeroQuest 2.3</h1>
+<h1>ZeroQuest 2.2</h1>
 <p class="sub">The Zero-Interaction MMO — The world plays itself.</p>
 <div id="new-character-form">
 <div><input type="text" id="hero-name" value="Hero" maxlength="16" placeholder="Character name"></div>
@@ -197,7 +185,7 @@ color: var(--text); font-family: var(--font); font-size: 14px; line-height: 1.5;
 </div>
 <div id="game-screen" style="display:none;">
 <div class="topbar">
-<div class="logo">⚔ ZeroQuest 2.3</div>
+<div class="logo">⚔ ZeroQuest 2.2</div>
 <div class="server-info">
 <span class="pill"><span class="dot"></span> <span id="online-count">0</span> Online</span>
 <span class="pill">🌐 Server: <b style="color:var(--text);margin-left:4px;">Eternity-01</b></span>
@@ -284,8 +272,6 @@ color: var(--text); font-family: var(--font); font-size: 14px; line-height: 1.5;
 <div class="social-tab active" data-stab="guild">🛡 Guild</div>
 <div class="social-tab" data-stab="faction">⚔ Factions</div>
 <div class="social-tab" data-stab="friends">👥 Friends</div>
-<div class="social-tab" data-stab="bestiary">📖 Bestiary</div>
-<div class="social-tab" data-stab="about">ℹ️ About</div>
 </div>
 <div class="social-panel active" data-scontent="guild">
 <div class="guild-header">
@@ -303,24 +289,6 @@ color: var(--text); font-family: var(--font); font-size: 14px; line-height: 1.5;
 <div class="log" id="faction-log" style="flex:1;"></div>
 </div>
 <div class="social-panel" data-scontent="friends"><h2>Friends List</h2><div class="member-list" id="friends-list"></div></div>
-<div class="social-panel" data-scontent="bestiary">
-<h2>📖 Bestiary — Creatures Slain</h2>
-<div class="bestiary-log" id="bestiary-log"></div>
-<div class="log" style="margin-top:10px; max-height:120px;" id="bestiary-hint-log"><div class="log-entry log-system">Every monster you defeat is recorded here. Keep hunting to complete your bestiary!</div></div>
-</div>
-<div class="social-panel" data-scontent="about">
-<h2>ℹ️ About ZeroQuest 2.3</h2>
-<div class="about-section">
-<p style="margin-bottom:12px;"><strong>ZeroQuest 2.3 — The Zero-Interaction MMO</strong> is an idle/autoplay RPG where the world lives without you. Your character fights, loots, levels up, joins guilds and factions, trades on the auction house, and engages in PvP — all automatically.</p>
-<p style="margin-bottom:12px;">Everything happens in real-time. Watch your hero grow, check the leaderboard, or just let it run in the background. Progress is saved automatically.</p>
-<h3 style="margin:12px 0 8px 0; font-size:0.9em;">📜 Changelog</h3>
-<div id="changelog-container">
-<div class="changelog-entry"><span class="changelog-version">v2.3</span><span class="changelog-date">— Latest</span><ul class="changelog-list"><li>💖 Added MYSTIC rarity items (pink) — 0.01% drop rate!</li><li>✨ Mystic weapons, armor, helmet, shield, boots, ring, amulet available</li><li>🎨 Mystic items have unique pink glow and enhanced stats</li><li>📈 Mystic gear has 8x stat multiplier</li></ul></div>
-<div class="changelog-entry"><span class="changelog-version">v2.2.1</span><span class="changelog-date">— June 12, 2026</span><ul class="changelog-list"><li>📖 Added Bestiary Log — tracks kills per monster type</li><li>ℹ️ Added About section with game info & changelog</li><li>🎨 Moved Bestiary to Social panel for better organization</li></ul></div>
-<div class="changelog-entry"><span class="changelog-version">v2.2.0</span><span class="changelog-date">— Initial Release</span><ul class="changelog-list"><li>⚔ Automatic combat & monster spawning</li><li>🏪 Player-driven auction house with NPC trading</li><li>🏆 Ranked PvP arena with leaderboards</li><li>🛡 Dynamic guild system</li><li>⚔ Faction reputation & war events</li><li>👥 Friends list & world chat</li><li>💾 Full save/export/import system</li><li>⚡ Gold to XP conversion (training)</li><li>✨ Epic & Legendary loot drops</li></ul></div>
-</div>
-</div>
-</div>
 </div>
 </div>
 <div class="panel">
@@ -339,12 +307,12 @@ const MONSTER_PREFIXES = ['Angry','Fierce','Cursed','Giant','Tiny','Sneaky','Rab
 const MONSTER_NAMES = ['Goblin','Rat','Wolf','Skeleton','Spider','Orc','Troll','Dragon','Slime','Bat','Zombie','Ghost','Imp','Golem','Harpy','Basilisk','Minotaur','Lich','Wyvern','Beholder','Ogre','Gnoll','Kobold','Mimic','Wraith','Chimera','Hydra','Phoenix'];
 const MONSTER_ICONS = ['👹','🐀','🐺','💀','🕷️','👺','🧌','🐉','🟢','🦇','🧟','👻','😈','🗿','🦅','🐍','🐂','☠️','🦎','👁️','👹','🐗','🦎','📦','👤','🦁','🐙','🔥'];
 const EQUIP_SLOTS = ['Weapon','Armor','Helmet','Shield','Boots','Ring','Amulet'];
-const EQUIP_PREFIXES = { common:['Rusty','Old','Simple','Worn','Basic'], uncommon:['Fine','Sturdy','Sharp','Polished','Tempered'], rare:['Enchanted','Gleaming','Blessed','Mithril','Elven'], epic:['Ancient','Infernal','Celestial','Draconic','Void'], legendary:['Godly','Eternal','Primordial','Astral','Mythic'], mystic:['Cosmic','Ethereal','Transcendent','Infinite','Voidborn','Prismatic','Omnipotent'] };
-const EQUIP_BASES = { Weapon:['Sword','Axe','Mace','Dagger','Staff','Bow','Spear','Greatsword','Greataxe'], Armor:['Chainmail','Plate','Leather','Robe','Brigandine','Chestguard'], Helmet:['Helm','Crown','Hood','Circlet','Cap','Mask'], Shield:['Buckler','Kite Shield','Tower Shield','Barrier','Ward','Aegis'], Boots:['Boots','Greaves','Sandals','Treads','Sabatons','Striders'], Ring:['Ring','Band','Loop','Signet','Circle','Seal'], Amulet:['Amulet','Pendant','Necklace','Talisman','Charm','Medallion'] };
+const EQUIP_PREFIXES = { common:['Rusty','Old','Simple','Worn','Basic'], uncommon:['Fine','Sturdy','Sharp','Polished','Tempered'], rare:['Enchanted','Gleaming','Blessed','Mithril','Elven'], epic:['Ancient','Infernal','Celestial','Draconic','Void'], legendary:['Godly','Eternal','Primordial','Astral','Mythic'] };
+const EQUIP_BASES = { Weapon:['Sword','Axe','Mace','Dagger','Staff','Bow','Spear'], Armor:['Chainmail','Plate','Leather','Robe','Brigandine'], Helmet:['Helm','Crown','Hood','Circlet','Cap'], Shield:['Buckler','Kite Shield','Tower Shield','Barrier','Ward'], Boots:['Boots','Greaves','Sandals','Treads','Sabatons'], Ring:['Ring','Band','Loop','Signet','Circle'], Amulet:['Amulet','Pendant','Necklace','Talisman','Charm'] };
 const FAKE_NAMES = ['Arthas','Gandalf','Conan','Xena','Drizzt','Elminster','Raistlin','Cirdan','Tasslehoff','Fizzban','Sturm','Goldmoon','Tika','Caramon','Dalamar','Kitiara','Eldritch','Mordain','Vex','Percy','Keyleth','Grog','Pike','Scanlan','Geralt','Yennefer','Ciri','Triss','Dandelion','Zoltan','Vesemir','Lara','Aloy','Senua','Eivor','Kvothe','Bast','Chronicle','Killer','Noobslayer','XxX_Shadow_XxX','pwnz0r','L33tMage','HealPlz','TankMain','RogueLife','Paladin4Life','DivineWrath','VoidWalker','FlameKeeper','FrostBorn','StormCaller','NightBlade','SunChaser','MoonWhisper','StarGazer','DragonHeart','WolfKin','RavenEye','SilverHand','GoldenArrow','CrimsonBlade','AzureMage','EmeraldDruid','ObsidianKnight'];
 const GUILD_NAMES = ['The Eternal Vanguard','Shadow Covenant','Order of the Phoenix','Crimson Blades','Arcane Collective','Dragon Slayers','The Silent Brotherhood','Knights of Valor','Mystic Circle','Iron Legion'];
 const GUILD_MOTTOS = ['In unity, strength','From shadows we strike','Reborn in fire','Blood for glory','Knowledge is power','Death to dragons','Silence is golden','For honor and realm','Magic binds us','Forged in battle'];
-const CHAT_GENERAL = ['anyone wanna group for the dungeon?', 'LFG mythic raid, need healer', 'WTS [item] 500g pm me', 'just hit level [lvl]!!! 🎉', 'this game is addicting lol', 'brb food', 'where do i quest next?', 'nerf mages plz', 'warriors are OP change my mind', 'anyone else lagging?', 'first time playing, this is cool', 'sold my legendary for 50g... oops', 'guild recruiting! pm me', 'how do i change my spec?', 'the market is rigged', 'just got ganked in pvp, ragequit incoming', 'lol get rekt', 'gg wp', 'anyone know the drop rate for [item]?', 'server merge when?', 'this boss is impossible', 'ez clap', 'need tank for world boss', 'healer rev plz', 'im broke, anyone spare gold?', 'streaming live on zerotwitch!', 'new patch notes are insane', 'who wants to trade?', 'the auction house is scammy', 'just got the rarest mount in the game!!!', 'HOLY COW someone got a MYSTIC item!', 'pink gear is unreal', '0.01% drop rate is brutal', 'MYSTIC WEAPON DROP?! no way'];
+const CHAT_GENERAL = ['anyone wanna group for the dungeon?', 'LFG mythic raid, need healer', 'WTS [item] 500g pm me', 'just hit level [lvl]!!! 🎉', 'this game is addicting lol', 'brb food', 'where do i quest next?', 'nerf mages plz', 'warriors are OP change my mind', 'anyone else lagging?', 'first time playing, this is cool', 'sold my legendary for 50g... oops', 'guild recruiting! pm me', 'how do i change my spec?', 'the market is rigged', 'just got ganked in pvp, ragequit incoming', 'lol get rekt', 'gg wp', 'anyone know the drop rate for [item]?', 'server merge when?', 'this boss is impossible', 'ez clap', 'need tank for world boss', 'healer rev plz', 'im broke, anyone spare gold?', 'streaming live on zerotwitch!', 'new patch notes are insane', 'who wants to trade?', 'the auction house is scammy', 'just got the rarest mount in the game!!!'];
 const CHAT_GUILD = ['guild meeting in 5!', 'who\'s online for the raid?', 'deposited 500g to guild bank', 'great run tonight everyone', 'anyone have spare potions?', 'gm is offline again...', 'officer applications open', 'guild level up!!! 🎉', 'remember guild dues are due', 'new member welcome!', 'we hit top 10 on the leaderboard!', 'who\'s tanking tonight?', 'loot council meeting later'];
 // ============ STATE ============
 let hero = null, monster = null, gameInterval = null, tickCount = 0, startTime = 0, totalUptime = 0;
@@ -352,7 +320,6 @@ let fakePlayers = [], marketListings = [], pvpOpponent = null, pvpTimer = 0;
 let heroPvpWins = 0, heroPvpLosses = 0, heroPvpRating = 1000;
 let guild = null, factionRep = { order: 0, chaos: 0 }, friends = [], worldChat = [];
 let isCatchingUp = false, offlineStats = { xp: 0, gold: 0, kills: 0, levels: 0 };
-let bestiaryKills = {};
 function rand(min, max) { return Math.floor(Math.random() * (max - min + 1)) + min; }
 function pick(arr) { return arr[Math.floor(Math.random() * arr.length)]; }
 function chance(p) { return Math.random() < p; }
@@ -360,10 +327,10 @@ function clamp(v, min, max) { return Math.max(min, Math.min(max, v)); }
 // ============ SAVE / LOAD SYSTEM ============
 function getSaveData() {
 return {
-version: '2.3', lastSaveTime: Date.now(), totalUptime: totalUptime + (Date.now() - startTime),
+version: '2.2', lastSaveTime: Date.now(), totalUptime: totalUptime + (Date.now() - startTime),
 hero: { name: hero.name, race: hero.race, cls: hero.cls, level: hero.level, stats: hero.stats, hp: hero.hp, maxHp: hero.maxHp, mp: hero.mp, maxMp: hero.maxMp, xp: hero.xp, xpNeeded: hero.xpNeeded, gold: hero.gold, kills: hero.kills, equipment: hero.equipment, guild: hero.guild, faction: hero.faction, score: hero.score },
 pvp: { wins: heroPvpWins, losses: heroPvpLosses, rating: heroPvpRating },
-factionRep, friends, fakePlayers, marketListings, guild, tickCount, bestiaryKills
+factionRep, friends, fakePlayers, marketListings, guild, tickCount
 };
 }
 function saveGame() {
@@ -407,88 +374,42 @@ function getDefense(h) { const base = h.stats.con + Math.floor(h.stats.dex/2); r
 function getDamage(h) { const c = CLASSES[h.cls], base = h.stats[c.atkStat] || 10, w = h.equipment.Weapon; return [Math.max(1, (w?w.dmgMin:1) + Math.floor(base/3)), (w?w.dmgMax:3) + Math.floor(base/2) + h.level]; }
 function getCrit(h) { return Math.min(50, 5 + Math.floor(h.stats.dex/3) + (h.equipment.Weapon?.crit||0)); }
 function getPower(h) { return getAttack(h) * 10 + getDefense(h) * 5 + h.level * 20 + (h.equipment.Weapon?.dmgMax || 0) * 10; }
-// ============ BESTIARY RENDERING ============
-function updateBestiaryLog() {
-const el = document.getElementById('bestiary-log');
-if (!el) return;
-const sorted = Object.entries(bestiaryKills).sort((a,b) => b[1] - a[1]);
-el.innerHTML = sorted.length === 0 ? '<div style="color:var(--text-dim); text-align:center; padding:8px;">No monsters slain yet...</div>' : '';
-sorted.forEach(([name, count]) => {
-const div = document.createElement('div'); div.className = 'bestiary-entry';
-div.innerHTML = `<span class="bestiary-name">${name}</span><span class="bestiary-count">${count} slain</span>`;
-el.appendChild(div);
-});
-}
-function addBestiaryKill(monsterFullName) {
-let baseName = monsterFullName;
-for (const prefix of MONSTER_PREFIXES) {
-if (baseName.startsWith(prefix + ' ')) {
-baseName = baseName.substring(prefix.length + 1);
-break;
-}
-}
-if (!bestiaryKills[baseName]) bestiaryKills[baseName] = 0;
-bestiaryKills[baseName]++;
-updateBestiaryLog();
-}
-// ============ MYSTIC RARITY (0.01% drop rate) ============
-function rollRarity(luck) {
-const r = Math.random() * 10000; // 0-10000 range for 0.01% precision
-if (r < 1) return 'mystic';      // 0.01% chance
-if (r < 100) return 'legendary';  // ~0.99% chance
-if (r < 600) return 'epic';       // 5% chance
-if (r < 1800) return 'rare';      // 12% chance
-if (r < 4500) return 'uncommon';  // 27% chance
-return 'common';                  // ~55% chance
-}
-const RARITY_MULT = { common:1, uncommon:1.5, rare:2.2, epic:3.5, legendary:5.5, mystic:8.0 };
-function generateLoot(monsterLvl, forcedRarity = null) {
-const slot = pick(EQUIP_SLOTS);
-const rarity = forcedRarity || rollRarity(0);
-const mult = RARITY_MULT[rarity];
-let itemName;
-if (rarity === 'mystic') {
-itemName = `${pick(EQUIP_PREFIXES.mystic)} ${pick(EQUIP_BASES[slot])}`;
-} else {
-itemName = `${pick(EQUIP_PREFIXES[rarity])} ${pick(EQUIP_BASES[slot])}`;
-}
-const item = { name: itemName, slot, rarity, atk:0, def:0, dmgMin:0, dmgMax:0, crit:0 };
-const baseVal = monsterLvl * mult;
-if (slot === 'Weapon') { item.dmgMin = Math.floor(baseVal * 0.8); item.dmgMax = Math.floor(baseVal * 1.8) + 3; item.atk = Math.floor(baseVal * 0.7); item.crit = rarity === 'mystic' ? 15 : rarity === 'legendary' ? 8 : rarity === 'epic' ? 5 : rarity === 'rare' ? 3 : 0; }
-else if (slot === 'Shield' || slot === 'Armor') { item.def = Math.floor(baseVal * 1.5); if (rarity === 'mystic') item.def += monsterLvl; }
-else if (slot === 'Helmet' || slot === 'Boots') { item.def = Math.floor(baseVal * 0.8); }
-else { item.atk = Math.floor(baseVal * 0.6); item.def = Math.floor(baseVal * 0.6); if (rarity === 'mystic') { item.atk += Math.floor(monsterLvl/2); item.def += Math.floor(monsterLvl/2); } }
-item.value = Math.floor((item.atk*4 + item.def*3 + (item.dmgMin||0)*2 + (item.dmgMax||0)*2 + item.crit*8) * mult * 2);
-if (rarity === 'mystic') item.value *= 3;
-return item;
-}
-function itemScore(item) { return (item.atk||0) * 2 + (item.def||0) * 1.5 + (item.dmgMin||0) + (item.dmgMax||0) + (item.crit||0)*2; }
-function rarityColor(r) { return {common:'var(--r-common)',uncommon:'var(--r-uncommon)',rare:'var(--r-rare)',epic:'var(--r-epic)',legendary:'var(--r-legendary)',mystic:'var(--r-mystic)'}[r]; }
-function tryEquip(item) {
-const current = hero.equipment[item.slot];
-if (!current || itemScore(item) > itemScore(current)) {
-hero.equipment[item.slot] = item;
-if (!isCatchingUp) {
-log(`Equipped: <span style="color:${rarityColor(item.rarity)}">${item.name}</span>`, 'log-loot');
-if (item.rarity === 'mystic') { 
-addWorldChat('system', null, `💖✨ MIRACLE! ${hero.name} has obtained a MYSTIC [${item.name}]! ✨💖`); 
-toast(`💖 MYSTIC ITEM DROPPED! ${item.name} 💖`);
-addWorldChat('system', null, `🌟 ${hero.name} is the first to wield a MYSTIC artifact!`);
-}
-else if (item.rarity === 'legendary' || item.rarity === 'epic') { addWorldChat('system', null, `⚔ ${hero.name} just equipped [${item.name}]!`); toast(`🎉 Epic loot: ${item.name}!`); }
-}
-return true;
-}
-hero.gold += Math.floor(itemScore(item) * 2);
-if (!isCatchingUp) log(`Sold ${item.name} for ${Math.floor(itemScore(item) * 2)}g.`, 'log-info');
-return false;
-}
 // ============ MONSTER ============
 function spawnMonster() {
 const lvl = Math.max(1, hero.level + rand(-1, 2)), idx = rand(0, MONSTER_NAMES.length - 1);
 monster = { name: (chance(0.6) ? pick(MONSTER_PREFIXES) + ' ' : '') + MONSTER_NAMES[idx], icon: MONSTER_ICONS[idx], level: lvl, maxHp: Math.floor((lvl * 8 + 15) * (0.8 + Math.random()*0.5)), hp: 0, atk: lvl * 2 + rand(1, 5), def: lvl + rand(0, 3), dmg: [Math.max(1, lvl), lvl * 2 + 2], xpReward: Math.floor(lvl * 15 * (0.9 + Math.random()*0.3)), goldReward: rand(1, lvl * 5) };
 monster.hp = monster.maxHp;
 updateMonsterUI();
+}
+// ============ EQUIPMENT ============
+function rollRarity(luck) { const r = Math.random() * 100 - luck; if (r < 1) return 'legendary'; if (r < 6) return 'epic'; if (r < 18) return 'rare'; if (r < 45) return 'uncommon'; return 'common'; }
+const RARITY_MULT = { common:1, uncommon:1.5, rare:2.2, epic:3.5, legendary:5.5 };
+function generateLoot(monsterLvl, forcedRarity = null) {
+const slot = pick(EQUIP_SLOTS), rarity = forcedRarity || rollRarity(0), mult = RARITY_MULT[rarity];
+const item = { name: `${pick(EQUIP_PREFIXES[rarity])} ${pick(EQUIP_BASES[slot])}`, slot, rarity, atk:0, def:0, dmgMin:0, dmgMax:0, crit:0 };
+const baseVal = monsterLvl * mult;
+if (slot === 'Weapon') { item.dmgMin = Math.floor(baseVal * 0.7); item.dmgMax = Math.floor(baseVal * 1.5) + 2; item.atk = Math.floor(baseVal * 0.5); item.crit = rarity === 'legendary' ? 8 : rarity === 'epic' ? 5 : rarity === 'rare' ? 3 : 0; }
+else if (slot === 'Shield' || slot === 'Armor') { item.def = Math.floor(baseVal * 1.2); }
+else if (slot === 'Helmet' || slot === 'Boots') { item.def = Math.floor(baseVal * 0.6); }
+else { item.atk = Math.floor(baseVal * 0.4); item.def = Math.floor(baseVal * 0.4); }
+item.value = Math.floor((item.atk*3 + item.def*2 + (item.dmgMin||0) + (item.dmgMax||0) + item.crit*5) * mult * 2);
+return item;
+}
+function itemScore(item) { return (item.atk||0) * 2 + (item.def||0) * 1.5 + (item.dmgMin||0) + (item.dmgMax||0) + (item.crit||0)*2; }
+function rarityColor(r) { return {common:'var(--r-common)',uncommon:'var(--r-uncommon)',rare:'var(--r-rare)',epic:'var(--r-epic)',legendary:'var(--r-legendary)'}[r]; }
+function tryEquip(item) {
+const current = hero.equipment[item.slot];
+if (!current || itemScore(item) > itemScore(current)) {
+hero.equipment[item.slot] = item;
+if (!isCatchingUp) {
+log(`Equipped: <span style="color:${rarityColor(item.rarity)}">${item.name}</span>`, 'log-loot');
+if (item.rarity === 'legendary' || item.rarity === 'epic') { addWorldChat('system', null, `⚔ ${hero.name} just equipped [${item.name}]!`); toast(`🎉 Epic loot: ${item.name}!`); }
+}
+return true;
+}
+hero.gold += Math.floor(itemScore(item) * 2);
+if (!isCatchingUp) log(`Sold ${item.name} for ${Math.floor(itemScore(item) * 2)}g.`, 'log-info');
+return false;
 }
 // ============ COMBAT ============
 function combatTick() {
@@ -506,7 +427,6 @@ monster.hp -= dmg;
 if (!isCatchingUp) log(`${hero.name} hits ${monster.name} for ${dmg}${crit?' (CRIT!)':''}.`, 'log-combat');
 if (monster.hp <= 0) {
 hero.xp += monster.xpReward; hero.gold += monster.goldReward; hero.kills++; hero.score += monster.xpReward;
-addBestiaryKill(monster.name);
 if (isCatchingUp) { offlineStats.xp += monster.xpReward; offlineStats.gold += monster.goldReward; offlineStats.kills++; }
 else log(`${monster.name} defeated! +${monster.xpReward} XP, +${monster.goldReward}g.`, 'log-info');
 if (chance(0.5)) tryEquip(generateLoot(monster.level));
@@ -759,7 +679,6 @@ eqList.appendChild(div);
 updateMonsterUI();
 const elapsed = Math.floor(totalUptime / 1000);
 document.getElementById('uptime').textContent = `${String(Math.floor(elapsed/3600)).padStart(2,'0')}:${String(Math.floor((elapsed%3600)/60)).padStart(2,'0')}:${String(elapsed%60).padStart(2,'0')}`;
-updateBestiaryLog();
 }
 // ============ EXPORT/IMPORT ============
 function exportSave() {
@@ -769,7 +688,7 @@ toast('💾 Save exported successfully!'); log('💾 Character save exported.', 
 }
 function showImportModal() {
 const overlay = document.createElement('div'); overlay.className = 'modal-overlay'; overlay.id = 'import-modal';
-overlay.innerHTML = `<div class="modal"><h3>📂 Import Character Save</h3><div class="modal-info"><div class="info-row"><span class="info-label">Version:</span><span class="info-value">2.3</span></div><div class="info-row"><span class="info-label">Format:</span><span class="info-value">JSON</span></div></div><textarea id="import-text" placeholder="Paste your save data here or use file upload below..."></textarea><div style="margin-bottom:16px;"><input type="file" id="import-file" accept=".json" style="display:none;"><button class="btn secondary" onclick="document.getElementById('import-file').click()" style="width:100%;">📁 Choose File</button></div><div class="modal-buttons"><button class="btn secondary" onclick="closeImportModal()">Cancel</button><button class="btn" onclick="importSave()">Import</button></div></div>`;
+overlay.innerHTML = `<div class="modal"><h3>📂 Import Character Save</h3><div class="modal-info"><div class="info-row"><span class="info-label">Version:</span><span class="info-value">2.2</span></div><div class="info-row"><span class="info-label">Format:</span><span class="info-value">JSON</span></div></div><textarea id="import-text" placeholder="Paste your save data here or use file upload below..."></textarea><div style="margin-bottom:16px;"><input type="file" id="import-file" accept=".json" style="display:none;"><button class="btn secondary" onclick="document.getElementById('import-file').click()" style="width:100%;">📁 Choose File</button></div><div class="modal-buttons"><button class="btn secondary" onclick="closeImportModal()">Cancel</button><button class="btn" onclick="importSave()">Import</button></div></div>`;
 document.body.appendChild(overlay);
 document.getElementById('import-file').addEventListener('change', (e) => { const file = e.target.files[0]; if (!file) return; const reader = new FileReader(); reader.onload = (event) => { document.getElementById('import-text').value = event.target.result; }; reader.readAsText(file); });
 }
@@ -788,12 +707,11 @@ hero = data.hero; heroPvpWins = data.pvp?.wins || 0; heroPvpLosses = data.pvp?.l
 factionRep = data.factionRep || { order: 0, chaos: 0 }; friends = data.friends || [];
 fakePlayers = data.fakePlayers || []; marketListings = data.marketListings || []; guild = data.guild || null;
 tickCount = data.tickCount || 0; totalUptime = data.totalUptime || 0; startTime = Date.now();
-bestiaryKills = data.bestiaryKills || {};
 }
 // ============ OFFLINE CATCH-UP ============
 function processOfflineProgress(secondsPassed) {
 isCatchingUp = true;
-let ticksToProcess = Math.min(secondsPassed, 28800);
+let ticksToProcess = Math.min(secondsPassed, 28800); // Max 8 hours
 let processed = 0;
 const batchSize = 1000;
 function catchUpFrame() {
@@ -829,7 +747,7 @@ combatTick();
 if (tickCount % 3 === 0) regenTick();
 if (tickCount % 2 === 0) chatTick();
 if (tickCount % 3 === 0) marketTick();
-if (tickCount % 5 === 0) { renderOnline(); friendsTick(); saveGame(); }
+if (tickCount % 5 === 0) { renderOnline(); friendsTick(); saveGame(); } // Auto-save every 5 seconds
 if (tickCount % 7 === 0) guildTick();
 if (tickCount % 10 === 0) factionTick();
 pvpTick();
@@ -859,7 +777,6 @@ const race = document.getElementById('hero-race').value;
 const cls = document.getElementById('hero-class').value;
 hero = createHero(name, race, cls);
 totalUptime = 0; tickCount = 0;
-bestiaryKills = {};
 }
 startTime = Date.now();
 if (!fromImport || !fakePlayers.length) initFakePlayers();
@@ -870,7 +787,7 @@ document.getElementById('creation-screen').style.display = 'none';
 document.getElementById('game-screen').style.display = 'block';
 if (!fromImport) {
 log(`${hero.name} the ${hero.race} ${hero.cls} enters the world!`, 'log-level');
-log(`Welcome to ZeroQuest 2.3 — the world plays itself.`, 'log-system');
+log(`Welcome to ZeroQuest 2.2 — the world plays itself.`, 'log-system');
 addWorldChat('system', null, `🌟 ${hero.name} has entered the world!`);
 } else {
 log(`📂 Loaded save: ${hero.name} (Level ${hero.level})`, 'log-info');
@@ -888,6 +805,7 @@ applySaveData(save);
 startGame(true);
 const secondsPassed = Math.floor((Date.now() - save.lastSaveTime) / 1000);
 if (secondsPassed > 5) {
+// Pause normal loop, run catch-up
 if (gameInterval) clearInterval(gameInterval);
 processOfflineProgress(secondsPassed);
 }
@@ -905,20 +823,26 @@ document.getElementById('hero-name').value = pick(names);
 document.getElementById('hero-race').value = pick(Object.keys(RACES));
 document.getElementById('hero-class').value = pick(Object.keys(CLASSES));
 }
+// ============ NEW FEATURE: GOLD TO XP ============
 function convertGoldToXp(amount) {
   if (!hero) return;
   if (amount === 'all') amount = hero.gold;
   if (amount <= 0) { toast('❌ Not enough gold!'); return; }
   if (hero.gold < amount) { toast(`❌ You only have ${hero.gold}g!`); return; }
+  
   const xpGained = amount * 3;
   hero.gold -= amount;
   hero.xp += xpGained;
+  
   log(`⚡ Converted ${amount}g into ${xpGained} XP!`, 'log-info');
   toast(`⚡ Gained ${xpGained} XP!`);
+  
   while (hero.xp >= hero.xpNeeded) levelUp();
+  
   updateUI();
   saveGame();
 }
+// ============ INIT ============
 window.addEventListener('beforeunload', saveGame);
 window.addEventListener('visibilitychange', () => { if (document.visibilityState === 'hidden') saveGame(); });
 checkExistingSave();

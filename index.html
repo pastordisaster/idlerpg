@@ -315,10 +315,10 @@ color: var(--text); font-family: var(--font); font-size: 14px; line-height: 1.5;
 <p style="margin-bottom:12px;">Everything happens in real-time. Watch your hero grow, check the leaderboard, or just let it run in the background. Progress is saved automatically.</p>
 <h3 style="margin:12px 0 8px 0; font-size:0.9em;">📜 Changelog</h3>
 <div id="changelog-container">
-<div class="changelog-entry"><span class="changelog-version">v2.3.1</span><span class="changelog-date">— PvP Balance Patch</span><ul class="changelog-list"><li>⚖️ COMPLETELY REWORKED PvP matchmaking — no more level 400+ opponents!</li><li>🎯 Opponents now within 30-40% power range for fair fights</li><li>📊 Win chance now properly balanced (50% base vs equal power)</li><li>🚫 Fake players capped at hero level +30 to prevent runaway scaling</li><li>🏆 Leaderboard now displays fair competition</li><li>✨ Added power difference indicator in PvP arena</li></ul></div>
-<div class="changelog-entry"><span class="changelog-version">v2.3</span><span class="changelog-date">— Mystic Update</span><ul class="changelog-list"><li>💖 Added MYSTIC rarity items (pink) — 0.01% drop rate!</li><li>✨ Mystic weapons, armor, helmet, shield, boots, ring, amulet available</li><li>🎨 Mystic items have unique pink glow and enhanced stats</li><li>📈 Mystic gear has 8x stat multiplier</li></ul></div>
-<div class="changelog-entry"><span class="changelog-version">v2.2.1</span><span class="changelog-date">— Quality of Life</span><ul class="changelog-list"><li>📖 Added Bestiary Log — tracks kills per monster type</li><li>ℹ️ Added About section with game info & changelog</li><li>🎨 Moved Bestiary to Social panel for better organization</li></ul></div>
-<div class="changelog-entry"><span class="changelog-version">v2.2.0</span><span class="changelog-date">— Initial Release</span><ul class="changelog-list"><li>⚔ Automatic combat & monster spawning</li><li>🏪 Player-driven auction house with NPC trading</li><li>🏆 Ranked PvP arena with leaderboards</li><li>🛡 Dynamic guild system</li><li>⚔ Faction reputation & war events</li><li>👥 Friends list & world chat</li><li>💾 Full save/export/import system</li><li>⚡ Gold to XP conversion (training)</li></ul></div>
+<div class="changelog-entry"><span class="changelog-version">v2.3.2</span><span class="changelog-date">— Dynamic Opponent Scaling</span><ul class="changelog-list"><li>⚔️ Fake players now dynamically equip gear and grow stronger over time</li><li>📊 Opponent power now scales with gear score, not just level</li><li>🎯 PvP win rate balanced to ~50% against equal-power opponents</li><li>🔄 Fake players periodically "loot" better equipment from simulated combat</li><li>📈 Opponent power cap now scales with player progression</li></ul></div>
+<div class="changelog-entry"><span class="changelog-version">v2.3.1</span><span class="changelog-date">— PvP Balance Patch</span><ul class="changelog-list"><li>⚖️ COMPLETELY REWORKED PvP matchmaking — no more level 400+ opponents!</li><li>🎯 Opponents now within 30-40% power range for fair fights</li><li>📊 Win chance now properly balanced (50% base vs equal power)</li><li>🚫 Fake players capped at hero level +30 to prevent runaway scaling</li><li>🏆 Leaderboard now displays fair competition</li></ul></div>
+<div class="changelog-entry"><span class="changelog-version">v2.3</span><span class="changelog-date">— Mystic Update</span><ul class="changelog-list"><li>💖 Added MYSTIC rarity items (pink) — 0.01% drop rate!</li><li>✨ Mystic weapons, armor, helmet, shield, boots, ring, amulet available</li><li>🎨 Mystic items have unique pink glow and enhanced stats</li></ul></div>
+<div class="changelog-entry"><span class="changelog-version">v2.2.1</span><span class="changelog-date">— Quality of Life</span><ul class="changelog-list"><li>📖 Added Bestiary Log — tracks kills per monster type</li><li>ℹ️ Added About section with game info & changelog</li></ul></div>
 </div>
 </div>
 </div>
@@ -345,7 +345,7 @@ const EQUIP_BASES = { Weapon:['Sword','Axe','Mace','Dagger','Staff','Bow','Spear
 const FAKE_NAMES = ['Arthas','Gandalf','Conan','Xena','Drizzt','Elminster','Raistlin','Cirdan','Tasslehoff','Fizzban','Sturm','Goldmoon','Tika','Caramon','Dalamar','Kitiara','Eldritch','Mordain','Vex','Percy','Keyleth','Grog','Pike','Scanlan','Geralt','Yennefer','Ciri','Triss','Dandelion','Zoltan','Vesemir','Lara','Aloy','Senua','Eivor','Kvothe','Bast','Chronicle','Killer','Noobslayer','XxX_Shadow_XxX','pwnz0r','L33tMage','HealPlz','TankMain','RogueLife','Paladin4Life','DivineWrath','VoidWalker','FlameKeeper','FrostBorn','StormCaller','NightBlade','SunChaser','MoonWhisper','StarGazer','DragonHeart','WolfKin','RavenEye','SilverHand','GoldenArrow','CrimsonBlade','AzureMage','EmeraldDruid','ObsidianKnight'];
 const GUILD_NAMES = ['The Eternal Vanguard','Shadow Covenant','Order of the Phoenix','Crimson Blades','Arcane Collective','Dragon Slayers','The Silent Brotherhood','Knights of Valor','Mystic Circle','Iron Legion'];
 const GUILD_MOTTOS = ['In unity, strength','From shadows we strike','Reborn in fire','Blood for glory','Knowledge is power','Death to dragons','Silence is golden','For honor and realm','Magic binds us','Forged in battle'];
-const CHAT_GENERAL = ['anyone wanna group for the dungeon?', 'LFG mythic raid, need healer', 'WTS [item] 500g pm me', 'just hit level [lvl]!!! 🎉', 'this game is addicting lol', 'brb food', 'where do i quest next?', 'nerf mages plz', 'warriors are OP change my mind', 'anyone else lagging?', 'first time playing, this is cool', 'sold my legendary for 50g... oops', 'guild recruiting! pm me', 'how do i change my spec?', 'the market is rigged', 'just got ganked in pvp, ragequit incoming', 'lol get rekt', 'gg wp', 'anyone know the drop rate for [item]?', 'server merge when?', 'this boss is impossible', 'ez clap', 'need tank for world boss', 'healer rev plz', 'im broke, anyone spare gold?', 'streaming live on zerotwitch!', 'new patch notes are insane', 'who wants to trade?', 'the auction house is scammy', 'just got the rarest mount in the game!!!', 'HOLY COW someone got a MYSTIC item!', 'pink gear is unreal', '0.01% drop rate is brutal', 'MYSTIC WEAPON DROP?! no way'];
+const CHAT_GENERAL = ['anyone wanna group for the dungeon?', 'LFG mythic raid, need healer', 'WTS [item] 500g pm me', 'just hit level [lvl]!!! 🎉', 'this game is addicting lol', 'brb food', 'where do i quest next?', 'nerf mages plz', 'warriors are OP change my mind', 'anyone else lagging?', 'first time playing, this is cool', 'sold my legendary for 50g... oops', 'guild recruiting! pm me', 'how do i change my spec?', 'the market is rigged', 'just got ganked in pvp, ragequit incoming', 'lol get rekt', 'gg wp', 'anyone know the drop rate for [item]?', 'server merge when?', 'this boss is impossible', 'ez clap', 'need tank for world boss', 'healer rev plz', 'im broke, anyone spare gold?', 'streaming live on zerotwitch!', 'new patch notes are insane', 'who wants to trade?', 'the auction house is scammy', 'just got the rarest mount in the game!!!', 'HOLY COW someone got a MYSTIC item!', 'pink gear is unreal'];
 const CHAT_GUILD = ['guild meeting in 5!', 'who\'s online for the raid?', 'deposited 500g to guild bank', 'great run tonight everyone', 'anyone have spare potions?', 'gm is offline again...', 'officer applications open', 'guild level up!!! 🎉', 'remember guild dues are due', 'new member welcome!', 'we hit top 10 on the leaderboard!', 'who\'s tanking tonight?', 'loot council meeting later'];
 // ============ STATE ============
 let hero = null, monster = null, gameInterval = null, tickCount = 0, startTime = 0, totalUptime = 0;
@@ -358,7 +358,50 @@ function rand(min, max) { return Math.floor(Math.random() * (max - min + 1)) + m
 function pick(arr) { return arr[Math.floor(Math.random() * arr.length)]; }
 function chance(p) { return Math.random() < p; }
 function clamp(v, min, max) { return Math.max(min, Math.min(max, v)); }
-// ============ SAVE / LOAD SYSTEM ============
+// ============ FAKE PLAYER GEAR SYSTEM ============
+function calculateFakePlayerPower(player) {
+    if (!player) return 100;
+    let gearBonus = player.gearScore || 0;
+    let basePower = player.level * 100;
+    let totalPower = Math.floor(basePower + gearBonus * 5);
+    return Math.max(50, totalPower);
+}
+function upgradeFakePlayerGear(player) {
+    if (!player) return;
+    let currentGear = player.gearScore || 0;
+    let gain = rand(1, 8) + Math.floor(player.level / 10);
+    if (chance(0.05)) gain *= 2;
+    player.gearScore = Math.min(currentGear + gain, player.level * 15 + 200);
+    let newPower = calculateFakePlayerPower(player);
+    if (player.gearScore > currentGear + 5 && chance(0.2) && hero) {
+        if (Math.abs(newPower - (hero ? getPower(hero) : 500)) < 500) {
+            if (!isCatchingUp && chance(0.1)) addWorldChat('system', null, `⚔ ${player.name} found powerful new equipment!`);
+        }
+    }
+}
+function makeFakePlayer(overrides = {}) {
+    let level = overrides.level || rand(1, 50);
+    if (hero && level > hero.level + 25) level = hero.level + rand(5, 20);
+    let gearScore = overrides.gearScore || rand(level * 3, level * 12);
+    return { name: overrides.name || pick(FAKE_NAMES) + rand(1,999), race: overrides.race || pick(Object.keys(RACES)), cls: overrides.cls || pick(Object.keys(CLASSES)), level: level, guild: overrides.guild || (chance(0.7) ? pick(GUILD_NAMES) : null), faction: overrides.faction || (chance(0.5) ? 'order' : 'chaos'), online: overrides.online ?? chance(0.6), score: overrides.score || level * 100 + rand(0, 500), gearScore: gearScore, activity: rand(0, 100) };
+}
+function initFakePlayers() {
+    fakePlayers = [];
+    for (let i = 0; i < 80; i++) fakePlayers.push(makeFakePlayer());
+}
+function getPower(h) {
+    if (!h) return 100;
+    let attack = 0, defense = 0;
+    if (h.equipment) {
+        attack = Object.values(h.equipment).reduce((s,e) => s + (e.atk||0), 0);
+        defense = Object.values(h.equipment).reduce((s,e) => s + (e.def||0), 0);
+    }
+    let baseAttack = (h.stats?.[CLASSES[h.cls]?.atkStat] || 10) * 2 + h.level;
+    let baseDefense = (h.stats?.con || 10) + Math.floor((h.stats?.dex || 10)/2) + Math.floor(h.level/2);
+    return (baseAttack + attack) * 10 + (baseDefense + defense) * 5 + h.level * 20;
+}
+function getHeroPower() { return hero ? getPower(hero) : 500; }
+// ============ SAVE / LOAD ============
 function getSaveData() {
 return {
 version: '2.3', lastSaveTime: Date.now(), totalUptime: totalUptime + (Date.now() - startTime),
@@ -367,38 +410,16 @@ pvp: { wins: heroPvpWins, losses: heroPvpLosses, rating: heroPvpRating },
 factionRep, friends, fakePlayers, marketListings, guild, tickCount, bestiaryKills
 };
 }
-function saveGame() {
-if (!hero) return;
-try { localStorage.setItem('zeroquest_save', JSON.stringify(getSaveData())); } catch (e) { console.warn('Save failed:', e); }
-}
-function loadGame() {
-try { const raw = localStorage.getItem('zeroquest_save'); return raw ? JSON.parse(raw) : null; } catch (e) { return null; }
-}
+function saveGame() { if (!hero) return; try { localStorage.setItem('zeroquest_save', JSON.stringify(getSaveData())); } catch(e) {} }
+function loadGame() { try { const raw = localStorage.getItem('zeroquest_save'); return raw ? JSON.parse(raw) : null; } catch(e) { return null; } }
 function checkExistingSave() {
 const save = loadGame();
 if (save && save.hero) {
 document.getElementById('new-character-form').style.display = 'none';
 document.getElementById('continue-box').style.display = 'block';
-document.getElementById('save-info').innerHTML = `
-<div class="sp-row"><span class="sp-label">Character:</span><span class="sp-val">${save.hero.name}</span></div>
-<div class="sp-row"><span class="sp-label">Class:</span><span class="sp-val">${save.hero.race} ${save.hero.cls}</span></div>
-<div class="sp-row"><span class="sp-label">Level:</span><span class="sp-val">${save.hero.level}</span></div>
-<div class="sp-row"><span class="sp-label">Last Saved:</span><span class="sp-val">${new Date(save.lastSaveTime).toLocaleString()}</span></div>`;
+document.getElementById('save-info').innerHTML = `<div class="sp-row"><span class="sp-label">Character:</span><span class="sp-val">${save.hero.name}</span></div><div class="sp-row"><span class="sp-label">Class:</span><span class="sp-val">${save.hero.race} ${save.hero.cls}</span></div><div class="sp-row"><span class="sp-label">Level:</span><span class="sp-val">${save.hero.level}</span></div>`;
 }
 }
-// ============ FAKE PLAYERS (with level cap) ============
-function makeFakePlayer(overrides = {}) {
-const races = Object.keys(RACES), classes = Object.keys(CLASSES);
-let level = overrides.level || rand(1, 80);
-if (hero && level > hero.level + 30) level = hero.level + rand(5, 20);
-return { name: overrides.name || pick(FAKE_NAMES) + rand(1,999), race: overrides.race || pick(races), cls: overrides.cls || pick(classes), level: level, guild: overrides.guild || (chance(0.7) ? pick(GUILD_NAMES) : null), faction: overrides.faction || (chance(0.5) ? 'order' : 'chaos'), online: overrides.online ?? chance(0.6), score: overrides.score || level * 100 + rand(0, 500), activity: rand(0, 100) };
-}
-function initFakePlayers() {
-fakePlayers = [];
-for (let i = 0; i < 80; i++) fakePlayers.push(makeFakePlayer());
-}
-function getHero() { return hero; }
-// ============ CHARACTER ============
 function createHero(name, race, cls) {
 const r = RACES[race], c = CLASSES[cls];
 const stats = { str: 8 + r.str + c.str + rand(0,3), dex: 8 + r.dex + c.dex + rand(0,3), con: 8 + r.con + c.con + rand(0,3), int: 8 + r.int + c.int + rand(0,3), wis: 8 + r.wis + c.wis + rand(0,3), cha: 8 + r.cha + c.cha + rand(0,3) };
@@ -409,52 +430,23 @@ function getAttack(h) { const c = CLASSES[h.cls], base = h.stats[c.atkStat] || 1
 function getDefense(h) { const base = h.stats.con + Math.floor(h.stats.dex/2); return base + Math.floor(h.level/2) + Object.values(h.equipment).reduce((s,e) => s + (e.def||0), 0); }
 function getDamage(h) { const c = CLASSES[h.cls], base = h.stats[c.atkStat] || 10, w = h.equipment.Weapon; return [Math.max(1, (w?w.dmgMin:1) + Math.floor(base/3)), (w?w.dmgMax:3) + Math.floor(base/2) + h.level]; }
 function getCrit(h) { return Math.min(50, 5 + Math.floor(h.stats.dex/3) + (h.equipment.Weapon?.crit||0)); }
-function getPower(h) { return getAttack(h) * 10 + getDefense(h) * 5 + h.level * 20 + (h.equipment.Weapon?.dmgMax || 0) * 10; }
-// ============ BESTIARY ============
 function updateBestiaryLog() {
-const el = document.getElementById('bestiary-log');
-if (!el) return;
+const el = document.getElementById('bestiary-log'); if (!el) return;
 const sorted = Object.entries(bestiaryKills).sort((a,b) => b[1] - a[1]);
 el.innerHTML = sorted.length === 0 ? '<div style="color:var(--text-dim); text-align:center; padding:8px;">No monsters slain yet...</div>' : '';
-sorted.forEach(([name, count]) => {
-const div = document.createElement('div'); div.className = 'bestiary-entry';
-div.innerHTML = `<span class="bestiary-name">${name}</span><span class="bestiary-count">${count} slain</span>`;
-el.appendChild(div);
-});
+sorted.forEach(([name, count]) => { const div = document.createElement('div'); div.className = 'bestiary-entry'; div.innerHTML = `<span class="bestiary-name">${name}</span><span class="bestiary-count">${count} slain</span>`; el.appendChild(div); });
 }
 function addBestiaryKill(monsterFullName) {
 let baseName = monsterFullName;
-for (const prefix of MONSTER_PREFIXES) {
-if (baseName.startsWith(prefix + ' ')) {
-baseName = baseName.substring(prefix.length + 1);
-break;
-}
-}
+for (const prefix of MONSTER_PREFIXES) { if (baseName.startsWith(prefix + ' ')) { baseName = baseName.substring(prefix.length + 1); break; } }
 if (!bestiaryKills[baseName]) bestiaryKills[baseName] = 0;
-bestiaryKills[baseName]++;
-updateBestiaryLog();
+bestiaryKills[baseName]++; updateBestiaryLog();
 }
-// ============ MYSTIC RARITY ============
-function rollRarity(luck) {
-const r = Math.random() * 10000;
-if (r < 1) return 'mystic';
-if (r < 100) return 'legendary';
-if (r < 600) return 'epic';
-if (r < 1800) return 'rare';
-if (r < 4500) return 'uncommon';
-return 'common';
-}
+function rollRarity(luck) { const r = Math.random() * 10000; if (r < 1) return 'mystic'; if (r < 100) return 'legendary'; if (r < 600) return 'epic'; if (r < 1800) return 'rare'; if (r < 4500) return 'uncommon'; return 'common'; }
 const RARITY_MULT = { common:1, uncommon:1.5, rare:2.2, epic:3.5, legendary:5.5, mystic:8.0 };
 function generateLoot(monsterLvl, forcedRarity = null) {
-const slot = pick(EQUIP_SLOTS);
-const rarity = forcedRarity || rollRarity(0);
-const mult = RARITY_MULT[rarity];
-let itemName;
-if (rarity === 'mystic') {
-itemName = `${pick(EQUIP_PREFIXES.mystic)} ${pick(EQUIP_BASES[slot])}`;
-} else {
-itemName = `${pick(EQUIP_PREFIXES[rarity])} ${pick(EQUIP_BASES[slot])}`;
-}
+const slot = pick(EQUIP_SLOTS); const rarity = forcedRarity || rollRarity(0); const mult = RARITY_MULT[rarity];
+let itemName = rarity === 'mystic' ? `${pick(EQUIP_PREFIXES.mystic)} ${pick(EQUIP_BASES[slot])}` : `${pick(EQUIP_PREFIXES[rarity])} ${pick(EQUIP_BASES[slot])}`;
 const item = { name: itemName, slot, rarity, atk:0, def:0, dmgMin:0, dmgMax:0, crit:0 };
 const baseVal = monsterLvl * mult;
 if (slot === 'Weapon') { item.dmgMin = Math.floor(baseVal * 0.8); item.dmgMax = Math.floor(baseVal * 1.8) + 3; item.atk = Math.floor(baseVal * 0.7); item.crit = rarity === 'mystic' ? 15 : rarity === 'legendary' ? 8 : rarity === 'epic' ? 5 : rarity === 'rare' ? 3 : 0; }
@@ -473,11 +465,8 @@ if (!current || itemScore(item) > itemScore(current)) {
 hero.equipment[item.slot] = item;
 if (!isCatchingUp) {
 log(`Equipped: <span style="color:${rarityColor(item.rarity)}">${item.name}</span>`, 'log-loot');
-if (item.rarity === 'mystic') { 
-addWorldChat('system', null, `💖✨ MIRACLE! ${hero.name} has obtained a MYSTIC [${item.name}]! ✨💖`); 
-toast(`💖 MYSTIC ITEM DROPPED! ${item.name} 💖`);
-}
-else if (item.rarity === 'legendary' || item.rarity === 'epic') { addWorldChat('system', null, `⚔ ${hero.name} just equipped [${item.name}]!`); toast(`🎉 Epic loot: ${item.name}!`); }
+if (item.rarity === 'mystic') { addWorldChat('system', null, `💖✨ MIRACLE! ${hero.name} obtained a MYSTIC [${item.name}]! ✨💖`); toast(`💖 MYSTIC ITEM DROPPED! ${item.name} 💖`); }
+else if (item.rarity === 'legendary' || item.rarity === 'epic') { addWorldChat('system', null, `⚔ ${hero.name} equipped [${item.name}]!`); toast(`🎉 Epic loot: ${item.name}!`); }
 }
 return true;
 }
@@ -485,23 +474,15 @@ hero.gold += Math.floor(itemScore(item) * 2);
 if (!isCatchingUp) log(`Sold ${item.name} for ${Math.floor(itemScore(item) * 2)}g.`, 'log-info');
 return false;
 }
-// ============ MONSTER ============
 function spawnMonster() {
 const lvl = Math.max(1, hero.level + rand(-1, 2)), idx = rand(0, MONSTER_NAMES.length - 1);
 monster = { name: (chance(0.6) ? pick(MONSTER_PREFIXES) + ' ' : '') + MONSTER_NAMES[idx], icon: MONSTER_ICONS[idx], level: lvl, maxHp: Math.floor((lvl * 8 + 15) * (0.8 + Math.random()*0.5)), hp: 0, atk: lvl * 2 + rand(1, 5), def: lvl + rand(0, 3), dmg: [Math.max(1, lvl), lvl * 2 + 2], xpReward: Math.floor(lvl * 15 * (0.9 + Math.random()*0.3)), goldReward: rand(1, lvl * 5) };
-monster.hp = monster.maxHp;
-updateMonsterUI();
+monster.hp = monster.maxHp; updateMonsterUI();
 }
-// ============ COMBAT ============
 function combatTick() {
-if (hero.dead) {
-hero.respawnTimer--;
-if (hero.respawnTimer <= 0) { hero.dead = false; hero.hp = hero.maxHp; hero.mp = hero.maxMp; if (!isCatchingUp) log(`${hero.name} has respawned!`, 'log-info'); spawnMonster(); }
-return;
-}
+if (hero.dead) { hero.respawnTimer--; if (hero.respawnTimer <= 0) { hero.dead = false; hero.hp = hero.maxHp; hero.mp = hero.maxMp; if (!isCatchingUp) log(`${hero.name} has respawned!`, 'log-info'); spawnMonster(); } return; }
 if (!monster) { spawnMonster(); return; }
-const [dMin, dMax] = getDamage(hero);
-let dmg = rand(dMin, dMax), crit = false;
+const [dMin, dMax] = getDamage(hero); let dmg = rand(dMin, dMax), crit = false;
 if (Math.random() * 100 < getCrit(hero)) { dmg *= 2; crit = true; }
 dmg = Math.max(1, dmg - Math.floor(monster.def / 2));
 monster.hp -= dmg;
@@ -513,17 +494,12 @@ if (isCatchingUp) { offlineStats.xp += monster.xpReward; offlineStats.gold += mo
 else log(`${monster.name} defeated! +${monster.xpReward} XP, +${monster.goldReward}g.`, 'log-info');
 if (chance(0.5)) tryEquip(generateLoot(monster.level));
 while (hero.xp >= hero.xpNeeded) levelUp();
-spawnMonster();
-return;
+spawnMonster(); return;
 }
 let mDmg = Math.max(1, rand(monster.dmg[0], monster.dmg[1]) - Math.floor(getDefense(hero) / 2));
 hero.hp -= mDmg;
 if (!isCatchingUp) log(`${monster.name} hits ${hero.name} for ${mDmg}.`, 'log-combat');
-if (hero.hp <= 0) {
-hero.hp = 0; hero.dead = true; hero.respawnTimer = 5;
-if (!isCatchingUp) { log(`${hero.name} has been slain by ${monster.name}! Respawning in 5s...`, 'log-death'); addWorldChat('system', null, `💀 ${hero.name} was slain by ${monster.name}.`); }
-monster = null;
-}
+if (hero.hp <= 0) { hero.hp = 0; hero.dead = true; hero.respawnTimer = 5; if (!isCatchingUp) { log(`${hero.name} has been slain by ${monster.name}! Respawning...`, 'log-death'); addWorldChat('system', null, `💀 ${hero.name} was slain by ${monster.name}.`); } monster = null; }
 }
 function levelUp() {
 hero.xp -= hero.xpNeeded; hero.level++; hero.xpNeeded = Math.floor(hero.xpNeeded * 1.35);
@@ -534,161 +510,25 @@ hero.maxHp = Math.floor((hero.stats.con * 2 + 20) * c.hpMul) + hero.level * 2;
 hero.maxMp = Math.floor((hero.stats.int + hero.stats.wis) * c.mpMul * 2) + hero.level;
 hero.hp = Math.min(hero.maxHp, hero.hp + (hero.maxHp - oldMax)); hero.mp = hero.maxMp;
 if (isCatchingUp) { offlineStats.levels++; }
-else {
-log(`🎉 LEVEL UP! Now level ${hero.level}! (${Object.entries(gains).map(([k,v]) => `${k.toUpperCase()}+${v}`).join(', ')})`, 'log-level');
-toast(`🎉 Level ${hero.level}!`);
-addWorldChat('system', null, `🎉 ${hero.name} reached level ${hero.level}!`);
+else { log(`🎉 LEVEL UP! Now level ${hero.level}! (${Object.entries(gains).map(([k,v]) => `${k.toUpperCase()}+${v}`).join(', ')})`, 'log-level'); toast(`🎉 Level ${hero.level}!`); addWorldChat('system', null, `🎉 ${hero.name} reached level ${hero.level}!`); }
+if (hero.level === 5 && !hero.guild) { hero.guild = pick(GUILD_NAMES); if (!isCatchingUp) { log(`🛡 You joined guild: ${hero.guild}`, 'log-level'); addWorldChat('system', null, `🛡 ${hero.name} joined [${hero.guild}]!`); toast(`🛡 Joined ${hero.guild}!`); } }
+if (hero.level === 10 && !hero.faction) { hero.faction = chance(0.5) ? 'order' : 'chaos'; factionRep[hero.faction] = 100; if (!isCatchingUp) { log(`⚔ You pledged to: ${hero.faction === 'order' ? 'The Radiant Order' : 'The Chaos Covenant'}`, 'log-level'); toast(`⚔ Joined ${hero.faction === 'order' ? 'The Radiant Order' : 'The Chaos Covenant'}!`); } }
 }
-if (hero.level === 5 && !hero.guild) {
-hero.guild = pick(GUILD_NAMES);
-if (!isCatchingUp) { log(`🛡 You joined guild: ${hero.guild}`, 'log-level'); addWorldChat('system', null, `🛡 ${hero.name} joined [${hero.guild}]!`); toast(`🛡 Joined ${hero.guild}!`); }
-}
-if (hero.level === 10 && !hero.faction) {
-hero.faction = chance(0.5) ? 'order' : 'chaos'; factionRep[hero.faction] = 100;
-if (!isCatchingUp) { log(`⚔ You pledged to: ${hero.faction === 'order' ? 'The Radiant Order' : 'The Chaos Covenant'}`, 'log-level'); toast(`⚔ Joined ${hero.faction === 'order' ? 'The Radiant Order' : 'The Chaos Covenant'}!`); }
-}
-}
-function regenTick() {
-if (hero.dead) return;
-if (hero.hp < hero.maxHp) hero.hp = Math.min(hero.maxHp, hero.hp + Math.max(1, Math.floor(hero.maxHp * 0.05)));
-if (hero.mp < hero.maxMp) hero.mp = Math.min(hero.maxMp, hero.mp + Math.max(1, Math.floor(hero.maxMp * 0.08)));
-}
-// ============ MARKET ============
-function initMarket() {
-marketListings = [];
-for (let i = 0; i < 10; i++) { const s = pick(fakePlayers), item = generateLoot(rand(5, 70)); marketListings.push({ item, price: Math.floor(item.value * (0.8 + Math.random() * 0.8)), seller: s.name, age: 0 }); }
-}
+function regenTick() { if (hero.dead) return; if (hero.hp < hero.maxHp) hero.hp = Math.min(hero.maxHp, hero.hp + Math.max(1, Math.floor(hero.maxHp * 0.05))); if (hero.mp < hero.maxMp) hero.mp = Math.min(hero.maxMp, hero.mp + Math.max(1, Math.floor(hero.maxMp * 0.08))); }
+function initMarket() { marketListings = []; for (let i = 0; i < 10; i++) { const s = pick(fakePlayers), item = generateLoot(rand(5, 70)); marketListings.push({ item, price: Math.floor(item.value * (0.8 + Math.random() * 0.8)), seller: s.name, age: 0 }); } }
 function marketTick() {
 marketListings = marketListings.filter(l => { l.age++; return l.age < 30 && !l.sold; });
 if (marketListings.length < 12 && chance(0.4)) { const s = pick(fakePlayers), item = generateLoot(rand(5, 70)); marketListings.push({ item, price: Math.floor(item.value * (0.8 + Math.random() * 0.8)), seller: s.name, age: 0 }); }
-for (let i = marketListings.length - 1; i >= 0; i--) {
-const l = marketListings[i]; if (l.sold) continue;
-const current = hero.equipment[l.item.slot];
-if ((!current || itemScore(l.item) > itemScore(current) * 1.2) && hero.gold >= l.price && chance(0.3)) {
-hero.gold -= l.price; hero.equipment[l.item.slot] = l.item;
-if (!isCatchingUp) { log(`🛒 Bought <span style="color:${rarityColor(l.item.rarity)}">${l.item.name}</span> from ${l.seller} for ${l.price}g.`, 'log-loot'); addWorldChat('trade', hero.name, `bought ${l.item.name}`); }
-l.sold = true;
-}
-}
+for (let i = marketListings.length - 1; i >= 0; i--) { const l = marketListings[i]; if (l.sold) continue; const current = hero.equipment[l.item.slot]; if ((!current || itemScore(l.item) > itemScore(current) * 1.2) && hero.gold >= l.price && chance(0.3)) { hero.gold -= l.price; hero.equipment[l.item.slot] = l.item; if (!isCatchingUp) { log(`🛒 Bought ${l.item.name} from ${l.seller} for ${l.price}g.`, 'log-loot'); addWorldChat('trade', hero.name, `bought ${l.item.name}`); } l.sold = true; } }
 if (chance(0.3)) { const idx = rand(0, marketListings.length - 1); if (marketListings[idx] && !marketListings[idx].sold) { marketListings[idx].sold = true; if (!isCatchingUp && chance(0.3)) addWorldChat('trade', pick(fakePlayers).name, `bought ${marketListings[idx].item.name}`); } }
 if (!isCatchingUp) renderMarket();
 }
-function renderMarket() {
-const el = document.getElementById('market-list'); el.innerHTML = '';
-const visible = marketListings.filter(l => !l.sold).slice(0, 15);
-if (visible.length === 0) { el.innerHTML = '<div style="text-align:center; color:var(--text-dim); padding:20px;">No listings available</div>'; return; }
-visible.forEach(l => {
-const stats = []; if (l.item.atk) stats.push(`+${l.item.atk} ATK`); if (l.item.def) stats.push(`+${l.item.def} DEF`); if (l.item.dmgMax) stats.push(`${l.item.dmgMin}-${l.item.dmgMax} DMG`); if (l.item.crit) stats.push(`+${l.item.crit}% CRIT`);
-const div = document.createElement('div'); div.className = 'market-item';
-div.innerHTML = `<div><div class="mi-name" style="color:${rarityColor(l.item.rarity)}">${l.item.name}</div><div class="mi-seller">Sold by ${l.seller} • ${l.item.slot}</div><div class="mi-stats">${stats.join(' · ')}</div></div><div class="mi-price">${l.price}g</div><button class="mi-buy" onclick="buyItem(${marketListings.indexOf(l)})">Buy</button>`;
-el.appendChild(div);
-});
-}
-window.buyItem = function(idx) {
-const l = marketListings[idx]; if (!l || l.sold) return;
-if (hero.gold < l.price) { toast('❌ Not enough gold!'); return; }
-hero.gold -= l.price; hero.equipment[l.item.slot] = l.item;
-log(`🛒 Bought <span style="color:${rarityColor(l.item.rarity)}">${l.item.name}</span> for ${l.price}g.`, 'log-loot');
-l.sold = true; renderMarket(); updateUI();
-};
-// ============ PVP (BALANCED MATCHMAKING) ============
-function pvpTick() {
-    pvpTimer--;
-    if (pvpTimer > 0) return;
-    pvpTimer = rand(20, 30);
-    
-    const myPower = getPower(hero);
-    const minPower = myPower * 0.65;
-    const maxPower = myPower * 1.35;
-    
-    let candidates = fakePlayers.filter(p => {
-        const oppPower = p.level * 100 + (p.score || 0) * 0.5;
-        return oppPower >= minPower && oppPower <= maxPower && Math.abs(p.level - hero.level) <= 20;
-    });
-    
-    if (candidates.length === 0) {
-        candidates = fakePlayers.filter(p => Math.abs(p.level - hero.level) <= 15);
-    }
-    if (candidates.length === 0) {
-        candidates = fakePlayers;
-    }
-    
-    const opp = candidates.length > 0 ? pick(candidates) : makeFakePlayer({ level: Math.max(1, hero.level + rand(-5, 5)) });
-    
-    let oppPower = opp.level * 100 + (opp.score || 0) * 0.5;
-    const targetMin = myPower * 0.7;
-    const targetMax = myPower * 1.3;
-    let scaledOppPower = Math.min(targetMax, Math.max(targetMin, oppPower));
-    const powerRatio = scaledOppPower / myPower;
-    
-    pvpOpponent = opp;
-    
-    const heroRoll = myPower * (0.7 + Math.random() * 0.6);
-    const oppRoll = scaledOppPower * (0.7 + Math.random() * 0.6);
-    
-    if (hero.dead) return;
-    
-    let winChance = 0.5;
-    if (powerRatio > 1) winChance = Math.max(0.3, 0.5 - (powerRatio - 1) * 0.35);
-    else if (powerRatio < 1) winChance = Math.min(0.7, 0.5 + (1 - powerRatio) * 0.35);
-    
-    const isVictory = heroRoll > oppRoll || Math.random() < winChance;
-    
-    if (isVictory) {
-        const reward = Math.floor(rand(30, 150) + (scaledOppPower / 200));
-        const ratingGain = Math.max(5, Math.min(35, Math.floor(25 * (1.2 - powerRatio))));
-        heroPvpWins++;
-        heroPvpRating += ratingGain;
-        hero.gold += reward;
-        hero.score += 100;
-        if (!isCatchingUp) {
-            log(`🏆 PVP VICTORY! Defeated ${opp.name} (Lv.${opp.level}) +${reward}g, +${ratingGain} rating`, 'log-pvp');
-            addWorldChat('pvp', hero.name, `defeated ${opp.name} in the arena!`);
-            toast(`🏆 Victory vs ${opp.name}!`);
-        }
-        if (hero.faction) factionRep[hero.faction] = clamp(factionRep[hero.faction] + 8, -1000, 1000);
-    } else {
-        const ratingLoss = Math.max(5, Math.min(25, Math.floor(18 * powerRatio)));
-        heroPvpLosses++;
-        heroPvpRating = Math.max(0, heroPvpRating - ratingLoss);
-        if (!isCatchingUp) {
-            log(`💀 PVP DEFEAT! Lost to ${opp.name} (Lv.${opp.level}) -${ratingLoss} rating`, 'log-pvp');
-            addWorldChat('pvp', opp.name, `defeated ${hero.name} in the arena!`);
-        }
-        if (hero.faction) factionRep[hero.faction] = clamp(factionRep[hero.faction] - 5, -1000, 1000);
-    }
-    if (!isCatchingUp) { renderPvp(); renderLeaderboard(); }
-}
-function renderPvp() {
-    const el = document.getElementById('pvp-vs');
-    if (!pvpOpponent) {
-        el.innerHTML = `<div class="pvp-fighter"><div>Searching...</div></div><div class="vs-text">VS</div><div class="pvp-fighter"><div>Searching...</div></div>`;
-    } else {
-        const myPower = getPower(hero);
-        const oppPower = pvpOpponent.level * 100;
-        const diffPercent = ((myPower - oppPower) / Math.max(myPower, oppPower) * 100).toFixed(0);
-        const advantage = myPower > oppPower ? 'Advantage' : (myPower < oppPower ? 'Disadvantage' : 'Even');
-        const advColor = myPower > oppPower ? 'var(--success)' : (myPower < oppPower ? 'var(--danger)' : 'var(--gold)');
-        el.innerHTML = `<div class="pvp-fighter"><div style="font-weight:700;">${hero.name}</div>
-                        <div style="font-size:0.8em; color:var(--text-dim);">Lv.${hero.level} ${hero.cls}</div>
-                        <div style="font-size:0.8em; color:var(--accent-2);">Power: ${myPower}</div></div>
-                        <div class="vs-text">VS</div>
-                        <div class="pvp-fighter"><div style="font-weight:700;">${pvpOpponent.name}</div>
-                        <div style="font-size:0.8em; color:var(--text-dim);">Lv.${pvpOpponent.level} ${pvpOpponent.cls}</div>
-                        <div style="font-size:0.8em; color:${advColor};">Power: ${oppPower} (${Math.abs(diffPercent)}% ${advantage})</div></div>`;
-    }
-    document.getElementById('pvp-wins').textContent = heroPvpWins;
-    document.getElementById('pvp-losses').textContent = heroPvpLosses;
-    document.getElementById('pvp-rating').textContent = heroPvpRating;
-}
-function renderLeaderboard() {
-    hero.score = hero.level * 100 + heroPvpRating + hero.kills * 5;
-    const cappedFake = fakePlayers.map(p => ({ ...p, level: Math.min(p.level, hero.level + 30), score: Math.min(p.score || 0, hero.score * 2) }));
-    const all = [...cappedFake, { name: hero.name, level: hero.level, cls: hero.cls, score: hero.score, isHero: true }].sort((a,b) => b.score - a.score).slice(0, 20);
-    const el = document.getElementById('leaderboard'); el.innerHTML = '';
-    all.forEach((p, i) => { const row = document.createElement('div'); row.className = 'lb-row' + (p.isHero ? ' hero' : ''); row.innerHTML = `<div class="lb-rank">#${i+1}</div><div class="lb-name">${p.name} <span class="cls">${p.cls||''}</span></div><div class="lb-lvl">Lv.${p.level}</div><div class="lb-score">${p.score}</div>`; el.appendChild(row); });
-}
-// ============ GUILD & FACTIONS & FRIENDS ============
+function renderMarket() { const el = document.getElementById('market-list'); el.innerHTML = ''; const visible = marketListings.filter(l => !l.sold).slice(0, 15); if (visible.length === 0) { el.innerHTML = '<div style="text-align:center; color:var(--text-dim); padding:20px;">No listings available</div>'; return; } visible.forEach(l => { const stats = []; if (l.item.atk) stats.push(`+${l.item.atk} ATK`); if (l.item.def) stats.push(`+${l.item.def} DEF`); if (l.item.dmgMax) stats.push(`${l.item.dmgMin}-${l.item.dmgMax} DMG`); if (l.item.crit) stats.push(`+${l.item.crit}% CRIT`); const div = document.createElement('div'); div.className = 'market-item'; div.innerHTML = `<div><div class="mi-name" style="color:${rarityColor(l.item.rarity)}">${l.item.name}</div><div class="mi-seller">Sold by ${l.seller} • ${l.item.slot}</div><div class="mi-stats">${stats.join(' · ')}</div></div><div class="mi-price">${l.price}g</div><button class="mi-buy" onclick="buyItem(${marketListings.indexOf(l)})">Buy</button>`; el.appendChild(div); }); }
+window.buyItem = function(idx) { const l = marketListings[idx]; if (!l || l.sold) return; if (hero.gold < l.price) { toast('❌ Not enough gold!'); return; } hero.gold -= l.price; hero.equipment[l.item.slot] = l.item; log(`🛒 Bought ${l.item.name} for ${l.price}g.`, 'log-loot'); l.sold = true; renderMarket(); updateUI(); };
+// ============ PVP WITH DYNAMIC OPPONENT POWER ============
+function pvpTick() { pvpTimer--; if (pvpTimer > 0) return; pvpTimer = rand(20, 30); fakePlayers.forEach(p => { if (chance(0.15)) upgradeFakePlayerGear(p); if (chance(0.05) && p.level < (hero?.level || 50) + 25) p.level++; }); const myPower = getHeroPower(); const minPower = myPower * 0.75; const maxPower = myPower * 1.35; let candidates = fakePlayers.filter(p => { const oppPower = calculateFakePlayerPower(p); return oppPower >= minPower && oppPower <= maxPower && Math.abs(p.level - (hero?.level || 1)) <= 20; }); if (candidates.length === 0) candidates = fakePlayers.filter(p => Math.abs(p.level - (hero?.level || 1)) <= 25); if (candidates.length === 0) candidates = fakePlayers; const opp = candidates.length > 0 ? pick(candidates) : makeFakePlayer({ level: Math.max(1, (hero?.level || 1) + rand(-5, 5)) }); let oppPower = calculateFakePlayerPower(opp); const targetMin = myPower * 0.75; const targetMax = myPower * 1.35; let scaledOppPower = Math.min(targetMax, Math.max(targetMin, oppPower)); const powerRatio = scaledOppPower / myPower; pvpOpponent = opp; const heroRoll = myPower * (0.7 + Math.random() * 0.6); const oppRoll = scaledOppPower * (0.7 + Math.random() * 0.6); if (hero?.dead) return; let winChance = 0.5; if (powerRatio > 1) winChance = Math.max(0.35, 0.5 - (powerRatio - 1) * 0.35); else if (powerRatio < 1) winChance = Math.min(0.65, 0.5 + (1 - powerRatio) * 0.35); const isVictory = heroRoll > oppRoll || Math.random() < winChance; if (isVictory) { const reward = Math.floor(rand(30, 150) + (scaledOppPower / 200)); const ratingGain = Math.max(8, Math.min(35, Math.floor(25 * (1.2 - powerRatio)))); heroPvpWins++; heroPvpRating += ratingGain; hero.gold += reward; hero.score += 100; if (!isCatchingUp) { log(`🏆 PVP VICTORY! Defeated ${opp.name} (Lv.${opp.level}) +${reward}g, +${ratingGain} rating`, 'log-pvp'); addWorldChat('pvp', hero.name, `defeated ${opp.name} in the arena!`); toast(`🏆 Victory vs ${opp.name}!`); } if (hero.faction) factionRep[hero.faction] = clamp(factionRep[hero.faction] + 8, -1000, 1000); } else { const ratingLoss = Math.max(8, Math.min(30, Math.floor(22 * powerRatio))); heroPvpLosses++; heroPvpRating = Math.max(0, heroPvpRating - ratingLoss); if (!isCatchingUp) { log(`💀 PVP DEFEAT! Lost to ${opp.name} (Lv.${opp.level}) -${ratingLoss} rating`, 'log-pvp'); addWorldChat('pvp', opp.name, `defeated ${hero.name} in the arena!`); } if (hero.faction) factionRep[hero.faction] = clamp(factionRep[hero.faction] - 5, -1000, -1000); } if (!isCatchingUp) { renderPvp(); renderLeaderboard(); } }
+function renderPvp() { const el = document.getElementById('pvp-vs'); if (!pvpOpponent) { el.innerHTML = `<div class="pvp-fighter"><div>Searching...</div></div><div class="vs-text">VS</div><div class="pvp-fighter"><div>Searching...</div></div>`; } else { const myPower = getHeroPower(); const oppPower = calculateFakePlayerPower(pvpOpponent); const diffPercent = ((myPower - oppPower) / Math.max(myPower, oppPower) * 100).toFixed(0); const advantage = myPower > oppPower ? 'Advantage' : (myPower < oppPower ? 'Disadvantage' : 'Even'); const advColor = myPower > oppPower ? 'var(--success)' : (myPower < oppPower ? 'var(--danger)' : 'var(--gold)'); el.innerHTML = `<div class="pvp-fighter"><div style="font-weight:700;">${hero.name}</div><div style="font-size:0.8em; color:var(--text-dim);">Lv.${hero.level} ${hero.cls}</div><div style="font-size:0.8em; color:var(--accent-2);">Power: ${myPower}</div></div><div class="vs-text">VS</div><div class="pvp-fighter"><div style="font-weight:700;">${pvpOpponent.name}</div><div style="font-size:0.8em; color:var(--text-dim);">Lv.${pvpOpponent.level} ${pvpOpponent.cls}</div><div style="font-size:0.8em; color:${advColor};">Power: ${oppPower} (${Math.abs(diffPercent)}% ${advantage})</div></div>`; } document.getElementById('pvp-wins').textContent = heroPvpWins; document.getElementById('pvp-losses').textContent = heroPvpLosses; document.getElementById('pvp-rating').textContent = heroPvpRating; }
+function renderLeaderboard() { hero.score = hero.level * 100 + heroPvpRating + hero.kills * 5; const cappedFake = fakePlayers.map(p => ({ ...p, level: Math.min(p.level, hero.level + 30), score: Math.min(p.score || 0, hero.score * 2), gearScore: p.gearScore })); const all = [...cappedFake, { name: hero.name, level: hero.level, cls: hero.cls, score: hero.score, isHero: true }].sort((a,b) => b.score - a.score).slice(0, 20); const el = document.getElementById('leaderboard'); el.innerHTML = ''; all.forEach((p, i) => { const row = document.createElement('div'); row.className = 'lb-row' + (p.isHero ? ' hero' : ''); row.innerHTML = `<div class="lb-rank">#${i+1}</div><div class="lb-name">${p.name} <span class="cls">${p.cls||''}</span></div><div class="lb-lvl">Lv.${p.level}</div><div class="lb-score">${p.score}</div>`; el.appendChild(row); }); }
 function initGuild() { guild = { name: pick(GUILD_NAMES), motto: pick(GUILD_MOTTOS), level: rand(3, 15), treasury: rand(1000, 50000), members: [] }; const ranks = ['Guild Master','Officer','Officer','Veteran','Veteran','Veteran','Member','Member','Member','Member','Member','Member','Recruit','Recruit']; for (let i = 0; i < rand(12, 25); i++) { const p = pick(fakePlayers); guild.members.push({ name: p.name, level: p.level, cls: p.cls, rank: ranks[Math.min(i, ranks.length-1)], online: p.online }); } }
 function guildTick() { if (!hero.guild) return; if (chance(0.15) && !isCatchingUp) addWorldChat('guild', pick(guild.members).name, pick(CHAT_GUILD)); if (chance(0.3)) guild.treasury += rand(10, 200); if (chance(0.1)) guild.treasury -= rand(50, 300); guild.treasury = Math.max(0, guild.treasury); guild.members.forEach(m => { if (chance(0.1)) m.online = !m.online; }); if (!isCatchingUp) renderGuild(); }
 function renderGuild() { if (!hero.guild) { document.getElementById('guild-name').textContent = 'No Guild'; document.getElementById('guild-motto').textContent = 'Reach level 5 to join a guild'; document.getElementById('guild-members-list').innerHTML = ''; return; } document.getElementById('guild-name').textContent = '🛡 ' + guild.name; document.getElementById('guild-motto').textContent = '"' + guild.motto + '"'; document.getElementById('guild-level').textContent = guild.level; document.getElementById('guild-members').textContent = guild.members.length; document.getElementById('guild-treasury').textContent = guild.treasury; const el = document.getElementById('guild-members-list'); el.innerHTML = ''; [{ name: hero.name + ' (you)', level: hero.level, cls: hero.cls, rank: 'Member', online: true }, ...guild.members].sort((a,b) => b.level - a.level).forEach(m => { const div = document.createElement('div'); div.className = 'member' + (m.online ? ' online' : ''); div.innerHTML = `<div class="status"></div><div><div class="m-name">${m.name}</div><div class="m-rank">${m.rank} · ${m.cls}</div></div><div class="m-lvl">Lv.${m.level}</div>`; el.appendChild(div); }); }
@@ -700,19 +540,19 @@ function initFriends() { friends = []; for (let i = 0; i < 6; i++) friends.push(
 function friendsTick() { friends.forEach(f => { if (chance(0.1)) f.online = !f.online; if (f.online && chance(0.2)) f.status = pick(['Idle','In Combat','In Dungeon','AFK','Trading','']); }); if (!isCatchingUp) renderFriends(); }
 function renderFriends() { const el = document.getElementById('friends-list'); el.innerHTML = ''; [...friends].sort((a,b) => (b.online?1:0) - (a.online?1:0)).forEach(f => { const div = document.createElement('div'); div.className = 'member' + (f.online ? ' online' : ''); div.innerHTML = `<div class="status"></div><div><div class="m-name">${f.name}</div><div class="m-rank">${f.cls}${f.status?' · '+f.status:''}</div></div><div class="m-lvl">Lv.${f.level}</div>`; el.appendChild(div); }); }
 function addWorldChat(type, name, msg) { if (isCatchingUp) return; worldChat.push({ type, name, msg, time: Date.now() }); if (worldChat.length > 100) worldChat.shift(); renderWorldChat(); }
-function chatTick() { if (isCatchingUp) return; if (chance(0.6)) { const p = pick(fakePlayers.filter(p => p.online)); if (!p) return; const type = chance(0.7) ? 'say' : chance(0.5) ? 'trade' : 'guild'; let msg = type === 'say' ? pick(CHAT_GENERAL).replace('[lvl]', rand(5, 80)).replace('[item]', pick(EQUIP_BASES.Weapon)) : type === 'trade' ? `WTS ${generateLoot(rand(10, 60)).name} ${rand(50, 5000)}g` : pick(CHAT_GUILD); addWorldChat(type, p.name, msg); } if (chance(0.3)) { const p = pick(fakePlayers.filter(p => p.online)); if (p) { const events = [() => { p.level = Math.min(p.level + 1, hero.level + 30); addWorldChat('system', null, `🎉 ${p.name} reached level ${p.level}!`); }, () => { addWorldChat('system', null, `⚔ ${p.name} defeated a ${pick(MONSTER_PREFIXES)} ${pick(MONSTER_NAMES)}!`); }, () => { addWorldChat('system', null, `💀 ${p.name} was slain by a ${pick(MONSTER_NAMES)}.`); }, () => { addWorldChat('system', null, `✨ ${p.name} found [${generateLoot(rand(20, 70), 'epic').name}]!`); }]; pick(events)(); } } }
+function chatTick() { if (isCatchingUp) return; if (chance(0.6)) { const p = pick(fakePlayers.filter(p => p.online)); if (!p) return; const type = chance(0.7) ? 'say' : chance(0.5) ? 'trade' : 'guild'; let msg = type === 'say' ? pick(CHAT_GENERAL).replace('[lvl]', rand(5, 80)).replace('[item]', pick(EQUIP_BASES.Weapon)) : type === 'trade' ? `WTS ${generateLoot(rand(10, 60)).name} ${rand(50, 5000)}g` : pick(CHAT_GUILD); addWorldChat(type, p.name, msg); } if (chance(0.3)) { const p = pick(fakePlayers.filter(p => p.online)); if (p) { const events = [() => { p.level = Math.min(p.level + 1, (hero?.level || 50) + 25); upgradeFakePlayerGear(p); addWorldChat('system', null, `🎉 ${p.name} reached level ${p.level}!`); }, () => { addWorldChat('system', null, `⚔ ${p.name} defeated a ${pick(MONSTER_PREFIXES)} ${pick(MONSTER_NAMES)}!`); if (chance(0.3)) upgradeFakePlayerGear(p); }, () => { addWorldChat('system', null, `💀 ${p.name} was slain by a ${pick(MONSTER_NAMES)}.`); }, () => { const item = generateLoot(p.level, chance(0.01) ? 'mystic' : (chance(0.1) ? 'legendary' : null)); addWorldChat('system', null, `✨ ${p.name} found [${item.name}]!`); upgradeFakePlayerGear(p); }]; pick(events)(); } } }
 function renderWorldChat() { const el = document.getElementById('world-chat'); el.innerHTML = ''; worldChat.slice(-50).forEach(c => { const div = document.createElement('div'); div.className = 'chat-msg chat-' + c.type; const t = new Date(c.time).toLocaleTimeString([], {hour:'2-digit',minute:'2-digit',second:'2-digit'}); if (c.type === 'system') div.innerHTML = `<span class="chat-sys">[${t}] ${c.msg}</span>`; else { const tag = {say:'[Say]',trade:'[Trade]',guild:'[Guild]',pvp:'[PvP]'}[c.type] || '[Say]'; div.innerHTML = `<span style="color:var(--text-faint); font-size:0.85em;">[${t}]</span> <span style="color:var(--text-faint);">${tag}</span> <span class="chat-name">${c.name}:</span> ${c.msg}`; } el.appendChild(div); }); el.scrollTop = el.scrollHeight; }
 function renderOnline() { const online = fakePlayers.filter(p => p.online).slice(0, 20); document.getElementById('online-count').textContent = online.length + rand(50, 200); const el = document.getElementById('online-list'); el.innerHTML = ''; online.forEach(p => { const div = document.createElement('div'); div.className = 'online-player'; div.innerHTML = `<div class="status"></div><div class="op-name">${p.name}</div><div class="op-info">Lv.${p.level} ${p.cls}</div>`; el.appendChild(div); }); }
 function log(msg, cls='log-info') { if (isCatchingUp) return; const el = document.getElementById('log'), div = document.createElement('div'); div.className = 'log-entry ' + cls; div.innerHTML = `<span class="log-time">[${new Date().toLocaleTimeString([], {hour:'2-digit',minute:'2-digit',second:'2-digit'})}]</span> ${msg}`; el.appendChild(div); el.scrollTop = el.scrollHeight; while (el.children.length > 200) el.removeChild(el.firstChild); }
 function toast(msg) { if (isCatchingUp) return; const t = document.createElement('div'); t.className = 'toast'; t.textContent = msg; document.body.appendChild(t); setTimeout(() => t.remove(), 3000); }
 function updateMonsterUI() { if (!monster) { document.getElementById('m-icon').textContent = '❓'; document.getElementById('m-name').textContent = 'Searching...'; document.getElementById('m-level').textContent = 'Level ?'; document.getElementById('m-hp-bar').style.width = '0%'; return; } document.getElementById('m-icon').textContent = monster.icon; document.getElementById('m-name').textContent = monster.name; document.getElementById('m-level').textContent = `Level ${monster.level}`; document.getElementById('m-hp-bar').style.width = Math.max(0, monster.hp/monster.maxHp*100) + '%'; }
 function updateUI() { document.getElementById('char-name').textContent = hero.name; document.getElementById('char-title').textContent = `${hero.race} ${hero.cls}`; document.getElementById('s-level').textContent = hero.level; document.getElementById('s-gold').textContent = hero.gold; document.getElementById('s-kills').textContent = hero.kills; document.getElementById('s-atk').textContent = getAttack(hero); document.getElementById('s-def').textContent = getDefense(hero); document.getElementById('s-hp-text').textContent = `${Math.max(0,Math.floor(hero.hp))}/${hero.maxHp}`; document.getElementById('hp-bar').style.width = Math.max(0, hero.hp/hero.maxHp*100) + '%'; document.getElementById('s-mp-text').textContent = `${Math.floor(hero.mp)}/${hero.maxMp}`; document.getElementById('mp-bar').style.width = (hero.mp/hero.maxMp*100) + '%'; document.getElementById('s-xp-text').textContent = `${hero.xp}/${hero.xpNeeded}`; document.getElementById('xp-bar').style.width = (hero.xp/hero.xpNeeded*100) + '%'; ['str','dex','con','int','wis','cha'].forEach(s => { document.getElementById('s-'+s).textContent = hero.stats[s]; }); const eqList = document.getElementById('equip-list'); eqList.innerHTML = ''; EQUIP_SLOTS.forEach(slot => { const item = hero.equipment[slot], div = document.createElement('div'); div.className = 'equip-slot' + (item ? ' r-' + item.rarity : ''); if (item) { const stats = []; if (item.atk) stats.push(`+${item.atk} ATK`); if (item.def) stats.push(`+${item.def} DEF`); if (item.dmgMax) stats.push(`${item.dmgMin}-${item.dmgMax} DMG`); if (item.crit) stats.push(`+${item.crit}% CRIT`); div.innerHTML = `<div class="slot-name">${slot}</div><div class="item-name" style="color:${rarityColor(item.rarity)}">${item.name}</div><div class="item-stats">${stats.join(' · ')}</div>`; } else div.innerHTML = `<div class="slot-name">${slot}</div><div class="item-name" style="color:var(--text-faint); font-style:italic;">Empty</div>`; eqList.appendChild(div); }); updateMonsterUI(); const elapsed = Math.floor(totalUptime / 1000); document.getElementById('uptime').textContent = `${String(Math.floor(elapsed/3600)).padStart(2,'0')}:${String(Math.floor((elapsed%3600)/60)).padStart(2,'0')}:${String(elapsed%60).padStart(2,'0')}`; updateBestiaryLog(); }
-function exportSave() { const json = JSON.stringify(getSaveData(), null, 2), blob = new Blob([json], { type: 'application/json' }), url = URL.createObjectURL(blob); const a = document.createElement('a'); a.href = url; a.download = `zeroquest-save-${hero.name}-${Date.now()}.json`; document.body.appendChild(a); a.click(); document.body.removeChild(a); URL.revokeObjectURL(url); toast('💾 Save exported successfully!'); log('💾 Character save exported.', 'log-info'); }
-function showImportModal() { const overlay = document.createElement('div'); overlay.className = 'modal-overlay'; overlay.id = 'import-modal'; overlay.innerHTML = `<div class="modal"><h3>📂 Import Character Save</h3><div class="modal-info"><div class="info-row"><span class="info-label">Version:</span><span class="info-value">2.3</span></div><div class="info-row"><span class="info-label">Format:</span><span class="info-value">JSON</span></div></div><textarea id="import-text" placeholder="Paste your save data here or use file upload below..."></textarea><div style="margin-bottom:16px;"><input type="file" id="import-file" accept=".json" style="display:none;"><button class="btn secondary" onclick="document.getElementById('import-file').click()" style="width:100%;">📁 Choose File</button></div><div class="modal-buttons"><button class="btn secondary" onclick="closeImportModal()">Cancel</button><button class="btn" onclick="importSave()">Import</button></div></div>`; document.body.appendChild(overlay); document.getElementById('import-file').addEventListener('change', (e) => { const file = e.target.files[0]; if (!file) return; const reader = new FileReader(); reader.onload = (event) => { document.getElementById('import-text').value = event.target.result; }; reader.readAsText(file); }); }
+function exportSave() { const json = JSON.stringify(getSaveData(), null, 2), blob = new Blob([json], { type: 'application/json' }), url = URL.createObjectURL(blob); const a = document.createElement('a'); a.href = url; a.download = `zeroquest-save-${hero.name}-${Date.now()}.json`; document.body.appendChild(a); a.click(); document.body.removeChild(a); URL.revokeObjectURL(url); toast('💾 Save exported!'); log('💾 Character save exported.', 'log-info'); }
+function showImportModal() { const overlay = document.createElement('div'); overlay.className = 'modal-overlay'; overlay.id = 'import-modal'; overlay.innerHTML = `<div class="modal"><h3>📂 Import Character Save</h3><div class="modal-info"><div class="info-row"><span class="info-label">Version:</span><span class="info-value">2.3</span></div><div class="info-row"><span class="info-label">Format:</span><span class="info-value">JSON</span></div></div><textarea id="import-text" placeholder="Paste your save data here..."></textarea><div style="margin-bottom:16px;"><input type="file" id="import-file" accept=".json" style="display:none;"><button class="btn secondary" onclick="document.getElementById('import-file').click()" style="width:100%;">📁 Choose File</button></div><div class="modal-buttons"><button class="btn secondary" onclick="closeImportModal()">Cancel</button><button class="btn" onclick="importSave()">Import</button></div></div>`; document.body.appendChild(overlay); document.getElementById('import-file').addEventListener('change', (e) => { const file = e.target.files[0]; if (!file) return; const reader = new FileReader(); reader.onload = (event) => { document.getElementById('import-text').value = event.target.result; }; reader.readAsText(file); }); }
 function closeImportModal() { const modal = document.getElementById('import-modal'); if (modal) modal.remove(); }
-function importSave() { const text = document.getElementById('import-text').value.trim(); if (!text) { toast('❌ No save data provided!'); return; } try { const data = JSON.parse(text); if (!data.version || !data.hero) throw new Error('Invalid save format'); applySaveData(data); closeImportModal(); if (document.getElementById('creation-screen').style.display !== 'none') startGame(true); else { updateUI(); renderPvp(); renderLeaderboard(); renderGuild(); renderFactions(); renderFriends(); renderOnline(); renderMarket(); toast('✅ Character imported successfully!'); log(`📂 Imported save for ${hero.name} (Level ${hero.level})`, 'log-info'); } } catch (err) { toast('❌ Invalid save data: ' + err.message); console.error('Import error:', err); } }
-function applySaveData(data) { hero = data.hero; heroPvpWins = data.pvp?.wins || 0; heroPvpLosses = data.pvp?.losses || 0; heroPvpRating = data.pvp?.rating || 1000; factionRep = data.factionRep || { order: 0, chaos: 0 }; friends = data.friends || []; fakePlayers = data.fakePlayers || []; marketListings = data.marketListings || []; guild = data.guild || null; tickCount = data.tickCount || 0; totalUptime = data.totalUptime || 0; startTime = Date.now(); bestiaryKills = data.bestiaryKills || {}; }
-function processOfflineProgress(secondsPassed) { isCatchingUp = true; let ticksToProcess = Math.min(secondsPassed, 28800); let processed = 0; const batchSize = 1000; function catchUpFrame() { let batch = Math.min(batchSize, ticksToProcess - processed); for (let i = 0; i < batch; i++) { tickCount++; combatTick(); if (tickCount % 3 === 0) regenTick(); if (tickCount % 10 === 0) marketTick(); if (tickCount % 15 === 0) { fakePlayers.forEach(p => { if (chance(0.3)) p.score += rand(10, 100); if (chance(0.1) && p.level < hero.level + 30) p.level++; }); } processed++; } if (processed < ticksToProcess) { requestAnimationFrame(catchUpFrame); } else { isCatchingUp = false; saveGame(); updateUI(); renderPvp(); renderLeaderboard(); renderGuild(); renderFactions(); renderFriends(); renderOnline(); renderMarket(); const hours = Math.floor(secondsPassed / 3600), mins = Math.floor((secondsPassed % 3600) / 60); const timeStr = hours > 0 ? `${hours}h ${mins}m` : `${mins}m`; toast(`Welcome back! Progressed for ${timeStr} while away.`); log(`🌟 Welcome back! You progressed for ${timeStr} while away. Gained ${offlineStats.xp} XP, ${offlineStats.gold}g, ${offlineStats.kills} kills, and ${offlineStats.levels} levels.`, 'log-level'); if (gameInterval) clearInterval(gameInterval); gameInterval = setInterval(gameLoop, 1000); } } catchUpFrame(); }
+function importSave() { const text = document.getElementById('import-text').value.trim(); if (!text) { toast('❌ No save data provided!'); return; } try { const data = JSON.parse(text); if (!data.version || !data.hero) throw new Error('Invalid save format'); applySaveData(data); closeImportModal(); if (document.getElementById('creation-screen').style.display !== 'none') startGame(true); else { updateUI(); renderPvp(); renderLeaderboard(); renderGuild(); renderFactions(); renderFriends(); renderOnline(); renderMarket(); toast('✅ Character imported!'); log(`📂 Imported save for ${hero.name} (Level ${hero.level})`, 'log-info'); } } catch (err) { toast('❌ Invalid save data: ' + err.message); } }
+function applySaveData(data) { hero = data.hero; heroPvpWins = data.pvp?.wins || 0; heroPvpLosses = data.pvp?.losses || 0; heroPvpRating = data.pvp?.rating || 1000; factionRep = data.factionRep || { order: 0, chaos: 0 }; friends = data.friends || []; fakePlayers = data.fakePlayers || []; marketListings = data.marketListings || []; guild = data.guild || null; tickCount = data.tickCount || 0; totalUptime = data.totalUptime || 0; startTime = Date.now(); bestiaryKills = data.bestiaryKills || {}; fakePlayers.forEach(p => { if (!p.gearScore) p.gearScore = rand(p.level * 3, p.level * 12); }); }
+function processOfflineProgress(secondsPassed) { isCatchingUp = true; let ticksToProcess = Math.min(secondsPassed, 28800); let processed = 0; const batchSize = 1000; function catchUpFrame() { let batch = Math.min(batchSize, ticksToProcess - processed); for (let i = 0; i < batch; i++) { tickCount++; combatTick(); if (tickCount % 3 === 0) regenTick(); if (tickCount % 10 === 0) marketTick(); if (tickCount % 15 === 0) { fakePlayers.forEach(p => { if (chance(0.3)) p.score += rand(10, 100); if (chance(0.1) && p.level < (hero?.level || 50) + 30) p.level++; if (chance(0.2)) upgradeFakePlayerGear(p); }); } processed++; } if (processed < ticksToProcess) { requestAnimationFrame(catchUpFrame); } else { isCatchingUp = false; saveGame(); updateUI(); renderPvp(); renderLeaderboard(); renderGuild(); renderFactions(); renderFriends(); renderOnline(); renderMarket(); const hours = Math.floor(secondsPassed / 3600), mins = Math.floor((secondsPassed % 3600) / 60); const timeStr = hours > 0 ? `${hours}h ${mins}m` : `${mins}m`; toast(`Welcome back! Progressed for ${timeStr}.`); log(`🌟 Welcome back! Progressed for ${timeStr}. Gained ${offlineStats.xp} XP, ${offlineStats.gold}g, ${offlineStats.kills} kills.`, 'log-level'); if (gameInterval) clearInterval(gameInterval); gameInterval = setInterval(gameLoop, 1000); } } catchUpFrame(); }
 function gameLoop() { tickCount++; combatTick(); if (tickCount % 3 === 0) regenTick(); if (tickCount % 2 === 0) chatTick(); if (tickCount % 3 === 0) marketTick(); if (tickCount % 5 === 0) { renderOnline(); friendsTick(); saveGame(); } if (tickCount % 7 === 0) guildTick(); if (tickCount % 10 === 0) factionTick(); pvpTick(); if (tickCount % 15 === 0) renderLeaderboard(); updateUI(); }
 document.addEventListener('click', e => { if (e.target.classList.contains('tab')) { document.querySelectorAll('.tab').forEach(t => t.classList.remove('active')); document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active')); e.target.classList.add('active'); document.querySelector(`.tab-content[data-content="${e.target.dataset.tab}"]`).classList.add('active'); } if (e.target.classList.contains('social-tab')) { document.querySelectorAll('.social-tab').forEach(t => t.classList.remove('active')); document.querySelectorAll('.social-panel').forEach(c => c.classList.remove('active')); e.target.classList.add('active'); document.querySelector(`.social-panel[data-scontent="${e.target.dataset.stab}"]`).classList.add('active'); } });
 function startGame(fromImport = false) { if (!fromImport) { const name = document.getElementById('hero-name').value.trim() || 'Hero'; const race = document.getElementById('hero-race').value; const cls = document.getElementById('hero-class').value; hero = createHero(name, race, cls); totalUptime = 0; tickCount = 0; bestiaryKills = {}; } startTime = Date.now(); if (!fromImport || !fakePlayers.length) initFakePlayers(); if (!fromImport || !marketListings.length) initMarket(); if (!fromImport || !guild) initGuild(); if (!fromImport || !friends.length) initFriends(); document.getElementById('creation-screen').style.display = 'none'; document.getElementById('game-screen').style.display = 'block'; if (!fromImport) { log(`${hero.name} the ${hero.race} ${hero.cls} enters the world!`, 'log-level'); log(`Welcome to ZeroQuest 2.3 — the world plays itself.`, 'log-system'); addWorldChat('system', null, `🌟 ${hero.name} has entered the world!`); } else { log(`📂 Loaded save: ${hero.name} (Level ${hero.level})`, 'log-info'); addWorldChat('system', null, `🌟 ${hero.name} has returned to the world!`); } spawnMonster(); renderPvp(); renderLeaderboard(); renderGuild(); renderFactions(); renderFriends(); renderOnline(); renderMarket(); if (gameInterval) clearInterval(gameInterval); gameInterval = setInterval(gameLoop, 1000); }
